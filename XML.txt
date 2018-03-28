@@ -1,0 +1,36 @@
+XML ÊÇÒ»ÖÖ±ê¼ÇÓïÑÔ£¬ºÜÀàËÆ HTML
+XML µÄÉè¼Æ×ÚÖ¼ÊÇ´«ÊäÊý¾Ý£¬¶ø·ÇÏÔÊ¾Êý¾Ý
+XML ºÍ HTML Îª²»Í¬µÄÄ¿µÄ¶øÉè¼Æ£º
+
+XML ±»Éè¼ÆÎª´«ÊäºÍ´æ´¢Êý¾Ý£¬Æä½¹µãÊÇÊý¾ÝµÄÄÚÈÝ¡£½ö½öÓÃÓÚ´«Êä´æ´¢Êý¾Ý£¬ÎÞÈÎºÎÐÐÎª
+
+HTML ±»Éè¼ÆÓÃÀ´ÏÔÊ¾Êý¾Ý£¬Æä½¹µãÊÇÊý¾ÝµÄÍâ¹Û¡£
+
+HTML Ö¼ÔÚÏÔÊ¾ÐÅÏ¢£¬¶ø XML Ö¼ÔÚ´«ÊäÐÅÏ¢¡£
+
+xml±êÇ©Ëæ×Ô¼º¶¨Òå
+html±êÇ©ÊÇ¶¨ÒåºÃµÄÁË
+
+
+Ê÷×´½á¹¹
+<?xml version="1.0" encoding="ISO-8859-1"?>  //µÚÒ»ÐÐÊÇ XML ÉùÃ÷
+<note>					     //¸ùÔªËØÄÚÈÝÁËÆäËû½Úµã
+<to>George</to>				     //×ÓÔªËØ
+<from>John</from>
+<heading>Reminder</heading>
+<body>Don't forget the meeting!</body>
+</note>
+
+XML ÎÄµµ±ØÐë°üº¬¸ùÔªËØ¡£¸ÃÔªËØÊÇËùÓÐÆäËûÔªËØµÄ¸¸ÔªËØ¡£
+
+
+XMLÓï·¨£º
+1£¬ÔªËØ¶¼±ØÐëÓÐ¹Ø±Õ±êÇ©<p>..</p> ±ØÐèÒªÓÐ</p>¹Ø±Õ±êÇ©
+2.´óÐ¡Ð´Ãô¸Ð
+3.¿ÉÒÔÇ¶Ì×±êÇ©ÔªËØ
+4.±ØÐèÓÐÒ»¸ö¸ùÔªËØ
+5.ÔªËØµÄÊôÐÔÖµÒªÓÐ¡°¡±£¬<note date="08/08/2008">£¬Ïñhtml
+
+6.×¢ÊÍ<!--comman-->
+7.ÊµÌåÒýÓÃ    < > & ' " =&lt,&gt,&amp,&apos,&quot
+8.¿Õ¸ñ±£Áô£¬²»Ïñhtml¿Õ¸ñ»áºÏ²¢

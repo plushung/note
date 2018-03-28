@@ -1,0 +1,68 @@
+maven:
+用于构建和管里项目
+Maven项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，报告和文档的软件项目管理工具。
+
+生命周期：
+clean 	清除已编译的文件
+
+build	主要周期 编译，测试，打包，发布
+	compile
+	test
+	package 打包好项目，但不放到本地仓库
+	install	将打包好项目后在放在本地仓库
+	deploy
+
+site	生成项目相关信息的网站，生成报表到<reporting>的<outputDirectory>下的路径中
+	
+mvn install 在本地Repository中安装jar
+
+pom.xml基本构造
+1个根元素<project>
+<groupId>
+<artifactId>
+<version>
+一个maven项目的唯一表识(groupId:artifactId:version)
+可用maven根据该表示获取到依赖
+
+配置文件：
+<Profiles>
+	<profile>创建配置文件
+	<id>指定配置id，根据id使用配置    mvn -P[idname] 
+
+依赖：
+在<dependency>里定义要依赖的外部文件，通过指定groupId>和artifactId>和version>加入依赖
+<scope>指定依赖的范围
+<systemPath>指定在系统路径下加入依赖
+	
+工程文档：
+mvn site :创建工程文档
+
+仓库：
+	本地仓库
+	中央仓库
+	用户远程仓库
+<repositories>
+	配置中央仓库与
+	用户远程仓库
+
+插件：
+Maven 实际上是一个依赖插件执行的框架，每个任务实际上是由插件完成
+    创建 jar 文件
+    创建 war 文件
+    编译代码文件
+    代码单元测试
+    创建工程文档
+    创建工程报告
+如：<artifactId>maven-compiler-plugin</artifactId> 用于compile
+类型有 Build Plugins 在<build>里的<plugins>
+	reporting plugins 在<reporting>里<plugins>
+使用插件：mvn [plugin-name]:[goal-name]
+
+构建工程：Maven 使用原型（archetype）插件创建工程。
+要先有一个pom.xml文件
+mvn archetype:generate
+
+
+
+package 打包
+

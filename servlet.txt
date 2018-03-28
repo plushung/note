@@ -1,0 +1,47 @@
+Java Servlet 通常情况下与使用 CGI（Common Gateway Interface，公共网关接口）实现的程序可以达到异曲同工的效果。
+
+组件：有特定功能，可在容器中部署运行的软件模块
+
+容器：为组件提供运行环境，管理组件的生命周期（init，server，destory），
+常用容器有web（tomcat）、EJB（WebSphere，WebLogic）
+
+容器+组件的优势：
+容器负责大量的基础服务（如链接数据库，多线程，传递参数。。。），
+而组件只负责业务逻辑，分工合作。
+
+
+Servlet 执行以下主要任务：
+	1.读取客户端（浏览器）发送的 HTTP 请求数据。request报文
+	2.处理数据并生成结果。
+	3.发送数据（即文档）到客户端（浏览器）
+
+生命周期：
+	init()-》service()-》destory()-》被JVM进行垃圾回收
+
+init()只执行一次，每次来一个线程访问该servlet，都用同一个servlet去处理，重复执行service（）。
+
+设置servlet:
+A:xml:<servlet>
+	<servlet-name>
+	<servlet-class>
+    </servlrt>
+    <servlet-mapping>
+	<servlet-name>
+	<url-pattern>
+    </servlet-mapping>
+annotation:@WebServlet(urlPatterns="",displayName="")
+
+
+"&" 引用
+
+filter:
+xml:&A servlet改成filter
+	<filter-mapping>
+		<dispatcher>FORWARD</dispatcher>  //指定请求类型：forward，request，redirect，ASYNC，ERROR
+annotation：@WebFilter(filterName="/CharsetFilter")
+
+listener：
+xml：<listener>
+		<listener-class>
+	</listener>
+annotation：@WebListener

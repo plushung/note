@@ -1,0 +1,15 @@
+StringBuilder  StringBuffer：
+	这两个类的对象都能够被多次的修改，并且不产生新的未使用对象。
+	便于处理字符串
+
+StringBuilder ：
+	线程不安全的，
+	
+StringBuffer：
+	线程安全的，通过Synchronize关键子保证线程安全
+
+使用场景：
+	StringBuilder的速度》StringBuffer，so多数情况下建议使用 StringBuilder--》fast
+	在要求线程安全条件下，则用StringBuffer--》safe
+
+	

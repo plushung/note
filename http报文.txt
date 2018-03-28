@@ -1,0 +1,28 @@
+请求：
+第一行：请求行 
+method url version/type
+post spweb/index.html http/1.0
+
+第二行开始：消息头
+ContentType="application/x-www-form-urlencoded"之类的
+。
+
+第三部分：消息体
+如果用post方法，消息体用来存放请求参数与值
+如果用get方法，url路径后存放请求参数与值
+
+
+
+响应：
+第一行：请求行 
+typr/version statecode stateCodeDescripty
+ex:http/1.0 200 ok
+
+第二行开始：消息头
+下载文件的Header，要添加的东西
+	添加:ContentType="application/PDF" 文件类型
+	     ContentLength=。。。设置内容长度
+	     Content-disposition="attachment;filename=ai.pdf;" 内容处理方式：附件，文件名ai.pdf
+
+第三部分：消息体
+服务器返回的结果

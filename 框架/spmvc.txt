@@ -1,0 +1,274 @@
+Spring MVC
+	流程：
+					DispatcherServlet
+		HTTP request-------------------->|
+							|			back
+							|<------->Handler Mapping	选择适当的Controller
+							|<------->Controller			返回model and viewname
+							|<------->ViewResolver		根据viewname解释取得实际视图名
+		HTTP request<--------------------|<------->View			用model渲染并返回视图
+	
+	HandlerMapping、Controller 和 ViewResolver 是 
+	WebApplicationContext 的一部分，而 WebApplicationContext 是带有一些对 web 应用程序必要的额外特性的 ApplicationContext 的扩展。
+
+	一个web应用程序可以有多个DispatcherServlet，处理不同路径的映射
+	需求的配置(web.xml)
+		在web.xml里定义DispatcherServlet类的bean，加载[servletname]-servlet.xml配置文件
+		或
+		<context-param>
+   			<param-name>contextConfigLocation</param-name>
+   			<param-value>/WEB-INF/HelloWeb-servlet.xml</param-value>
+		定义上下文配置文件位置
+		可以通过在 web.xml 文件中添加 servlet 监听器 ContextLoaderListener 自定义配置文件的名称和位置
+		在web.xml里定义ContextLoaderListener 监听器
+		静态资源映射
+		<servlet-mapping>
+			<servlet-name>default</servlet-name>
+			<url-pattern>*.html</url-pattern>
+		</servlet-mapping>
+	
+	
+	servlet.xml配置文件//或者使用基于代码的配置，继承WebApplicationInitializer
+		启用组件扫描，扫描controller
+		启用javaconfig  <context:annotation-config />
+		配置视图解析器
+		声明bean
+
+Spring MVC 用DispatcherServlet处理请求
+
+	WebApplicationInitializer是Spring MVC提供的一个接口
+		作用:查找基于代码的配置，并应用来初始化servlet3以上的web容器
+		
+		抽象实现:AbstractDispatcherServletInitializer
+			用于简化servlet配置，只要指定mapping映射
+	
+	ApplicationContext：
+		（其实就是根据[servletname]-servlet.xml配置文件生成的上下文对象）
+		WebApplicationContext继承自ApplicationContext
+			WebApplicationContext知道它关联到的是哪个servlet（它持有一个该ServletContext的引用)
+	
+		每个DispatcherServlet有一个自己的上下文对象WebApplicationContext，继承了一个唯一的RootWebApplicationContext
+			
+			RootWebApplicationContext---->DispatcherServlet1's  WebApplicationContext
+						|---->DispatcherServlet2's  WebApplicationContext
+						|---->DispatcherServlet3's  WebApplicationContext
+						...
+			<context-param>
+				<param-name>contextConfigLocation</param-name>
+				<param-value>/WEB-INF/springDispatcherServlet-servlet.xml</param-value>
+			</context-param>
+			//在context-param下指定的配置文件是RootWebApplicationContext
+			
+			<init-param>
+            			<param-name>contextConfigLocation</param-name>
+           			<param-value>servletname-servlet.xml</param-value>
+        		</init-param>
+			//在<servlet><init-param>下指定的配置文件是WebApplicationContext
+
+			//可以只配置RootWebApplicationContext	
+	
+	DispatcherServlet：
+
+		他维护了一个列表，其中保存了其所依赖的所有bean的默认实现(下面这些特殊bean的默认shixian)
+
+		使用了特殊的bean来处理请求、渲染视图等，这些特定的bean是Spring MVC框架的一部分，包括:
+			HandlerMapping		确定要用哪个Controller
+			HandlerAdapter		调用请求的Controller
+			HandlerExceptionResolver处理器异常解析器
+			ViewResolver		解析视图
+			LocaleResolver & LocaleContextResolver	解析客户端所在的地区信息，国际化的视图定制
+			ThemeResolver		解析你web应用中可用的主题
+			MultipartResolver	解析multi-part的传输请求，比如支持通过HTML表单进行的文件上传等
+			FlashMapManager		存储并取回两次请求之间的FlashMap对象
+
+			可在WebApplicationContext(xml)中配置以上特殊Bean
+			或 用AbstractDispatcherServletInitializer，简化配置
+
+		处理请求:
+			先把WebApplicationContext对象作为Attribute绑定到请求上，以便Controller或其他组件利用
+			地区（locale）解析器绑定到请求上
+			主题（theme）解析器绑定到请求上
+			如果你配置了multipart文件处理器。如果文件是multipart的，则将该请求包装成一个MultipartHttpServletRequest对象
+			为该请求查找一个合适的处理器，找到处理器则执行处理器链
+			如果处理器返回的是一个模型（model），那么框架将渲染相应的视图
+
+	Controller:
+		用@controller声明一个类作为Controller 或 不用Controller，直接把该类声明成Bean(@bean/<bean>)
+		
+		用@Controller 一定要开启 ComponentScan(xml/javaconfig),它继承了@Component
+
+		@RequestMapping（"path"）注解来将请求URL映射到整个controller类或某些方法上
+			method=GET 指定处理的请求类型
+		
+		映射请求路径:
+			URI模板:http://project/{paramName}
+				映射http://project/{paramName}请求，
+				在控制器方法的入参用 @PathVariable（“paramName”） 取得paramName位置的值
+			
+			带正则表达式的URI模板？！
+				/{varName:regex}/* regex为正则表达式
+	
+			注解支持在路径中使用占位符，以取得一些本地配置、系统配置、环境变量
+				/${xxxx}/*
+			
+			可消费（contentType）的媒体类型（根据请求类型处理请求）
+				consumes="application/json" 参数指定处理
+				ContentType为“ApplicationContext/json”的请求,
+				请求体的值放到@RequestBody的参数中
+
+			可生产（Accept）的媒体类型（根据响应类型处理请求）
+				produces="application/json"参数指定处理
+				Accept为“ApplicationContext/json”的请求
+
+					推荐用MediaType定义好的一些常量为consumes/produces赋值
+
+		定义@requestMapping的处理方法:
+			使用@RequestParam将请求参数绑定至方法参数
+				@RequestParam(path="id", required=false)）指定要绑定的参数
+			
+			使用@RequestBody注解映射请求体
+				@RequestBody注解暗示了方法参数应该被绑定了HTTP请求体的值。
+				HttpMessageConverter负责将HTTP请求信息转换成对象 (ex:将json内容转换为对象，要用jackson2.jar库)
+			
+			使用@ResponseBody注解映射响应体
+				@ResponseBody注解与@RequestBody注解类似。@ResponseBody注解可被应用于方法上，
+				标志该方法的返回值应该被直接写回到HTTP响应体中去,Spring使用了一个HttpMessageConverter来将返回对象转换到响应体
+				(ex:将返回对象内容转换为json，要用jackson2.jar库)
+			
+		使用@RestController注解创建REST控制器
+			@RestController=@Controller+@ResponseBody
+
+		使用HTTP实体ResponseEntity，HttpEntity~=ResponseBody,RequestBody+存取请求头和响应头
+			使用了HttpMessageConverter
+			Spring使用了HttpMessageConverter来对请求流和响应流进行转换。
+			HttpEntity与@RequestBody和@ResponseBody很相似。除了能获得请求体和响应体中的内容之外，
+			HttpEntity（以及专门负责处理响应的ResponseEntity子类）还可以存取请求头和响应头
+			=@responseBody+设置响应头
+
+		@ModelAttribute
+			用在方法参数上:
+				把Model中的对象数据绑定到参数上
+			用在方法返回值:
+				使@RequestMapping 方法返回值作为模型数据，自动将该返回值加入到ModelMap中，供视图访问
+				
+				使用@ModelAttribute注解的方法会在每一个@RequestMapping标注的方法前执行，
+
+				用法技巧:
+				暴露表单引用对象为模型数据：放在处理器的一般方法（非功能处理方法）上时，是为表单准备要展示的表单引用对象
+			与@SessionAttributes("currentUser"）配合
+			往 Session 中存或者从 Session 中取指定属性名的具体对象
+			
+			0.使用@ModelAttribute注解的方法会在每一个@RequestMapping标注的方法前执行，			
+			1.Model类，（不通过@ModelAttribute添加）默认在控制器返回的视图名对应的视图上有效，
+			·同一控制器类不同方法间Model不共享，Model离开控制器处理方法后就只能在视图中显示数据
+			2.通过在方法上@ModelAttribute，将返回值作模型数据添加到模型上，
+			·当输出视图时，@ModelAttribute的model复制到Model
+
+			3.离开控制器后，model要不渲染到视图显示，要不消失
+
+		@SessionAttributes（“name”）
+			用于控制器类级上
+			参数指定存贮在session上的模型数据的名称
+			把指定模型数据名添加到一个session中
+			
+		基于Servlet3的异步请求处理
+			控制器可以返回DeferredResult或Callable对象来异步地计算其返回值
+			异步请求处理的相关配置:
+				在web.xml的servlet元素下添加子标签
+					<async-supported>true</async-supported>设置为true
+					Filter都必须配置为支持ASYNC类型的请求分派
+				或用AbstractAnnotationConfigDispatcherServletInitializer来简化配置
+			1.控制器方法可以返回一个Callable对象，进行异步处理
+			2.另一个选择，是让控制器方法返回一个DeferredResult的实例
+			区别:callcable由taskExecutor处理
+			   DeferredResult可由任何线程处理
+			
+			Callable的异步请求流程:(由TaskExecutor线程处理)
+				1.控制器方法返会Callable对象
+			!	2.进行异步处理，并把该Callable对象提交给另一个独立线程的执行器TaskExecutor处理
+				3. DispatcherServlet和所有过滤器都退出Servlet容器线程，但响应对象未返回给客户
+				4. Callable对象处理完毕返回结果，此时Spring MVC会重新把请求分派回Servlet容器，恢复处理
+				5. DispatcherServlet再次被调用，恢复对Callable异步处理所返回结果的处理
+			
+			DeferredResult异步请求流程:(可由任何线程处理)
+				1.控制器先返回一个DeferredResult对象，并把它存取在内存（队列或列表等）中以便存取
+			!	2. Spring MVC开始进行异步处理
+				3. DispatcherServlet和所有过滤器都退出Servlet容器线程，但此时方法的响应对象仍未返回
+				4.由处理该请求的线程对 DeferredResult进行设值，然后Spring MVC会重新把请求分派回Servlet容器，恢复处理
+				5. DispatcherServlet再次被调用，恢复对该异步返回结果的处理
+				
+	Spring MVC 处理器映射HandlerMapping
+	RequestMappingHandlerMapping
+			before：上个版本要定义一个或多个HandlerMapping bean以将进入容器的web请求映射到合适的处理器方法
+			now：定义RequestMappingHandlerMapping类的bean 自动查找@RequestMapping的@Controller控制器bean
+			
+			定义一个处理器映射的方法
+			<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+				<property name="interceptors">
+					<bean class="example.MyInterceptor"/>
+				</property>
+			</bean>
+			
+		Spring MVC 使用HandlerInterceptor拦截请求
+		 HandlerInterceptor接口
+		 或继承HandlerInterceptorAdapter简化拦截器的配置
+				控制器方法处理的请求都会被配置的拦截器先拦截到
+				实现HandlerInterceptor接口的类做拦截器拦截处理请求，对HttpServletRequest, HttpServletResponse处理拦截
+					包含3个方法:
+						preHandle()  	在处理器前执行
+						postHandle() 	在处理器后执行
+						afterCompletion()	在整个请求完成后执行
+				在处理器映射里配置interceptors属性，使用拦截器s可以定义多个拦截器
+					上面的配置
+					<bean class="example.MyInterceptor"/>
+				
+				使用@ResponseBody或ResponseEntity的方法时
+				HttpMessageConverter会在拦截器的postHandle方法被调之前就把信息写回响应中。这样拦截器就无法再改变响应了
+	
+	Spring MVC 视图解析
+		解析视图名，给分发器渲染
+		基础:使用ViewResolver接口解析视图
+		Spring有非常多内置的视图解析器:
+			其中：UrlBasedViewResolver
+					ViewResolver接口的一个简单实现。它直接使用URL来解析到逻辑视图名
+				InternalResourceViewResolver	
+					UrlBasedViewResolver的一个好用的子类。它支持内部资源视图（具体来说，Servlet和JSP）、
+					以及诸如JstlView和TilesView等类的子类
+				ResourceBundleViewResolver	
+					视图解析器接口ViewResolver的一个实现，采用bundle根路径所指定的ResourceBundle中的bean定义作为配置。
+					一般bundle都定义在classpath路径下的一个配置文件中。默认的配置文件名为views.properties。
+				如果需要在应用中使用多种不同的视图技术，可以使用ResourceBundleViewResolver
+				
+		Spring MVC 视图链
+			Spring支持同时使用多个视图解析器，在他们的bean设置order属性指定它们的次序
+				 <property name="order" value="1"/>
+			for viewResolver i in viewResolvers:
+				if i.view!=null:
+					return i.view
+				else:
+					continue
+			throw ServletException
+			如果所有解析器都不能返回视图就抛出异常
+			如果不把InternalResourceViewResolver放置在解析器链的最后，将可能导致解析器链无法完全执行
+			 InternalResourceViewResolver永远都会返回一个视图。（可能是null）
+		
+		Spring MVC 视图重定向
+			重定向视图 RedirectView
+				控制器返回一个重定向视图RedirectView，使DispatcherServlet放弃使用一般的视图解析机制
+			向重定向目标传递数据
+				@RequestMapping里声明RedirectAttributes类型的方法参数，指定被传递到重定向的视图的参数
+				模型Model中的所有属性默认都会考虑作为URI模板变量被添加到重定向URL中
+					@RequestMapping方法可以声明一个RedirectAttributes类型的方法参数
+					如果重定向成功发生，那么RedirectAttributes对象中的内容就会被使用到URI模版上；
+					否则URI模版使用模型model中的数据
+					
+			重定向前缀——redirect:重定向
+				以Servlet上下文作为相对路径进行查找重定向路径
+				
+			重定向前缀——forward:转发
+				以Servlet上下文作为相对路径进行查找重定向路径
+				但当你主要使用的是其他的视图技术，而又想要强制把一个资源转发给Servlet/JSP引擎进行处理时，这个前缀就很有用
+				
+		Spring MVC 内容协商解析器
+			ContentNegotiatingViewResolver，不解析视图，而是把解析工作交给其他视图解析器
+		

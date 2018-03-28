@@ -1,0 +1,7 @@
+Reader类与writer类的子类用于处理文本输入输出
+
+Reader与writer及其子类对文本起到处理文本编码的作用
+
+默认使用系统编译器设定的字符集编码
+
+	可以在new Reader或writer时指定编码类型
