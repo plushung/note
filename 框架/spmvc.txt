@@ -424,3 +424,15 @@ Spring MVC 用DispatcherServlet处理请求
 			DefaultRequestToViewNameTranslator为我们根据约定生成视图名，要声明为Bean
 			Spring Web MVC的DispatcherServlet会为你实例化这样一个默认的对象
 			不指定viewname时，将会一url名作为视图名
+			
+	Spring MVC 支持HTTP缓存
+		HTTP缓存策略,决定何时缓存资源，缓存时间，有利于提升用户体验，加快加载速度
+		Http缓存响应头 由服务器设定
+			Cache-Control 
+				帮助私有缓存（比如浏览器端缓存）和公共缓存（比如代理端缓存）
+			Last-Modified
+				
+			ETag
+				标识给定的URL下的内容有无变化
+					客户端就可以在后续的GET请求中使用这个ETag头表示，一般是将它放在If-None-Match请求头中。
+					此时若内容没有变化，服务器端会直接返回304: 内容未更改。
