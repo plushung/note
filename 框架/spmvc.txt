@@ -34,7 +34,7 @@ Spring MVC
 		配置视图解析器	<Bean class="**viewResolver">
 		声明bean		<baen class="..">
 
-Spring MVC 用DispatcherServlet处理请求
+Spring MVC Content
 
 	WebApplicationInitializer是Spring MVC提供的一个接口
 		作用:查找基于代码的配置，并应用来初始化servlet3以上的web容器
@@ -242,6 +242,7 @@ Spring MVC 用DispatcherServlet处理请求
 				HttpMessageConverter会在拦截器的postHandle方法被调之前就把信息写回响应中。这样拦截器就无法再改变响应了
 				若要postHandler起作用，
 				请让你的应用实现ResponseBodyAdvice接口，并将其定义为一个@ControllerAdvice bean或直接在RequestMappingHandlerMapping中配置。
+	
 	Spring MVC 视图解析(ViewResolver)
 		解析视图名，给分发器渲染
 		基础:使用ViewResolver接口解析视图
@@ -425,8 +426,8 @@ Spring MVC 用DispatcherServlet处理请求
 			Spring Web MVC的DispatcherServlet会为你实例化这样一个默认的对象
 			不指定viewname时，将会一url名作为视图名
 			
-	Spring MVC 支持HTTP缓存
-		HTTP缓存策略,决定何时缓存资源，缓存时间，有利于提升用户体验，加快加载速度
+	Spring MVC 支持HTTP缓存 (Cache-Control)
+		HTTP缓存策略,决定何时缓存资源，缓存时间，有利于提升用户体验，加快加载速度，节省带宽资源
 		Http缓存响应头 由服务器设定
 			Cache-Control 
 				帮助私有缓存（比如浏览器端缓存）和公共缓存（比如代理端缓存）
@@ -436,3 +437,81 @@ Spring MVC 用DispatcherServlet处理请求
 				标识给定的URL下的内容有无变化
 					客户端就可以在后续的GET请求中使用这个ETag头表示，一般是将它放在If-None-Match请求头中。
 					此时若内容没有变化，服务器端会直接返回304: 内容未更改。
+					
+		1.Spring MVC在控制器中设置cache
+			若控制器返回ResponseEntity
+			可在ResponseEntity上配置cache
+				ResponseEntity.
+					ok().//响应状态
+					cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES)).//设置缓存时间
+					lastModified(1000).//设置lastModified头
+					eTag("123456").//设置eTag标志头，用于决定需不需要更新缓存
+					body(db);//返回到响应体中的model
+			
+		2.SPring mvc通过控制器的WebRequest 参数检测客户端的缓存是否已更改
+			request.checkNotModified( lastModified )
+				lastModified传入最后更改时间，与request头的If-Modified-Since比较
+				//false--不用更改  true--需要更改
+			或
+			request.checkNotModified( eTag )
+				方法会将传入的参数值与请求头'ETag'的值进行比较
+				//false--不用更改  true--需要更改
+			或
+			request.checkNotModified(eTag, lastModified)
+				同时比较lastMdified时间与ETag标志
+				//false--不用更改  true--需要更改
+				
+			若资源未修改返回一个304响应状态码HTTP 304 Not Modified（资源未修改）
+					
+		3.Spring mvc对静态资源设置缓存
+			xml:
+				<mvc:resources mapping="/resources/**" location="/public-resources/">
+					<mvc:cache-control max-age="3600" cache-public="true"/>
+				</mvc:resources>
+			JavaConfig类:
+				继承WebMvcConfigurerAdapter
+				重写addResourceHandlers(ResourceHandlerRegistry registry)
+					registry.addResourceHandler("/resources/**")
+					.addResourceLocations("/public-resources/")
+					.setCacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic());
+					
+		web容器 创建弱ETag对象(只节省带宽，不省计算资源)
+		它是纯Servlet技术实现的过滤器，因此，它可以与任何web框架无缝集成
+		只要在web.xml下配置过滤器
+			ShallowEtagHeaderFilter缓存JSP页面内容
+			将缓存内容生成MD5的Hash作为ETag
+			把ETag写入Response头的ETag中
+			
+			下次请求头If-None-Match写入ETag
+			ShallowEtagHeaderFilter检测If-None-Match的etag1
+			把jsp视图渲染得到etag2
+			比较etag2=etag1?304(未修改):200
+			
+Spring MVC 用JavaConfig 初始化Servlet容器
+	Servlet 3.0以上的环境下，你可以通过编程的方式来配置Servlet容器了
+	WebApplicationInitializer <--- --- --- AbstractDispatcherServletInitializer
+		AbstractDispatcherServletInitializer(ADSI)使DispatcherServlet配置变得更简单，
+			1.你只需要覆写相应的方法
+			2.在其中提供servlet映射
+				getServletMappings()
+			3.指定DispatcherServlet所需配置(javaconfig/xml)的位置
+				JavaConfig:)
+					getServletConfigClasses()	//web应用上下文
+					getRootConfigClasses()		//web根上下文
+				xml:)
+					createServletApplicationContext()
+			4.ADSI同样也提供了便捷的方式来添加过滤器Filter
+				getServletFilters()
+				
+Spring MVC 启用MVC Java编程配置或MVC命名空间
+	启用MVC:
+		@Configuration
+		@EnableWebMvc
+		public class WebConfig(){}
+		=======
+		<mvc:annotation-driven/>
+	默认注册的组件:
+		RequestMappingHandlerMapping	//映射控制器
+		RequestMappingHandlerAdapter	//调用控制器
+		ExceptionHandlerExceptionResolver	//解析控制器异常
+		支持对使用了@RequestMapping、@ExceptionHandler及其他注解的控制器方法的请求处理。
