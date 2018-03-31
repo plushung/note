@@ -1,0 +1,5 @@
+1.Error parsing HTTP request header Note: further occurrences of HTTP header parsing errors will be logged at DEBUG level
+	java.lang.IllegalArgumentException: Invalid character found in the request target. The valid characters are defined in RFC 7230 and RFC 3986
+表单提交了大量的数据，而这些数据量可能超过了Tomcatt的header缓冲区大小不够
+	使调整了server.xml <Connector maxHttpHeaderSize=" ">可能还是解决不了,还是用psot吧
+	

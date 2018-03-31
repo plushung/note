@@ -5,6 +5,10 @@ post spweb/index.html http/1.0
 
 第二行开始：消息头
 ContentType="application/x-www-form-urlencoded"之类的
+Accept="application/json" 表示客户端可接受的内容类型
+Content-Disposition: form-data; name=file;filename=test.txt;
+//表示该部分内容是表单数据form-data，名字为file，文件名为test.txt
+//服务器可以通过获取paramName（“file”）取得该数据
 。
 
 第三部分：消息体
@@ -26,3 +30,6 @@ ex:http/1.0 200 ok
 
 第三部分：消息体
 服务器返回的结果
+
+
+Content-disposition是 MIME 协议的扩展，MIME 协议指示 MIME 用户代理如何处理附加的文件

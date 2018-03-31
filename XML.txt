@@ -34,3 +34,5 @@ XML语法：
 6.注释<!--comman-->
 7.实体引用    < > & ' " =&lt,&gt,&amp,&apos,&quot
 8.空格保留，不像html空格会合并
+
+要使用某标签要先引入xmlns xml命名空间
