@@ -48,6 +48,7 @@ JQuery的ajax
 		contentType:"application/json",//设置ContentType
 		success:function(data,status,xhr){}//成功接受响应时调用函数
 		error:function(xhr,status){}
+		complete(xhr,staths){}
 	}
 	$.ajax(option) //option为js对象
 	

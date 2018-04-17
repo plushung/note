@@ -1,5 +1,25 @@
 maven clean 会清空target目录
 
+maven error
+	Error assembling WAR: webxml attribute is required (or pre-existing WEB-INF/web.xml if executing in update mode)
+		maven的web项目默认的webroot是在src\main\webapp。如果在此目录下找不到web.xml就抛出以上的异常。
+		解决
+			<build>    
+				<finalName>simple-webapp</finalName>    
+				<plugins>    
+					<plugin>    
+						<groupId>org.apache.maven.plugins</groupId>    
+						<artifactId>maven-war-plugin</artifactId>    
+						<version>2.1.1</version>    
+						<configuration>    
+					
+							  <webXml>WebContent\WEB-INF\web.xml</webXml>   ！！！！！         
+					
+						</configuration>    
+					</plugin>    
+				</plugins>    
+				 </build>    
+
 spring用classpathcontextloader加载xml，必需在classes下有xml文件
 
 读取文件的路径问题：
@@ -23,3 +43,8 @@ eclipse：
 	解决：清理项目
 		点击项目->clean->选第2个Clean projects selected below
 		项目clean完后自动重新编译出class文件
+
+The type ***** cannot be resolved
+	错误:某个类不能检索到，
+	原因:缺少需要的库
+	解决:导入对应的依赖

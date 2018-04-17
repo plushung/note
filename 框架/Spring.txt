@@ -32,7 +32,7 @@ Spring IoC 容器
 			       @Component：一个泛化的概念，表示一个组件（Bean），可作用在任何层次
    			       @Controller：用于对Controller实现类进行标注，目前该功能与Component相同
    			       @Repository：用于对DAO实现类进行标注
-    			       @Service：用于对Service实现类进行标注，目前该功能与Component相同
+    			   @Service：用于对Service实现类进行标注，目前该功能与Component相同,作用和与Bean同
 	    基于 Java 的配置 :@Configuration 的注解类表示这个类可以作为 bean 定义的来源
 				@Bean 的注解方法将返回一个对象，注册在 Spring 应用程序上下文中
 
@@ -48,7 +48,22 @@ Spring 依赖注入
 			<property name="spellChecker" value="spellChecker"/>
 	注入集合：
 		<set>,<list>,<map>,<props>
-
+		
+	运行时注入属性
+		0在配置类中声明属性源@PorpertySource(“pathurl”)
+		1.通过Spring的Environment Bean从属性文件中取得属性值
+			1在配置类中注入一个Environment 的bean，evn
+			2在要运行时注入属性值得地方用evn.getProperty("porpertyName","defaultValue"),取得属性值,没有就用defaultValue
+		1.通过属性占位符${}或SpEl占位符#{}注入属性值
+			1在配置类声明一个PorpettySourcePlaceholderConfigure bean，并且加上static，因为要在configure类加载时就初始化，用以解析占位符
+			2在需要注入值的地方${porpertyName}或#{systemproperties[“porpertyName”]}
+				# #引用Bean#{beanId}，引用Bean的方法#{beanName.method()}，引用Bean的属性#{beanName.Field}
+				# #使用类#{T(Class)}
+			!!! ${}可以用在任何地方，在java类中，xml文件中
+			!!! 自动装配时配合@Value()使用，作用像@Autowrie
+		
+		2程序运行时再注入值
+		
 Spring Beans 自动装配
 	xml:<bean autowire="byName/byType/constructor">
 
@@ -93,11 +108,11 @@ Spring AOP
 	AOP的配置实现	
 		classpath下要包含以下AspectJ 库文件
     		aspectjrt.jar
-		aspectjweaver.jar
-		aspectj.jar
+			aspectjweaver.jar
+			aspectj.jar
     		aopalliance.jar
 
-		xml方式：
+		xml方式：(要先声明一个Aspect的Bean)
 			<aop:config>
 				<aop:aspect>
 					<aop:pointcut>
@@ -116,7 +131,7 @@ Spring AOP
 				ref 引用一个切点businessService，在该切点调用该aspect的一个method：adviceMethod
 		注解方式：
 			xml配置文件要声明以下标签以启用@AspectJ
-			<aop:aspectj-autoproxy/>
+			<aop:aspectj-autoproxy/>或@EnableAspectJAutoProxy
 			声明切面:
 				@Aspect
 				public class AspectModule｛｝
@@ -137,7 +152,8 @@ Spring JDBC 框架
 
 	存储过程（Stored Procedure）：
 	是在大型数据库系统中，一组为了完成特定功能的SQL 语句集，存储在数据库中，
-	经过第一次编译后再次调用不需要再次编译，用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。存储过程是数据库中的一个重要对象。
+	经过第一次编译后再次调用不需要再次编译，用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。
+	存储过程是数据库中的一个重要对象。
 
 Spring 事务管理（commit，rollback。。。）
 	事务的四个关键属性说成是 ACID
@@ -156,7 +172,7 @@ Spring 事务管理（commit，rollback。。。）
 	Spring 支持两种类型的事务管理:
 		编程式事务管理 ：这意味着你在编程的帮助下有管理事务。这给了你极大的灵活性，但却很难维护。
 			将事务管理与业务代码DAO编写在一块
-    		声明式事务管理 ：这意味着你从业务代码中分离事务管理。你仅仅使用注释或 XML 配置来管理事务。
+    	声明式事务管理 ：这意味着你从业务代码中分离事务管理。你仅仅使用注释或 XML 配置来管理事务。
 			从业务代码中分离事务管理，仅仅使用注释或 XML 配置来管理事务，是非侵入式，不会影响业务逻辑的实现。
 
 	Spring 支持使用 Spring AOP 框架的声明式事务管理。声明式事务管理比编程式事务管理更可取
@@ -172,3 +188,56 @@ Spring 事务管理（commit，rollback。。。）
 		另为一种通过@Transactional实现事务管理实现
 	continue。。。。。。。。。。。。。。。。。。。。。。。。。
 
+	
+	ORM事务实体管理
+		
+		JPA:
+			1.EntityManagerFactory中取得EntityManager
+			2.EntityManager执行事务
+			JPA事务实体管理分为 应用程序管理类型 和 容器管理类型
+				应用程序管理类型的EntityManagerFactory
+					通过PresistenceProvider的createEntityManagerFactory()取得
+				容器管理类型的EntityManagerFactory
+					通过PresistenceProvider的createContainerEntityManagerFactory()取得
+		
+			若通过Spring管理JPA
+				使用Spring提供的FactoryBean生成EntityManagerFactory
+				Spring提供的这两个类封装了PresistenceProvider，为我们创建EntityManagerFactory
+				JPA应用程序类管理器（Spring作为应用）
+					Spring的LocalEntityManagerFactoryBean产生EntityManagerFactory
+					配置LocalEntityManagerFactoryBean时要指定persistence.xml
+				JPA容器类管理器（Spring作为容器）
+					Spring的LocalContainerEntityManagerFactoryBean产生EntityManagerFactory
+					配置LocalContainerEntityManagerFactoryBean时要指定使用哪中JPA的实现
+					
+		Hibernate:
+			1.SessionFactory中取得Session
+			2.Session执行事务
+			
+			hibernate用SessionFactory管理事务，一个程序应该只有一个
+			
+			若通过Spring管理Hibernate
+				使用Spring提供的FactoryBean生成SessionFactory
+				Spring的LocalSessionFactoryBean为我们提供SessionFactory，它封装了SessionFactory，并作配置
+				LocalSessionFactoryBean
+					用于以xml定义映射的持久化类的配置
+				AnnotationSessionFactoryBean
+					用于以注解定义映射的持久化类的配置
+					
+		@Repository
+			1用于注解基于ORM（Hibernate或JPA）的DAO类，是Spring的构造性注解，
+			像Controller，可以被组件扫描到，其里面发生的异常可被Spring框架捕获
+			2.被注解的bean产生的异常会被转换为Spring的同一数据访问异常，
+			由Spring统一处理(无论是用Hibernate还是JPA，统统变为Spring数据访问异常)
+			！！！要配置一个前置处理器进行转换，
+			
+		@Transactional
+			是使用Spring AOP实现的
+			进行管理事务(commit,rollback)，所有DAO方法都在事务Context上执行
+			
+			context上下文，或者程序环境，是一段程序运行时所依赖的环境，
+			例如程序的运行要依赖环境中的某些变量
+		JPA&&Hibernate
+			EntityManagerFactory====SessionFactory====DriverManager
+			EntityManager====Session=====connection
+			persistence.xml====hibernate.cfg.xml=====“username=***”

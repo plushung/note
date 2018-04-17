@@ -19,13 +19,13 @@ Content-Disposition: form-data; name=file;filename=test.txt;
 
 响应：
 第一行：请求行 
-typr/version statecode stateCodeDescripty
+type/version statecode stateCodeDescripty
 ex:http/1.0 200 ok
 
 第二行开始：消息头
 下载文件的Header，要添加的东西
 	添加:ContentType="application/PDF" 文件类型
-	     ContentLength=。。。设置内容长度
+	     ContentLength=。。。设置消息体内容长度
 	     Content-disposition="attachment;filename=ai.pdf;" 内容处理方式：附件，文件名ai.pdf
 
 第三部分：消息体

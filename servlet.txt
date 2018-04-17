@@ -45,3 +45,83 @@ xml：<listener>
 		<listener-class>
 	</listener>
 annotation：@WebListener
+
+
+
+异常处理
+	<error-page>
+		<error-code>404</error-code>		//处理的异常码
+		<location>/ErrorHandler</location>	//处理页面
+	</error-page>
+
+cookies处理
+	设置cookies
+		servlet通过response的Set-Cookie头给浏览器设置Cookies，不同内容用；分开
+			内容
+				expires=Friday, 04-Feb-07 22:03:38 GMT;	//该cookies过期时间
+				name=xyz							//该cookies存储的消息，key/values
+				path=/							//表示当浏览器访问该路径时就把这个cookies发送给服务器
+				domain=w3cschool.cn					//该cookies的域名
+		
+		new cookies（‘key’，‘values’） //cookies对象
+		
+		方法
+			setMaxAge(int expiry)			//过期时间	不设置则该cookies只在当前session有效
+			setValue(String newValue)		//cookies存储的值
+			setPath(String uri)			//用于该路径
+			setDomain(String pattern)		//用于该域名
+			setSecure(boolean flag)		//是否在ssl加密的接上发送
+		
+		response.addCookie(cookie);		//把cookies添加到响应	可同时添加多个cookies
+		
+	读取cookies
+		若浏览器再次访问/
+			把保存在cookies的消息name=xyz发回给服务器，服务器可通过cookies的取得该消息
+			
+		request
+		方法	
+			request.getCookies()		//获取浏览器的cookies对象数组
+			cookies.getName() 		//访问每个 cookie 关联的key
+			cookies.getValue() 		//访问每个 cookie 关联的value
+			
+	删除cookies
+		将从浏览器读取的cookies的maxage设置为0,再返回给浏览器
+		方法
+			cookies.setMaxAge(0)
+			response.addCookies(cookies)
+			
+Session 跟踪
+	浏览器每个单独的连接，web服务器会新建一个新的会话session
+	维持会话
+		三种方式来维持 Web 客户端和 Web 服务器之间的 session 会话
+			cookies
+				将web服务器分配的sessionid存储到cookies，下次访问在用该sessionid
+			hidden表单字段
+				把sessionid保存到hidden表单中，随表单提交发送给服务器
+			URL 重写
+				每个 URL 末尾追加一些额外的数据来标识 session 会话
+				
+	获取当前连接的session
+		request.getSession()
+	
+	session方法
+		getId()							//获取sessionid
+		setAttribute(String name, Object value) 		//向session添加对象
+		getAttribute(String name)				//获取session存储的对象
+		public boolean isNew()				//如果客户端还不知道该 session 会话，或者如果客户选择不参入该 session 会话，则该方法返回 true
+		
+	删除 Session 会话数据
+		removeAttribute(String name) 			//移除某个对象
+		invalidate()							//删除session
+		在web.xml
+			<session-config>
+				<session-timeout>15</session-timeout>
+			  </session-config>
+			  
+Servlet 网页重定向	
+	当文档移动到新的位置，我们需要向客户端发送这个新位置时，我们需要用到网页重定向。
+	当然，也可能是为了负载均衡，或者只是为了简单的随机，这些情况都有可能用到网页重定向。
+	response 对象的 sendRedirect()
+	
+Servlet 自动刷新页面
+	 response.setIntHeader("Refresh", 5);
