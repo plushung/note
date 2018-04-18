@@ -54,6 +54,7 @@ Spring 依赖注入
 		1.通过Spring的Environment Bean从属性文件中取得属性值
 			1在配置类中注入一个Environment 的bean，evn
 			2在要运行时注入属性值得地方用evn.getProperty("porpertyName","defaultValue"),取得属性值,没有就用defaultValue
+		或
 		1.通过属性占位符${}或SpEl占位符#{}注入属性值
 			1在配置类声明一个PorpettySourcePlaceholderConfigure bean，并且加上static，因为要在configure类加载时就初始化，用以解析占位符
 			2在需要注入值的地方${porpertyName}或#{systemproperties[“porpertyName”]}
@@ -176,7 +177,7 @@ Spring 事务管理（commit，rollback。。。）
 			从业务代码中分离事务管理，仅仅使用注释或 XML 配置来管理事务，是非侵入式，不会影响业务逻辑的实现。
 
 	Spring 支持使用 Spring AOP 框架的声明式事务管理。声明式事务管理比编程式事务管理更可取
-	即将事务模块声明为Aspect，运用AOP的方式管理事务
+	即将事务模块声明为Aspect，运用AOP的方式管理事务      @Transaction
 
 	Spring 事务抽象：
 		PlatformTransactionManager 接口
@@ -184,7 +185,7 @@ Spring 事务管理（commit，rollback。。。）
 		TransactionStatus 接口为事务代码提供了一个简单的方法来控制事务
 	声明式事务：
 		一种为通过使用Spring的<tx:advice>定义事务通知与AOP相关配置实现，
-			
+		或	
 		另为一种通过@Transactional实现事务管理实现
 	continue。。。。。。。。。。。。。。。。。。。。。。。。。
 
@@ -227,7 +228,7 @@ Spring 事务管理（commit，rollback。。。）
 		@Repository
 			1用于注解基于ORM（Hibernate或JPA）的DAO类，是Spring的构造性注解，
 			像Controller，可以被组件扫描到，其里面发生的异常可被Spring框架捕获
-			2.被注解的bean产生的异常会被转换为Spring的同一数据访问异常，
+			2.被注解的bean产生的异常会被转换为Spring的同一数据访问异常，DAO_Access_exception
 			由Spring统一处理(无论是用Hibernate还是JPA，统统变为Spring数据访问异常)
 			！！！要配置一个前置处理器进行转换，
 			

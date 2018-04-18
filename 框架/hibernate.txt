@@ -160,21 +160,25 @@ Hibernate 架构
 								   context---->getTransaction----transaction!=null---->return transaction
 												    |-----transaction=null----->gettransactionFactory
 																		|------>createTransaction----->return transaction 
-		hibernate的transactionFactory有3种
-	事务策略配置
-		org.hibernate.Transaction统一了各种事务的具体实现，可方便决定用哪种事务
-		通过设置 Hibernate 配置属性 hibernate.transaction.factory_class 来指定一个 Transaction 实例的工厂类，
-		用来产生transaction,决定session用谁的transaction来对数据库操作
-		有三个标准（内建）
-			默认用org.hibernate.transaction.JDBCTransactionFactory
-				使用JDBC事务的工厂，即本地事务
-			org.hibernate.transaction.JTATransactionFactory
-				使用JTA事务的工厂
-				如果在上下文环境中存在运行着的事务（如，EJB 会话 Bean 的方法），则委托给容器管理的事务。
-				否则，将启动一个新的事务，并使用 Bean 管理的事务。
-			org.hibernate.transaction.CMTTransactionFactory
-				使用容器管理的事务的工厂，
-				事务的开始、提交、回滚交给容器决定，
+		
+	hibernate内置的事务工厂transactionFactory有3种	
+		事务策略配置
+			org.hibernate.Transaction统一了各种事务的具体实现，可方便决定用哪种事务
+			
+			通过设置 Hibernate 配置属性 hibernate.transaction.factory_class 来指定一个 Transaction 实例的工厂类，
+			
+			用来产生transaction,决定session用谁的transaction来对数据库操作
+			
+			有三个标准（内建）
+				默认用org.hibernate.transaction.JDBCTransactionFactory
+					使用JDBC事务的工厂，即本地事务
+				org.hibernate.transaction.JTATransactionFactory
+					使用JTA事务的工厂
+					如果在上下文环境中存在运行着的事务（如，EJB 会话 Bean 的方法），则委托给容器管理的事务。
+					否则，将启动一个新的事务，并使用 Bean 管理的事务。
+				org.hibernate.transaction.CMTTransactionFactory
+					使用容器管理的事务的工厂，
+					事务的开始、提交、回滚交给容器决定，
 			
 持久化类
 	
@@ -398,35 +402,7 @@ Hibernate 架构
 				nullable = false		//是否可以为null
 			@Formula(value="(select count(p.PageId) from pagetable p where p.OwnerId=id)")
 				当hibernate访问数据库时，执行该SQL语句并将查询值赋值给被注解的属性
-			组件
-				组件类的属性约束只能在Column中用nullable添加
-				将某类定义为组件并声明为实体类的组件属性，是值类型
-					@Embeddable
-						将类声明为复合类（组件），有多个属性
-						可指定@Column属性设置列的相关属性，按照我们设定的值去生成表的字段
-					@Embedded
-						在一个属性中使用复合（组件）类型
-						@AttributeOverrides
-							在@Embedded属性中使用，覆盖@Embeddable的列属性，包含多个@AttributeOverride
-						@AttributeOverride
-							 @AttributeOverride(name="city", column = @Column(name = "person_city", length = 15))})
-							 定义如何覆盖@Embeddable类的属性，
-							 name	//指明覆盖的属性名
-							 column	//指明被覆盖的属性映射成表中的什么字段名
-						@AttributeOverrides({
-							  @AttributeOverride(name="key.street1", column=@Column(name="fld_street")),
-							  @AttributeOverride(name="value.stars", column=@Column(name="fld_note"))
-						   })	
-					组件可嵌套
-					xml
-						<component name="name" class="Name" unique="true">
-						//name 	实体类中的组件属性名
-						//class	组件的类名
-							<parent name="owner"/>
-							<property name="first" />
-							<property name="last" />
-						</component>
-					
+				
 			xml
 				<property
 					name="propertyName"		//属性的名字
@@ -442,35 +418,67 @@ Hibernate 架构
 					optimistic-lock="true|false"	//指定这个属性在做更新时是否需要获得乐观锁
 					generated="never|insert|always"//表明此属性值是否实际上是由数据库生成的
 				/>
+		5组件
+			组件类的属性约束只能在Column中用nullable添加
+			将某类定义为组件并声明为实体类的组件属性，是值类型
+				@Embeddable
+					将类声明为复合类（组件），有多个属性
+					可指定@Column属性设置列的相关属性，按照我们设定的值去生成表的字段
+				@Embedded
+					在一个属性中使用复合（组件）类型
+					@AttributeOverrides
+						在@Embedded属性中使用，覆盖@Embeddable的列属性，包含多个@AttributeOverride
+					@AttributeOverride
+						 @AttributeOverride(name="city", column = @Column(name = "person_city", length = 15))})
+						 定义如何覆盖@Embeddable类的属性，
+						 name	//指明覆盖的属性名
+						 column	//指明被覆盖的属性映射成表中的什么字段名
+					@AttributeOverrides({
+						  @AttributeOverride(name="key.street1", column=@Column(name="fld_street")),
+						  @AttributeOverride(name="value.stars", column=@Column(name="fld_note"))
+					   })	
+				组件可嵌套
+			xml
+				<component name="name" class="Name" unique="true">
+				//name 	实体类中的组件属性名
+				//class	组件的类名
+					<parent name="owner"/>
+					<property name="first" />
+					<property name="last" />
+				</component>
+					
+					
+			
 	!映射继承关系
 		@AttributeOverrides({		//在子类上使用时，将重写父类属性到表的映射字段
 							  @AttributeOverride(name="key.street1", column=@Column(name="fld_street")),
 							  @AttributeOverride(name="value.stars", column=@Column(name="fld_note"))
 						   })
-		1:@MappedSuperClass
+		1:@MappedSuperClass								//只要维护子表，没有父表。对多关联时，不能用这种继承方式，必需用下面的
 			在父类上使用，使子类继承父类的所有字段，在子类上可以用@AttributeOverride重写字段映射
 				可选在父类上声明数据库标识符id
 		或			
 		每个子类各有一个表
-		2:@Entity+@Inheritance(strategy="Table_Per_Class")
+		2:@Entity+@Inheritance(strategy="Table_Per_Class")			//只要维护子表，父表是空的
 			在父类上使用，使子类继承父类的所有字段,
 				从不同的子表select出需要的字段通过union 子表 as 父表
 			！！用这种方法，必需要在父类上定义数据库标志符，所有子类共享标志符
-			这种策略的子类的表之间没有关系，互不关联，子类表还是独立的，父类表是通过子表的union操作构成的
+			这种策略的子类的表之间没有关系，互不关联，子类表还是独立的，父类实体是通过子表的union操作构成的
 		或
 		所有子类公用一个父类表		//不推荐
-		3:@Entity+@Inheritance(strategy="Single_table")
+		3:@Entity+@Inheritance(strategy="Single_table")				//只要维护一个表
 			在父类上使用，使子类继承父类的所有字段,
 			！！用这种方法，必需要在父类上定义数据库标志符，所有子类共享标志符
-			要父类配置识别器@DiscriminatorColumn(name="By_TYPE") //用于识别不同的子表的识别值，来区分子表
-			同时在子类上用@DiscriminatorValue（"CC"）		//为子表赋予一个不同的识别值
+			要父类配置识别器@DiscriminatorColumn(name="By_TYPE") //用于识别不同的子表的识别值，来区分子表，hibernate 会在表上创建一个By_Type字段
+			同时在子类上用@DiscriminatorValue（"CC"）			//为子表赋予一个不同的识别值作为BY_Type的值，通过By_type字段区分子类
+			通过条件where By_type="son"取出子类记录
 		或
-		4:@Entity+@Inheritance(strategy="Inheritancetype.joined")
-			在父类上使用，使子类继承父类的所有字段, 通过联结的形式(inner join),构成表
-				父表 inner join 不同的子表	= 父表
+		4:@Entity+@Inheritance(strategy="Inheritancetype.joined")		//要维护父表与子表
+			在父类上使用，使子类继承父类, 通过联结的形式(inner join),构成表
+				父表 inner join 不同的子表	= 表
 			！！用这种方法，必需要在父类上定义数据库标志符，所有子类共享标志符
 			子类表引用父表的外键约束，可用@PrimaryKeyColumn指定外键列作主键
-	
+			子表的主键是外键，父表的主键做子表的外键
 		
 	！Hibernate 的类型 
 		实体（Entities）和值（values）
@@ -533,33 +541,66 @@ Hibernate 架构
 				@OrderColumn(name="orders_index")	//用持有集合索引值的字段的名称
 		
 		2映射基础类型集合和组件类集合
-			集合元素为基础类型的映射
-				@ElementCollection			//声明该集合是基础类型的集合
-				@CollectionTable(name="Nicknames", joinColumns=@JoinColumn(name="user_id"))//声明中间表和外键
-				@Column(name="nickname")		//声明该集合在中间表对应的字段
-				
-			
-			集合元素的类型为组件类的映射
-				@ElementCollection
-				@CollectionTable(name="Addresses", joinColumns=@JoinColumn(name="user_id"))//中间表为Address，外键是user_id
-				@AttributeOverrides({
-				@AttributeOverride(name="street1", column=@Column(name="fld_street"))	//组件类的street映射成中间表的fld_street字段
-				})
-				
-			xml方式
-				不用<*ToMany>标签，换成<element>标签
-					<key column>		//指明保存关联的表的外键
-					<element			//指明保存关联的表的主键
-						column(1)="column_name"
-						formul(2)a="any SQL expression"
-						type="(3)typename"
-						length="L"
-						precision="P"
-						scale="S"
-						not-null="true|false"
-						unique="true|false"
-						node="element-name"
-				/>
+			值类型集合必需用@CollectionTable来映射，集合默认是懒加载的，即在读取集合时才从数据库select
+				集合元素为基础值类型的映射
+					@ElementCollection					//声明该集合是值类型的集合
+					@CollectionTable(name="Nicknames", 		//声明中间表和外键
+						joinColumns=@JoinColumn(name="user_id"))//不指定外键名时。默认外键字段名为 外键表_外键表的主键 user表的id为主键
+					@Column(name="nickname")				//声明该集合在中间表对应的字段，将表中的该字段集合加入到java集合中
+					
+					附加：
+						集合可以是set，collection，list
+							set 的映射表中不存在重复项，set表通过userId与ItemName组合主键，保证每个用户的set集合不存在重复元素
+								主键: userId与ItemName构成组合
+								
+							collection 可以存在重复的元素，即userId与ItemName相同的记录可以有多条，因此要为表添加一个额外主键
+								@CollectionId（｛			//为collection添加一个主键，用以区分每条记录
+									column=" PrimaryKey "，	//定义主键字段名
+									type=@Type(type=“Long”)，	//定义主键的类型
+									generator=Contants.ID_GENERATOR	//定义主键值生成策略
+								｝）
+								主键: 主动为collection添加一个主键
+								
+							list 可以保持元素在数据库中的顺序,所以表中要增加个索引字段，以user_id与索引作组合主键
+								@OrderColumn				//在该list的表上添加一个索引字段，可以自定义字段名,默认是 表名_ORDER
+								主键: user_id与索引字段字段构成组合主键
+								
+							Map 可以以键/值对的形式保存集合信息，在映射时要指定key字段
+								@MapKeyColumn（name=“KEY_NAME”）
+								将map的键映射到表中的KEY_NAME列,同一用户的map的key不能重复，所以
+								主键: 由user_id与Key_Name构成组合主键
+						
+						集合排序sort
+							@SortNatural	//使集合元素按自然排序
+							或
+							@hibernate.OrderBy(clause="FILENAME desc|asc")	//按指定的列的升序|降序来排序
+							或
+							@SortComparator(comparator.class)	//通过比较器排序
+							
+				集合元素的类型为组件类的映射( 组件也属于值类型  )
+					@ElementCollection
+					@CollectionTable(name="Addresses", joinColumns=@JoinColumn(name="user_id"))//中间表为Address，外键是user_id
+						可选
+							@AttributeOverrides({
+							@AttributeOverride(name="street1", column=@Column(name="fld_street"))	
+							})
+							//重写组件属性映射的字段，组件类的street属性映射成中间表的fld_street字段，
+							
+							
+				xml方式
+					不用<*ToMany>标签，换成<element>标签
+						<key column>		//指明保存关联的表的外键
+						<element			//指明保存关联的表的主键
+							column(1)="column_name"
+							formul(2)a="any SQL expression"
+							type="(3)typename"
+							length="L"
+							precision="P"
+							scale="S"
+							not-null="true|false"
+							unique="true|false"
+							node="element-name"
+					/>
 		高级
 			有序集合
 				@Sort
@@ -568,7 +609,7 @@ Hibernate 架构
 			双向关联 //双向关联允许通过关联的任一端访问另外一端
 				在关联的两个类上都定意义*TO*
 				一对多关联
-					@OneToMany(MappedBy="d")
+					@OneToMany(MappedBy="d")		
 						MappedBy==xml的inverse=true	//定义了作为反向端的实体
 					或
 					<bag name="categories" table="CATEGORY_ITEM" inverse="true">
