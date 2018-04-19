@@ -418,6 +418,7 @@ Hibernate 架构
 					optimistic-lock="true|false"	//指定这个属性在做更新时是否需要获得乐观锁
 					generated="never|insert|always"//表明此属性值是否实际上是由数据库生成的
 				/>
+				
 		5组件
 			组件类的属性约束只能在Column中用nullable添加
 			将某类定义为组件并声明为实体类的组件属性，是值类型
@@ -541,8 +542,8 @@ Hibernate 架构
 				@OrderColumn(name="orders_index")	//用持有集合索引值的字段的名称
 		
 		2映射基础类型集合和组件类集合
-			值类型集合必需用@CollectionTable来映射，集合默认是懒加载的，即在读取集合时才从数据库select
-				集合元素为基础值类型的映射
+			值类型集合必需用@CollectionTable来映射，集合默认是懒加载的，即在读取集合时才从数据库select，fetch属性决定抓去策略懒加载or立即加载
+				1集合元素为基础值类型的映射
 					@ElementCollection					//声明该集合是值类型的集合
 					@CollectionTable(name="Nicknames", 		//声明中间表和外键
 						joinColumns=@JoinColumn(name="user_id"))//不指定外键名时。默认外键字段名为 外键表_外键表的主键 user表的id为主键
@@ -554,30 +555,23 @@ Hibernate 架构
 								主键: userId与ItemName构成组合
 								
 							collection 可以存在重复的元素，即userId与ItemName相同的记录可以有多条，因此要为表添加一个额外主键
-								@CollectionId（｛			//为collection添加一个主键，用以区分每条记录
-									column=" PrimaryKey "，	//定义主键字段名
-									type=@Type(type=“Long”)，	//定义主键的类型
-									generator=Contants.ID_GENERATOR	//定义主键值生成策略
+								@CollectionId（｛					//为collection添加一个主键，用以区分每条记录
+									column=" PrimaryKey "，			//定义主键字段名
+									type=@Type(type=“Long”)，			//定义主键的类型
+									generator=Contants.ID_GENERATOR	//定义主键值生成策略,可用hibernate的Generator
 								｝）
-								主键: 主动为collection添加一个主键
+								主键: 主动为collection添加一个代理主键，使得可存在重复值
 								
 							list 可以保持元素在数据库中的顺序,所以表中要增加个索引字段，以user_id与索引作组合主键
 								@OrderColumn				//在该list的表上添加一个索引字段，可以自定义字段名,默认是 表名_ORDER
 								主键: user_id与索引字段字段构成组合主键
 								
 							Map 可以以键/值对的形式保存集合信息，在映射时要指定key字段
-								@MapKeyColumn（name=“KEY_NAME”）
+								@MapKeyColumn（name=“KEY_NAME”）		//指定key映射的列，默认为 表名_KEY 
 								将map的键映射到表中的KEY_NAME列,同一用户的map的key不能重复，所以
 								主键: 由user_id与Key_Name构成组合主键
-						
-						集合排序sort
-							@SortNatural	//使集合元素按自然排序
-							或
-							@hibernate.OrderBy(clause="FILENAME desc|asc")	//按指定的列的升序|降序来排序
-							或
-							@SortComparator(comparator.class)	//通过比较器排序
 							
-				集合元素的类型为组件类的映射( 组件也属于值类型  )
+				2集合元素的类型为组件类的映射( 组件也属于值类型  )
 					@ElementCollection
 					@CollectionTable(name="Addresses", joinColumns=@JoinColumn(name="user_id"))//中间表为Address，外键是user_id
 						可选
@@ -585,7 +579,16 @@ Hibernate 架构
 							@AttributeOverride(name="street1", column=@Column(name="fld_street"))	
 							})
 							//重写组件属性映射的字段，组件类的street属性映射成中间表的fld_street字段，
-							
+							@AttributeOverrides用于重写多个属性
+							@AttributeOverride用于重写单个属性
+					一定要实现组件的相等性，重写equals()和hashCode()方法，便于set比较组件
+					
+					组件的集合与普通值的集合的配置方法相似
+					同样的，组件集合也是set，collection,map,list
+						set的组件集合依赖equals(),和HashCode()的实现，通常用业务键相等的方法重写equals()
+						map
+							若以某类组件为键key，则要重写某类的equals()和hashcode()方法，保证key是唯一的
+					可通过@Parent引用组件构成的类的实例，使组件取得实体的引用，拥有对实体的单向关联
 							
 				xml方式
 					不用<*ToMany>标签，换成<element>标签
@@ -601,10 +604,14 @@ Hibernate 架构
 							unique="true|false"
 							node="element-name"
 					/>
-		高级
-			有序集合
-				@Sort
-					用于SortSet或SortMap，对集合进行排序，
+		3高级
+			集合排序sort
+				@SortNatural	//使集合元素按自然排序
+				或
+				@hibernate.OrderBy(clause="FILENAME desc|asc")	//clause按指定的 列 的升序|降序 来排序,没有clause就按属性来排
+				@OrderBy( " fieldName , desc|asc " )			//按组件属性名排序
+				或
+				@SortComparator(comparator.class)	//通过比较器排序
 					
 			双向关联 //双向关联允许通过关联的任一端访问另外一端
 				在关联的两个类上都定意义*TO*
@@ -625,11 +632,41 @@ Hibernate 架构
 							<key column="ITEM_ID"/>		
 							<many-to-many class="Category" column="CATEGORY_ID"/>
 					</bag>
-	！关联关系映射	//任何映射都要有name
-		基于外键的单向关联
+	！关联关系映射
+		0.简单的关联关系
+			单向：
+				在只在一端的实体类属性上@OneToMany,@ManyToOne,@OneToOne,@ManyToMany（fetch=fetchtypy.lazy）fetch属性配置抓取策略
+				通过@JoinColumn指定外键
+				
+			使关联变双向
+				在另一侧的实体类属性上@ManyToOne,@OneToMany,@OneToOne,@ManyToMany（fetch=fetchtypy.lazy）
+				
+				使用@OneToMany，@ManyToMany的双向关联时，
+				加上mappedBy属性，告诉hibernate使用另一侧 已给定属性映射的外键列 (@JoinColumn)来 加载该关联集合
+				
+			级联操作
+				背景：
+					双向关联 的两个对像a，b中，a添加b时，b要同时保存a，保证双方关联关系正确，即操作要可以传递
+				jpa级联解决级联操作的传递问题
+					通常在@OneToMany侧配置cascade属性，使操作可以级联起来，
+					即a的属性上用了@OneToMany(cascafe=CascadeType.persist),那么保存a时会级联保存b到数据库中
+						cascadeType：
+							cascadeType.persist		//级联保存
+							cascadeType.remove		//级联删除	hibernate会先加载集合实例，在对每个实例进行remove()操作，执行多条delete的sql，比较低效
+												//hibernate对关联实体集合的删除是逐个删除的而组件集合是一次性删除的
+							使用@OnDelete			//一次性删除集合,必remove高效
+								hibernate的@OnDelet在数据库中执行一条on update cascade的ddl语言
+								数据库中若在外键列定义了on update cascade，那么外键所在表的对应行被删除了，则拥有该外键的所有记录会被级联删除
+								
+				remove时可能出现不一致问题		//再次保存了被删除过的记录, 应用程序应负责移除被删除对象的引用
+					a一对多b，b多对一c，
+					若a删除了，a的b引用会在数据库被删除，
+					但是，若c同时引用了b，在c update()时，被删除的b会随c的更新再次记录到数据库，b又出现在数据库中了！！导致数据不一致
+					由于b也是实体，有自己的生命周期，可以被其他实体引用
+		1基于外键(连结列)的单向关联	（@JoinCloumn外键）
 			一对多	//不推荐用外键关联，最好用连接表关联
 				@OneToMany（cascaed）		//级联操作
-				@JoinColumn（name="OwnerId"）//指明保存关联关系的表的外键，根据这外键取得集合
+				@JoinColumn（name="OwnerId"）//重写外键列，根据这外键取得集合
 				or
 				<set name="pages">
 					<key column="OwnerId">	//外键
