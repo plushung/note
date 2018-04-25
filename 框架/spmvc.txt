@@ -2,14 +2,17 @@ Spring MVC
 	流程：
 					DispatcherServlet
 		HTTP request-------------------->|
-							|			back
-							|<------->HandlerMapping		选择适当的Controller 
-							|<------->Controller			返回model and viewname
+							|			
+							|<------->HandlerMapping	选择适当的Controller 
+							|<------->Controller			由handlerMappingAdaptor调用并在Controller前后调用拦截器，返回model and viewname
 							|<------->ViewResolver		根据viewname解释取得实际视图名,仅仅是解析出真视图名，返回view，不渲染
 		HTTP request<--------------------|<------->View				用model渲染并返回视图，View接口就接收request与response以及Model，将Model的数据输出渲染到response	
 	
 	HandlerMapping、Controller 和 ViewResolver 是 WebApplicationContext 的一部分，
 	而 WebApplicationContext 是带有一些对 web 应用程序必要的额外特性的 ApplicationContext 的扩展。
+		ApplicationContext
+			|-----------------WebApplicationContext
+							|------HandlerMapping、Controller，ViewResolver等
 
 	一个web应用程序可以有多个DispatcherServlet，处理不同路径的映射
 	需求的配置(web.xml)
@@ -17,18 +20,22 @@ Spring MVC
 		或
 		<context-param>
    			<param-name>contextConfigLocation</param-name>
-   			<param-value>/WEB-INF/HelloWeb-servlet.xml</param-value> (RootWebApplicatonContext)
+   			<param-value>/WEB-INF/HelloWeb-servlet.xml</param-value>  (RootWebApplicatonContext)
 		定义上下文配置文件位置
-		可以通过在 web.xml 文件中添加 servlet 监听器 ContextLoaderListener 自定义配置文件的名称和位置
+		可以通过在 web.xml 文件中添加 servlet 监听器 ContextLoaderListener 自定义配置文件的名称和位置，该配置是根应用上的
 		在web.xml里定义ContextLoaderListener 监听器
 		静态资源映射
-		<servlet-mapping>
-			<servlet-name>default</servlet-name>
-			<url-pattern>*.html</url-pattern>
-		</servlet-mapping>
+			web下配置
+			<servlet-mapping>
+				<servlet-name>default</servlet-name>
+				<url-pattern>*.html</url-pattern>
+			</servlet-mapping>
+			或
+			spring配置文件下配置
+			<mvc:resource mapping="/js/**" location="/js/" >	spring配置文件下配置静态资源映射
 	
 	
-	servlet.xml配置文件//或者使用基于代码的配置，继承WebApplicationInitializer
+	servlet.xml配置文件	//或者使用基于代码的配置，继承WebApplicationInitializer
 		启用组件扫描，扫描controller <context:component-scan base-package="..">
 		启用javaconfig  <context:annotation-config />
 		配置视图解析器	<Bean class="**viewResolver">
@@ -46,6 +53,8 @@ Spring MVC Content
 		（其实就是根据[servletname]-servlet.xml配置文件生成的上下文对象）
 		WebApplicationContext继承自ApplicationContext
 			WebApplicationContext知道它关联到的是哪个servlet（它持有一个该ServletContext的引用)
+				WebApplicationContext
+						|--------------ServletContexts------》servlet--------》返回给客户端
 	
 		每个DispatcherServlet有一个自己的上下文对象WebApplicationContext，继承了一个唯一的RootWebApplicationContext
 			
@@ -82,7 +91,8 @@ Spring MVC Content
 			FlashMapManager		存储并取回两次请求之间的FlashMap对象
 
 			可在WebApplicationContext(servlet.xml)中配置以上特殊Bean
-			或 用AbstractDispatcherServletInitializer，简化配置
+			或 
+			用AbstractDispatcherServletInitializer，简化配置
 				AbstractDispatcherServletInitializer拓展了Servlet的ServletContainerInitializer，
 				servlet3以上的容器会自动发现并应用ServletContainerInitializer接口的配置
 		处理请求:
@@ -95,7 +105,8 @@ Spring MVC Content
 
 	Controller:
 		用@controller声明一个类作为Controller 由handlerMapping查找
-		或 不用Controller，直接把该控制器类声明成Bean(@bean/<bean>)
+		或 
+		不用@Controller，直接把该控制器类声明成Bean(@bean/<bean>)
 		
 		用@Controller 一定要开启 ComponentScan(xml/javaconfig),它继承了@Component
 
@@ -147,7 +158,7 @@ Spring MVC Content
 			@RestController=@Controller+@ResponseBody
 
 		使用HTTP实体ResponseEntity，HttpEntity~=ResponseBody,RequestBody+存取请求头和响应头
-			使用了HttpMessageConverter
+			使用了HttpMessageConverter，当返回的是ResponseEntity时，Spring会自动用httpMessageConverter把ResponseEntity的类容转换为json
 			Spring使用了HttpMessageConverter来对请求流和响应流进行转换。
 			HttpEntity与@RequestBody和@ResponseBody很相似。除了能获得请求体和响应体中的内容之外，
 			HttpEntity（以及专门负责处理响应的ResponseEntity子类）还可以存取请求头和响应头
@@ -209,7 +220,8 @@ Spring MVC Content
 	Spring MVC 处理器映射(HandlerMapping)
 		 <mvc:annotation-driven/>//作用是处理器映射
 		 //作用于@Controller,它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter
-		 //默认配置了RequestMappingHandlerAdapter,为他配置了一个默认的HttpMessageConverter
+		 //默认配置了RequestMappingHandlerAdapter,并为他配置了一个默认的HttpMessageConverter
+		 //ResourceHttpRequestHandler这是SpringMvc的默认控制器，处理静态资源
 		 RequestMappingHandlerAdapter
 			调用具体的方法对用户发来的请求来进行处理
 		 配置了RequestMappingHandlerMapping		//用来映射控制器
@@ -240,7 +252,16 @@ Spring MVC Content
 					<list>
 						<bean class="example.MyInterceptor"/>
 						<ref name="localinterceptor"/>
-			
+		
+		部署拦截器
+			在xml配置文件中
+				<mvc:interceptors >		//mvc拦截器
+					<!-- 如果不定义 mvc:mapping path 将拦截所有的URL请求 -->	
+					<mvc:mapping path="/user/**" />  
+					<bean class="introceptor.Minterceptor">	//具体拦截器
+					</bean>
+				</mvc:interceptors>
+		
 			使用@ResponseBody或ResponseEntity的方法时
 			HttpMessageConverter会在拦截器的postHandle方法被调之前就把信息写回响应中。这样拦截器就无法再改变响应了
 			若要postHandler起作用，
@@ -376,7 +397,11 @@ Spring MVC Content
 					<!--所有文件都要写入磁盘-->
 				<file-size-threshold>0</file-size-threshold>
 				</multipart-config>
-					
+			或
+			在AbstractAnnotationConfigDispatcherServletInitializer
+				下重写customizeRegistration()
+				
+				
 					依赖于Servlet 3.0对multipart请求的支持（始于Spring 3.1）
 	
 		Spring MVC 处理客户端发起的文件上传请求
@@ -519,7 +544,7 @@ Spring MVC Content
 			
 Spring MVC 用JavaConfig 初始化Servlet容器 ServletInitializer
 	Servlet 3.0以上的环境下，你可以通过编程的方式来配置Servlet容器了
-	WebApplicationInitializer <--- --- --- AbstractDispatcherServletInitializer
+	WebApplicationInitializer <--- --- --- AbstractDispatcherServletInitializer		基于servlet3.0的ServletInitializer
 		继承AbstractDispatcherServletInitializer(ADSI)使DispatcherServlet配置变得更简单，
 			1.你只需要覆写相应的方法
 			2.在其中提供servlet映射
@@ -675,7 +700,7 @@ Spring MVC 启用MVC Java编程配置（@EnableWebMvc）或MVC命名空间（<mvc:annotaiton-d
 						<mvc:default-views>	//设置默认View的bean
 							<bean >
 		
-		Spring MVC 回到默认的Servlet来进行静态资源服务
+		Spring MVC 回到默认的Servlet来进行静态资源服务，用web容器的默认servlet
 			javaconfig
 				继承WebMvcConfigurationSupport
 				如果要完全定制自己的Converter
@@ -687,8 +712,7 @@ Spring MVC 启用MVC Java编程配置（@EnableWebMvc）或MVC命名空间（<mvc:annotaiton-d
 				
 			允许默认的Servlet处理被DispatcherServlet拦截的url资源(静态资源)
 			若Web应用服务器的默认Servlet不是default则
-				<mvc:default-servlet-handler default-servlet-name="mydefault" />
-				
+				<mvc:default-servlet-handler default-servlet-name="mydefault" />	指定web的默认servlet
 			或用
 				<mvc:resources location="/js/**" mapping="/resources/**"/>
 				处理静态资源

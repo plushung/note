@@ -6,6 +6,13 @@
 
 取得trancaction开始事务，beginTrancaction()
 
+JPA
+	通过JDK 5.0注解或XML描述对象－关系表的映射关系，将实体映射成数据库的表
+	持久化上下文EntityManager由JPA创建
+JTA
+	Java Transaction API，译为Java事务API。JTA允许应用程序执行分布式事务处理,决定持久化何时提交到数据库
+	每个事务Transaction由JTA创建
+
 用session执行查询
 	1.用Criteria对象进行标准查询
 		Criteria cr=s.createCriteria(Spittle.class);
@@ -36,9 +43,9 @@ Hibernate 架构
 	2.sessionFactory对象
 		线程安全的，由Configuration对象创建，SessionFactory 在同一个application中一般只有一个，
 		一个SessionFactory对应一种数据库的配置
-	3.Session对象
-		Session对象用于保存和检索持久化对象，与数据库进行交互
-		Session由SessionFactory对象创建
+	3.Session对象		//这是一个持久化上下文，为实体的持久化提供环境
+		Session对象用于保存和检索持久化对象，与数据库进行交互，是持久化的上下文
+		Session由SessionFactory对象创建，session会在内存中缓存他实例化过的持久化实体实例(一级缓存)
 	4.Transaction对象
 		一个事务代表了与数据库工作的一个单元，进行数据库事务commit或rollback
 		在 Hibernate 中事务由底层事务管理器（transactionManager）和事务(transaction)（来自 JDBC 或者 JTA）处理
@@ -81,12 +88,12 @@ Hibernate 架构
 			setProperty("hibernate.dialect","org.hibernate.dialect.MySQLInnoDBDialect")
 			或在hibernate.cfg.xml/hibernate.properties配置文件上配置属性
 		
-	2 SessionFactory
+	2 SessionFactory		//表示一个持久化单元或逻辑数据库
 		SessionFactory被应用的所有线程共享
 		3.通过Configuration对象的取得SessionFactory
 			Configureation.buildSessionFactory();
 			
-	3 Session（取得jdbc连接）
+	3 Session（取得jdbc连接）	//这是一个持久化上下文，为实体的持久化提供环境
 		前提是配置好数据源或JDBC
 		4. SessionFactory.openSession()
 			SessionFactory会从连接池获得一个连接
@@ -146,13 +153,16 @@ Hibernate 架构
 
 			
 
-事务
+事务与并发
 	session的begainTransaction（）过程
-		首先在cfg.xml的SessionFactory中定义的hibernate.transaction.factory_class，指定了谁提供事务给Session
-		然后，由session所在的上下文(context),决定是否创建一条transaction
+		1确定事务的提供者
+			在cfg.xml的SessionFactory中定义的hibernate.transaction.factory_class，指定了谁提供事务给Session
+		2.取得事务
+			由session所在的上下文(context),决定是否创建一条transaction
 			若session所在的上下文已经有hibernateTransaction的一个实例则直接返回这条事务
+			
 			若session所在的上下文已经没有hibernateTransaction实例
-				则由上下文取得transactionFactory的引用，并创建一个hibernateTransaction实例返回给session
+			则由上下文取得transactionFactory的引用，并创建一个hibernateTransaction实例返回给session
 		
 		session——————>beginTrransaction————>getTransaction----->begin---->return to session
 								   ||
@@ -161,15 +171,18 @@ Hibernate 架构
 												    |-----transaction=null----->gettransactionFactory
 																		|------>createTransaction----->return transaction 
 		
-	hibernate内置的事务工厂transactionFactory有3种	
+	事务提供者：事务工厂transactionFactory有3种	
 		事务策略配置
-			org.hibernate.Transaction统一了各种事务的具体实现，可方便决定用哪种事务
+			hibernate的transaction
+				org.hibernate.Transaction统一了各种事务的具体实现，可方便决定用哪种事务
 			
-			通过设置 Hibernate 配置属性 hibernate.transaction.factory_class 来指定一个 Transaction 实例的工厂类，
+			指定Transaction工厂类
+				设置 Hibernate 配置属性 hibernate.transaction.factory_class 来指定一个 Transaction 实例的工厂类，
 			
-			用来产生transaction,决定session用谁的transaction来对数据库操作
+			Transaction工厂类作用
+				产生transaction,决定session用谁的transaction来对数据库操作
 			
-			有三个标准（内建）
+			有三个TransactionFactory标准（内建）
 				默认用org.hibernate.transaction.JDBCTransactionFactory
 					使用JDBC事务的工厂，即本地事务
 				org.hibernate.transaction.JTATransactionFactory
@@ -178,8 +191,106 @@ Hibernate 架构
 					否则，将启动一个新的事务，并使用 Bean 管理的事务。
 				org.hibernate.transaction.CMTTransactionFactory
 					使用容器管理的事务的工厂，
-					事务的开始、提交、回滚交给容器决定，
+					事务的开始、提交、回滚交给容器决定
+	
+	事务管理
+		jdbc连接池
+			直接取得一个数据库连接即一个事务
+			由程序员手动管理事务
+		事务管理器
+			通过JTA等的事务管理器取得一个数据库的连接
+			由ORM框架的事务管理器自动管理事务，hibernate本身没有事务管理器，可通过Spring的事务管理器管理hibernate事务
+		事务管理系统
+			通过第三方专门管理事务的事务管理系统框架（如Bitronix），取得事务
+			由专业的事务管理系统托管事务
+	
+	事务与并发
+		事务边界
+			JTA编程式事务
+				JTA标准化了事务管理与事务分布式事务，他begin(),与commit()系统事务，通过编程地begin()和commit()确定事务边界
+				JTA的EntityManager有两种:应用程序托管的与容器托管的
+					应用程序托管的
+						EntityManager的创建与关闭通过应用程序显式地执行
+					容器托管的
+						EntityManager的创建与关闭由容器来管理，不用显式关闭
+			声明式事务
+				在javaEE中可以通过声明的方式确定一个事务的边界，在DAO实现类上@Transactional，声明地区分事务边界
+				
+		控制并发访问
+			数据库级别的事务隔离保障
+				事务隔离问题（不隔离事务时发生问题）
+					丢失更新
+						无隔离的事务更新相同数据，先更新的数据被后更新的数据覆盖而丢失
+					读脏数据
+						事务A读取了事务B没提交的更新数据
+					不可重复读
+						事务A执行两次读取操作期间，事务B更新了数据，使事务A两次读取到的数据状态不同
+					第二类丢失更新
+						不可重复读的特例，事务B重写事务A更新的数据
+					幻读
+						事务A执行两次读取操作期间，事务B插入或删除了数据，使事务A两次读取到的数据数目不同
+					
+				数据库事务隔离级别
+					1.读未提交		//解决丢失更新
+						事务A修改某行并未提交时，其他事务不可在这行进行写操作，只可以读操作，读写其他行不受影响
+						读取时，其他事务可写可读，写入时，其他事务不可写只可读			1101	
+					2.读提交		//解决读脏数据，
+						其他事务要等事务A的修改提交后才可读取A修改的行，读写其他行不受影响
+						读取时，其他事务不可写只可读，写入时，其他事务不可写只可读		0101
+					3.可重复读取	//解决不可重复读
+						读取时，其他事务不可写只可读，写入时，其他事务不可写不可读		0100
+					4.序列化		//解决幻读
+						读写时，其他事务什么都不能做							0000
+						
+					1，2，3的隔离范围是同一行，4的隔离范围是同一个表
+					
+					#hibernate.connection.isolation 4 在hibernate配置文件中修改数据库的事务隔离级别
+					
+					jpa及hibernate会默认数据库用的是读未提交隔离级别，
+					剩下不可重复读，读脏数据，幻读的问题由ORM框架解决
 			
+			框架提供的并发控制
+				乐观锁并发控制 (原理通过version版本控制并发，不是真正的锁，只是框架提供的根据version字段控制并发的‘锁’)
+					使用版本控制
+						hibernate在刷新持久上下文进行updata和delete时通过select检测版本，
+						若版本与之前取得的版本号不同或该行不存在，则抛出OptimisticLockException,表示之前加载的实体已被他人修改
+						否则执行更新
+					排除某属性的乐观锁
+						若想修改某属性时不更新版本号或时间戳，则在属性上@OptimisticLock(exclude=true)
+					
+					1.启用版本号进行版本控制		//更新数据时更新版本号
+						增加一个version，在version上@Version启用版本控制
+						当hibernate检测到数据变脏后，更新version号，在执行updata和delete时比较version号，并更新版本号	
+					(快的优先)先更新的事务被提交，后来更新的事务被rollback并抛出OptimisticLockException
+					或
+					2.使用时间戳进行版本控制
+						在表上有一列存储最后修改的时间戳，在实体类上的对应Data属性上@version启用版本控制
+						可选@Type(type="dbtimestamp"),让hinernate统一从数据库读取时间
+					或	不用时间戳和版本号
+					3.在类上@OpmisticLocking（type=ALL）
+						在检索实例或刷型持久化上下文时对该实体额所有未修改属性检测与数据库上的对比，进行冲突检测
+						type=dirty 选项只在多条事务同时修改同一行记录的同一字段的值时才检测冲突，多条事务可同时修改同一行
+					或
+					4.手动检查版本				//使数据可重复读
+						查询时加乐观锁，让hibernate在刷新时对查询过的记录执行select，对比每行版本号，若不同则抛出OptimisticLockException
+						在Query中setLockMode(LockModeType.OPTIMISTIC)，在某个查询时用乐观锁
+						该乐观锁只是hinernate对version的检测，没有正真涉及到锁
+					或
+					5.强制版本递增				//加载数据时更新版本号
+						在加载实体实例时递增版本号，执行find（）时添加LockModeType.OPTIMISTIC_Force_increment参数
+					(慢的优先)后来事务的更新被提交，先前的更新被rollback并抛出OptimisticLockException
+					
+				显式悲观锁 (原理是通过数据库真正的锁控制并发，即在数据库事务上加锁，加的是真正意义上的锁)
+					LockModeType.pessimistic_read:	确保可重复读
+						在数据库执行查询时加读锁，其他事务只可读。或增加删除其他记录，但不能对加锁的那行修改
+						锁定查询行
+						mysql : hibernate对该模式的处理是查询时sql语句后加上“lock in share mode”，为查询的记录加读锁
+					
+					LockModeType.pessimistic_write:	确保可重复读，确保不会幻读，即串行化查询
+						在数据库执行查询时加读写锁，其他事务不可读写，并且不可加sx锁
+						锁定查询的行
+						mysql : hibernate对该模式的处理是查询时sql语句后加上“for updata”，为查询的记录加读写锁
+
 持久化类
 	
 	实体类定义要求
@@ -208,15 +319,20 @@ Hibernate 架构
 	3种状态
 		瞬时态
 			一个被new实例化的javaPOJO对象，并未与Session关联，在数据库中无记录
-		持久态(被绑定到Session上的对象)
-			Session用save。saveOrUpdata方法处理瞬时态的对象，那么该对象就变为持久态，
-			或者session用Criteria从数据库检索一条记录并映射成一个java对象时，这个java对象是持久态的
+		持久态(与某个Session有关联)
+			Session用save。saveOrUpdata方法处理瞬时态的对象，那么该对象就变为持久态，并拥有一个持久化标识（identifier）。
+			或
+			者session用Criteria从数据库检索一条记录并映射成一个java对象时，这个java对象是持久态的
 			
 			对处于持久态的对象的任何操作都会被Hibernate 监视任何改变并在后台隐式写的方式执行SQL，放在session的缓存区
-			当Session flush的时候，就会同步内存状态（缓存）和数据库
-		脱管态
-			从持久太脱离出来的不再与Session关联的对象，此时对对象的任何操作都不会记录进数据库
+			当Session flush的时候或事务提交时，就会同步内存状态（缓存）和数据库，同步更新到数据库
+			
+		脱管态（detached）
+			从持久太脱离出来的由于session的close(),clear(),detach()使实例不再与Session关联的对象，
+			此时实例对象的任何操作都不会记录进数据库，但数据库中已有记录
 			session对脱管态对象用updata，使其重新变为持久态，只有用updata才能对对象在脱管态时的改动持久化到数据库
+		！删除态
+			持久态或托管态被session的delete删除了，那么对象就成了删除态，此时数据库中没有该对象的记录，像临时态一样
 
 对象/关系数据库映射基础		
 	通过映射文件配置映射
@@ -448,8 +564,13 @@ Hibernate 架构
 					<property name="last" />
 				</component>
 					
-					
-			
+		6.枚举
+			在枚举属性上@Enumerated（EnumType.SSTRING）,并设置枚举量要映射成数据库上的什么类型
+		
+		7.时序属性
+			jap说明时序属性要有@Temporal()
+			可以用hibernate的@CreationTimestamp（），自动产生一个时间
+	
 	!映射继承关系
 		@AttributeOverrides({		//在子类上使用时，将重写父类属性到表的映射字段
 							  @AttributeOverride(name="key.street1", column=@Column(name="fld_street")),
@@ -632,6 +753,7 @@ Hibernate 架构
 							<key column="ITEM_ID"/>		
 							<many-to-many class="Category" column="CATEGORY_ID"/>
 					</bag>
+	
 	！关联关系映射
 		0.简单的关联关系
 			单向：
@@ -641,8 +763,9 @@ Hibernate 架构
 			使关联变双向
 				在另一侧的实体类属性上@ManyToOne,@OneToMany,@OneToOne,@ManyToMany（fetch=fetchtypy.lazy）
 				
-				使用@OneToMany，@ManyToMany的双向关联时，
-				加上mappedBy属性，告诉hibernate使用另一侧 已给定属性映射的外键列 (@JoinColumn)来 加载该关联集合
+				使用@OneToMany，@ManyToMany，@OneToOne的双向关联时，
+				加上mappedBy属性，告诉hibernate使用另一侧 已给定属性映射的外键列 (@JoinColumn)来 select加载该关联
+					表示当前实体由对面实体的mappedby的属性控制
 				
 			级联操作
 				背景：
@@ -651,10 +774,10 @@ Hibernate 架构
 					通常在@OneToMany侧配置cascade属性，使操作可以级联起来，
 					即a的属性上用了@OneToMany(cascafe=CascadeType.persist),那么保存a时会级联保存b到数据库中
 						cascadeType：
-							cascadeType.persist		//级联保存
+							cascadeType.persist		//级联保存	保存本侧时，先保存另一侧
 							cascadeType.remove		//级联删除	hibernate会先加载集合实例，在对每个实例进行remove()操作，执行多条delete的sql，比较低效
 												//hibernate对关联实体集合的删除是逐个删除的而组件集合是一次性删除的
-							使用@OnDelete			//一次性删除集合,必remove高效
+							使用@OnDelete			//一次性删除集合,比remove高效
 								hibernate的@OnDelet在数据库中执行一条on update cascade的ddl语言
 								数据库中若在外键列定义了on update cascade，那么外键所在表的对应行被删除了，则拥有该外键的所有记录会被级联删除
 								
@@ -663,68 +786,100 @@ Hibernate 架构
 					若a删除了，a的b引用会在数据库被删除，
 					但是，若c同时引用了b，在c update()时，被删除的b会随c的更新再次记录到数据库，b又出现在数据库中了！！导致数据不一致
 					由于b也是实体，有自己的生命周期，可以被其他实体引用
-		1基于外键(连结列)的单向关联	（@JoinCloumn外键）
-			一对多	//不推荐用外键关联，最好用连接表关联
-				@OneToMany（cascaed）		//级联操作
-				@JoinColumn（name="OwnerId"）//重写外键列，根据这外键取得集合
-				or
-				<set name="pages">
-					<key column="OwnerId">	//外键
-					<oneToMany class="pageItem">//只要指定类
-				</set>
-			一对一
-				1@OneToOne
-				2@JoinColumn（name="OwnerId"）	//两者关系通过外键-OwnerId-确认
-				2@PrimaryKeyColumn				//或通过共享主键确定关联关系，外键=主键
-				or
-				<one-to-one name="page" >
-			多对一	//与一对一关联相似
-				@ManyToOne
-				@JoinColum(name="OwnerId")		//两者关系通过外键-OwnerId-确认
-				or
-				<many-to-one name="Owner" Column="OwnerId">//可以指明通过哪个外键确定关联关系，不指定就默认为属性名作外键列名
-		使用连接表的单向关联（jointable）	
-			一对多	//不推荐用外键关联，最好用连接表关联
-				@OneToMany（cascaed）		//级联操作
-				@JoinTable（				
-					name="tableName",		//指明保存关联关系的连接表名
-					joinColumn=“”
-				）
-				or
-				<set name="addresses" table="PersonAddress">
-					<key column="personId"/>
-					<many-to-many column="addressId"
-						unique="true"
-						class="Address"/>
-				</set>
-			一对一
-				1@OneToOne
-				2@JoinTable（				
-					name="tableName",		//指明保存关联关系的连接表名
-					joinColumn=“name”			//对于被关联类的外键
-				）			
-				or
-				<one-to-one name="page" >
-			多对一	//与一对一关联相似
-				@ManyToOne
-				@@JoinTable（				
-					name="tableName",		//指明保存关联关系的连接表名
-					joinColumn=“”
-				）
-				or
-				<many-to-one name="Owner" Column="OwnerId">//可以指明通过哪个外键确定关联关系，不指定就默认为属性名作外键列名
-				<join table="PersonAddress" 
-					optional="true">
-					<key column="personId" unique="true"/>
-					<many-to-one name="address"
-						column="addressId" 
-						not-null="true"/>
-				</join>
+		关于双向关联
+			若b的fieldB 属性有 mappedBy“a.fieldA”，
+			则当a的fieldA属性保存了b之后才能把ab关系持久化到数据库，
+			若a.fieldA没保存过b，那么ab关系不会被存储到数据库，即使b.fieldB保存了a，也不能保存ab关系
+		1.@OneToMany @ManyToOne		//若有基于外键，则外键位于必位于多侧
+			@OneToMany：
+				单向：		
+					基于外键列：
+						@JoinColum() 多的一方拥有外键保存关系，重写多的一方的基于本实体表的外键名
+				(默认)基于中间表：	//此时的表有两个外键，没主键
+						@JoinTable() 重写中间表的信息，name:重写表名，JoinColumn:重写本侧实体id在表中的外键名，inverseJoinColum:重写关联实体在表中的外键名
+		  --------------双向：
+		  |	   		基于外键列：2(默认)	
+		  |				@Joincolumn 		//重写多的一方的基于本实体表的外键列名
+		  |				或
+		  |				在@OneToMany上添加mappedBy="human"属性，表示用本实体的id在另一侧human属性对应的外键列搜索，
+		  |				从另一侧的表中取得若干行记录存放到被@OneToMany注解的集合中
+		  |					@OnDelete 在外键上启用数据库的ON DELETE CASCADE，外键被删除时，多的那边的多条记录同时被删除
+		  |  		基于中间表：
+		  | 				只能配置mappedBy，通过另一侧取得 	//另一侧的属性 mappedBy与@JoinTable，@JoinColumn不可共存一侧
+		  |  @ManyToOne		
+		  |		单向：
+		  |		(默认)基于外键列：			
+		  |				@JoinColum()  		//多的一方拥有外键保存关系，本实体为多，重写本实体表上的外键名
+		  |			基于中间表：	//此时的表有 两个外键，其中 多的一方作主键
+		  | 				@JoinTable() 		//重写中间表信息
+		  -------------双向：
+					基于外键列：2(默认)	
+						@Joincolumn 		//重写多的一方的基于本实体表的外键列名
+					基于中间表：			//此时的表有 两个外键，其中 多的一方作主键即本侧是主键外键
+						多侧只能@JoinTable() 		//使用重写中间表的信息
+						
+			级联删除操作cascade不能在多的实体类中使用，否则有外键冲突
+			
+			在一的一方使用级联persist在保存一的那方前先保存多的那方
+			
+			实体集合排序
+				OrderColumn(name="cloumn")	//指定按哪列排序
+		
+		2.@OneToOne					//若有基于外键，则外键位于位于本侧
+			单向：
+			(默认)基于外键列：			//外键位于本侧
+					@JoinColum()  		//本实体外键保存关系，重写本实体表上的外键名
+					或
+					@PrimaryKeyColumn	//或通过共享主键确定关联关系，外键=主键，表的主键取用外键的值
+						本实体的主键与外键相同，引用的是关联实体的主键值
+				基于中间表：			//此时的表有 两个外键，其中 本侧的外键作作主键
+					@JoinTable() 		//重写中间表信息
+					
+			双向：
+			(默认)基于外键列：			
+					两边都@JoinColum()  		//外键位于本侧，两边同时拥有对方的外键
+					或
+					主控端mappedBy=“owner”	//通过另一端的外键取得另一端的实体，将取得的实体存放于被注解的这个变量
+					被控端@JoinColum()		//这端拥有外键
+					或
+					主控端mappedBy=“owner”
+					被控端@PrimaryKeyColumn	//或通过共享主键确定关联关系，外键=主键，表的主键取用外键的值
+						同时被控端要把主键生成策略设置为“foreign”，parmaters添加一个属性:“property” 及value:“user”//user指外键的属性名
+						本实体的主键与外键相同，引用的是关联实体的主键值
+				X基于中间表：			//此时的表有 两个外键，其中 本侧的外键作作主键
+					@JoinTable() 		//重写中间表信息	
+					
+		3@ManyToMany
+			单向：
+				基于中间表
+					
+			双向：
+				基于中间表
+					一侧@JoinTable
+					另一侧mappedBy该侧只读关系，不保存关系，被mappedBy的一侧即@JoinTable侧存储双方的关系
+					
+		4.更复杂的关联
+			通过第3方中间实体类保存多元多对多关联
+			或
+			通过嵌入组件集合，在组件类上保存多元多对多关联
+			1.三元关联、多元关联
+				
+			2.若希望中间表中不仅保存关联关系两端的主键，还想保存一些其他信息
+				使用组件使关联更复杂
+	
+	！动态SQL生成 
+		hibernate会在启动时，为crud预先创建好sql语句，加快执行效率，该语句包含表的所有列
+		但在只修改某行的一个字段时，不需要对该行的所有的列都更新，只要对某个特定的字段更新，
+		此时就不能用hibernate预先创建的sql语句了，而是根据改变的字段动态生成sql语句，生成一条只更新特定字段的sql
+		
+		当表中有非常多字段时使用动态sql更有效
+		
+		通过类的@DymanicInsert和@DynamicUpdata启用动态sql语句生成，
+	
 	!Inverse和Cascade的比较
 		 Inverse：负责两个关联对象的控制关系
 			决定谁控制谁的级联，false的一方作主控，true的一方被控
 				若主控的一方被删除，被控的一方中所有与主控方有关的【外键字段】被清空赋值null
-				被控方
 			用于集合属性上
 			MappedBy="parent"	= inverse=true+@JoinColum	//通过child的parent属性构成childs集合，parent作为主控端
 			或									//集合的元素通过相同的parent映射而来
@@ -733,12 +888,45 @@ Hibernate 架构
 				相同 “d” / <key> 的记录形成了该集合
 		 Cascade：负责控制关联对象的级联操作
 			用在级联保存，级联更新，级联删除上
+			
 			决定主控一方的哪种操作会级联到被控一方
 				若主控的一方被删除，被控的一方中所有与主控方有关的【记录】被整条删除
 			级联删除(在OneToMany一端用)
 				@OnDelete
 				或
 				<key column="productSerialNumber" on-delete="cascade"/>
+
+EntityManager 	//持久化上下文~=session
+	获得持久化上下文
+		@PresistanceContext
+		EntityManager em;
+	缓存
+		处于持久态的实体必定存在于在缓存中
+		持久化上下文EntityManager会自动在内存中缓存所加载的持久化实体实例，可通过detach(i)手动将缓存的实例i回收。
+		或用clear()将该持久化上下文的所有缓存的实例清除
+	操作
+		persist()
+			持久化一个实例
+		merge()
+			将一个处于脱离态的实例i的修改更新到数据库，并产生一个持久态的实例b，实例i依然是脱离态的
+		remove()
+			移除一个处于持久态的实例，使该实例变成瞬时态
+		find()
+			查询获取一个持久态的实例，
+			若持久化上下文中已有要查找的实例则直接在缓冲区取得该实例的引用
+			否则从数据库查找
+		flush()		实体实例------->数据库
+			将缓存实体实例的修改手动同步到数据库，不用等到commit才同步，同时将同步后的实例从缓存中移除
+		refresh()		实体实例<-------数据库
+			加载好一个实体实例后，若其他人修改过该实例在数据库的数据，
+			那么用refresh可以刷新该实体实例的所有引用的数据，用数据库的新数据覆盖实例数据
+		detach(i)
+			把在持久化上下文缓存的实体实例i从缓存中清除，使其变为脱离态，回收持久态实例
+		clear()
+			把在持久化上下文缓存的所有实体实例从缓存中清除，使其变为脱离态
+		contains(i)
+			检查实例i是否在缓存中，是否处于持久态
+		getReference()
 				
 会话	
 	Session s=SessionFactory.getCurrentSession()
@@ -764,8 +952,9 @@ Hibernate 架构
 			对标准的限制
 				add(Restrictions类)
 				Criteriaobj. add ( Restrictions.eq(String,object) )
-			分页使用标准
+			分页查询
 				Criteria的setFirstResult（）与 setMaxResults
+				或query的setFirstResult（）起始行与 setMaxResults返回的最大行数
 			排序结果
 				add(Order类)
 				Criteriaobj. add ( Order.desc("salary"))
@@ -778,6 +967,20 @@ Hibernate 架构
 	
 	原生SQL语言查询
 
+hibernate抓取策略
+	延时加载
+		通过代理proxy的方式，延迟关联实体的加载，只有在关联实体被调用时才从数据库查询。
+			持久化上下文持有一个目标实体的代理类，调用目标实体时，被代理类拦截并向数据库查询结果
+			对一关联
+				默认用急加载即 @*ToOne(fetch=FetchType.Eager)
+				OneToOne必需设置为option=false 才可用代理来进行懒加载
+			对多关联和组件集合
+				默认是懒加载即 @*ToMany(fetch=FetchType.Lazy)
+		通过拦截器的方式进行懒加载
+			
+			
+	急加载
+	
 缓存
 	有一级缓存与二级缓存，都存在于内存或硬盘
 	默认下，Hibernate 将缓存所有的在会话层缓存中的持久的对象
@@ -801,17 +1004,17 @@ Hibernate 架构
 			
 	使用缓存
 		1.使用配置文件中的 hibernate.cache.use_query_cache="true" 属性 	
-				<property name="hibernate.cache.use_query_cache">true</property>
-					激活查询层次缓存
-					使用查询缓存:Query 类的 setCacheable(Boolean)
+			<property name="hibernate.cache.use_query_cache">true</property>
+				激活查询层次缓存
+				使用查询缓存:Query 类的 setCacheable(Boolean)
 		2.在配置文件中决定好使用哪个并发策略
-				Read-only 	Nonstrict-read-write 	Read-write 	Transactional
-				在配置文件中配置<cache usage="read-write">	//在映射文件中配置
-					表示使用并发策略  read-write
-						<cache 
-							usage="transactional|read-write|nonstrict-read-write|read-only"
-							region="RegionName"
-							include="all|non-lazy"/>
+			Read-only 	Nonstrict-read-write 	Read-write 	Transactional
+			在配置文件中配置<cache usage="read-write">	//在映射文件中配置
+				表示使用并发策略  read-write
+					<cache 
+						usage="transactional|read-write|nonstrict-read-write|read-only"
+						region="RegionName"
+						include="all|non-lazy"/>
 				
 批处理
 	启用批处理
