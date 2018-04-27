@@ -18,3 +18,6 @@
 		当代理类调用Session操作数据时，Spring的TransactionManager通过SessionFactory取得一个当前Session的Transaction对象，
 		并把这个对象赋值给代理类的Transaction，每当DAOimp调用方法，方法会被代理类拦截并执行代理类的对应的方法，
 		同时Spring的TransactionManager管理着Transaction，执行beginTransaction()开始事务，commit（），rollback（）；
+		
+2.org.hibernate.StaleStateException: Batch update returned unexpected row count from update: 0 actual row count: 0 expected: 1
+	可能是原本表中无version，当hibernate删除这些没有version的记录时出现该错误，因hibernate根据version来进行并发控制，select version from table where id=?

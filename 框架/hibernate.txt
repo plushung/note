@@ -270,15 +270,15 @@ Hibernate 架构
 					3.在类上@OpmisticLocking（type=ALL）
 						在检索实例或刷型持久化上下文时对该实体额所有未修改属性检测与数据库上的对比，进行冲突检测
 						type=dirty 选项只在多条事务同时修改同一行记录的同一字段的值时才检测冲突，多条事务可同时修改同一行
-					或
+						
 					4.手动检查版本				//使数据可重复读
 						查询时加乐观锁，让hibernate在刷新时对查询过的记录执行select，对比每行版本号，若不同则抛出OptimisticLockException
 						在Query中setLockMode(LockModeType.OPTIMISTIC)，在某个查询时用乐观锁
 						该乐观锁只是hinernate对version的检测，没有正真涉及到锁
 					或
-					5.强制版本递增				//加载数据时更新版本号
+					5.强制版本递增				//加载数据时递增版本号，更新时再递增版本号
 						在加载实体实例时递增版本号，执行find（）时添加LockModeType.OPTIMISTIC_Force_increment参数
-					(慢的优先)后来事务的更新被提交，先前的更新被rollback并抛出OptimisticLockException
+					(慢的优先)后来事务被提交，先前的更新被rollback并抛出OptimisticLockException
 					
 				显式悲观锁 (原理是通过数据库真正的锁控制并发，即在数据库事务上加锁，加的是真正意义上的锁)
 					LockModeType.pessimistic_read:	确保可重复读
@@ -936,6 +936,13 @@ EntityManager 	//持久化上下文~=session
 		当getCurrentSession()或openSession()获取一个session时，Session的生命周期开始
 		当事务结束的时候，不管是提交还是回滚，Hibernate 会自动把 org.hibernate.Session 从当前线程剥离，并结束Session
 
+加载实体
+	若已知实体类的标志符id，可用session直接加载该实体对象，而不用查询；
+	session.load(Human.class,id)		//若实体不存在throw 不可恢复异常
+	or
+	session.get(Human.class,id)		//若不存在，返回null；	
+		可选LockMode
+		
 查询
 	Hibernate 查询语言（HQL）		感觉就是SQL语句，不过有所不同 ：***
 		命名参数(:var)
@@ -965,8 +972,203 @@ EntityManager 	//持久化上下文~=session
 			cr.list()
 		用于创造与执行面向规则的对象 来查询对象
 	
-	原生SQL语言查询
+	00.JPA条件查询
+		1CriteriaBuilder			//取得条件建造器
+			CB=session.getCriteriaBuilder()
+			或
+			em.getCriteriaBuilder()
+		2CriteriaQuery			//创建条件查询
+			CQ=CB.createQuery();
+		3.Root<T>查询根			//构造目标实体用查询根代表 why?构建查询条件时可以取得目标实体的各种信息用作条件选择的表达式
+			Root<T> r=CQ.from(T.class);
+				Root信息
+					type()：Root代表的实体的类				//T.class,
+					get("name")：Root代表的实体的属性name		//name属性的类型
+					
+					
+		4.Select				//构造一条获取查询根所代表的实体的select语句
+			CQ.select（column1，column2）的入参是要取得的列
+				select[ column1，column2 ,..]from human；
+				
+			投影:想要返回的列
+				CQ=CQ.select(r);	
+				或	
+				CQ.multiselect(Root1,Root2)				//表示 select h,b from human h,book b;
+					会产生Root1与Root2的笛卡尔积，返回的是元组，且元组每个元素是持久化的实体实例
+				CQ.multiselect(Root.field1,Root.field2,Root.field3)	//表示 select h.id,h.name,h.age from human h;
+					返回的一定是元组且元组的元素全是瞬时的，不可被持久化
+				或
+				CQ.select(CB.Tuple（Root1,Root2）)
+			
+			由于投影的出的不是一个实体,必需要用元组接受结果
+				多个列
+					List<Object[]>
+				单个结果
+					Object[]
+			
+			动态实例化DTO		//投影的到的那些列用一个非实体类表示
+				DTO数据传输对象，只用来传输数据而不用来持久化的对象
+				希望将要投影的那些列映射到一个非实体类的属性上，不定义实体类来取得查询结果
+					JPQL : select new MySummary( h.id,h.name,b.title ) from human h,book b;	//动态实例化
+						MySummary 要有一个有参构造函数
+						动态 : 查询结果得到的实例不是事先定义好映射的实体类，而是普通的不带@Entity的java类
+					或
+					条件化查询
+						CQ.select(CB.Constructor( MySummary.class,arg0,arg2,arg3 ))
+				若DTO没有构造函数，则使用resultTransformer将结果动态实例化为DTO
+				
+			得到唯一结果 
+				select distinct h,name from human h;
+				or
+				CQ.distinct(true)
+			
+			在投影中调用函数
+				CQ.select（CB.concat(arg1,arg2)）
+				or
+				select concat(h.name,":",h.id) from human h;
+			
+			聚合函数
+				count(),sum(),min(),max(),avg()
+				特殊的JPQL函数 CB.countDistinct(Root) 会忽略重复值
+				or
+				select count（distinct h.name）from human;
+				
+			分组
+				分组函数要配合聚合函数使用
+				CQ.GroupBy(Root)
+				or
+				。。。 Group by column;
+			分组过滤（根据限制条件过滤分组）				从分组后的数据列上设置条件
+				对分组后的记录筛选，predict是分组后关于列的限制条件,而where是原始记录进行筛选
+					CQ.having(Predicate)
+				Croup By i having 	
+			l
+					
+			
+			
+		5.where				//为查询添加条件如id>0....  从原始数据的所有列上设置条件
+			CQ.where(id>0)	的入参是条件
+				select * from human where[ id>0 ,..];
+			CQ.where(Condition)
+			
+		6.Predicate（Condition）限制
+			由CriteriaBuilder CB的方法给出的条件运算,用作where参数 
+				equal	 between	gt  greaterThan  in  isNull  	isNotNull    like
+				=	 between	>   >		 in  is null  	is not null	  like
+				(equal,=) (between,between) (gt,>) (greaterThan,>) (in,in) (isNull,is null) (isNotNull,is not null)
+			限制
+				比较表达式
+					CB.equal(Root信息，限定值)		//如equal（r.type,"value"）,	表示where type(r)="value" r的类型为value
+					CB.between(Root信息,下限值,上限值)// between(r.get("id"),1,100)	,	表示where id between 1 and 100
+					CB.gt(Root,value)				// 表示where Root>value   仅仅可以比较数字类型
+					CB.greaterThan(Root,value)		// 表示where Root>value   可以比较非数字类型 如:Data
+					CB.in(Root,value1,value2)		// 表示where Root in ("value1"，"value2")	
+					CB.like(Root,"_value%")			// 表示where root like “_value%”
+					CB.isNull(Root)				// where root is null
+					not(predicate) and(predicate,predicate) or(predicate,predicate)	//逻辑操作符
+				集合表达式
+					isEmpty(Root.Collection)		//若实体的某个属性是集合属性，isEmpty（Root.<Collection>get("Itemss")）,判断集合是否空
+					isNullEmpty()				//where Root.itemss is not empty
+					
+				在条件中调用函数
+					length(),size(),concat(),upper(),lower().
 
+		7.order 排序
+			CQ.orderBy(CB.asc(root)|CB.desc(root))
+		
+			
+		9.Query(取得查询)
+			Q=session.createQuery(CQ);
+		
+	11简单查询(createQuery(SQL))
+		类型化查询(准备)
+			JPA的type query
+				TypeQuery<T> q=em.createQuery（‘sql’，T.class）	//sql为HQL/JPQL/SQL语言，通过T.class指定类型，通过安全检查
+			或
+			hibernate的query
+				hibernate.query.Query<T> q=session.createQuery（‘sql’，T.class）	//sql为HQL/JPQL/SQL语言，通过T.class指定类型，通过安全检查
+			
+			命名参数
+				sql中的:name
+					通过setParameter('name',name) 把name的值绑定到‘name’上，防止sql注入
+			定位参数
+				sql中的?1,?2
+					通过setParameter(1,name) 把name的值绑定到?1位置上，防止sql注入
+	或
+	12外部命名查询(手动预先编写复杂的sql语句，通过名字直接调用)
+		命名与外部查询
+			调用命名查询
+				JPA
+					typequery em.getNamedQuery（“queryName”，T.class）
+				Hibernate 
+					session.getNamedQuery（“queryName”）
+					session.createNamedQuery（“queryName”，T.class）
+			定义命名查询
+				在xml元数据中定义(即或hibernate的映射文件hbm.xml)
+					JPA	query.xml
+						<entity-mappings>
+							<entity >
+							<name-query name="name">						//JPQL
+								<query><![CDATA[ JPQL ]]></query>
+							或
+							<name-native-query name="name" result-class="*.*.T">	//SQL
+								<query><![CDATA[ sql ]]></query>
+								
+					hibernate	query.hbm.xml
+						要在query返回的实体类的映射文件中定义，如果实体通过注解定义的就通过注解定义命名查询
+						<hibernate-mapping>
+							<class name="huamn">
+								....
+							<query name="name"> JPQL </query>				//不用指定实体类
+							或
+							<sql-query name="name"> 
+								<return class="*.*.T"/>						//用sql时要指明实体类
+								SQL </>			
+
+				用注解定义查询
+					1.JPA方式
+						在Entity类上
+						@NamedQueries(
+								@NamedQuery(name="queryname", query="JPQL/HQL")
+						or
+						@NamedNativeQueries(
+								@NamedNativeQuery(name="queryname", query="SQL")
+								)
+				编程定义命名查询
+					在Session中addNamedQuery（“name”，Query）
+					或
+					在emtitymanager取得entityManagerFactory并addNameQuery（，）
+	
+	返回Tuple的查询
+		若查询返回的每条记录包含多个实体类，可用元组（Object[]）接受返回，此时Object数组中的每个元素都是实体类
+		倘若有多条记录可用List<Object[]> 接受返回的结果集
+	返回标量（scalar）
+		同样用object[]接受查询结果，但查询的结果不能构成实体类，此时Object[]的每个元素是标量
+		标量即不能构成实体的元素
+	返回动态实例
+		用返回的标量构成一个非实体类的实例
+			select new package.DynamicClass(h.id,h.name,b.title) from human h,book b;
+				返回DynamicClass的实例化对象，注意，他有有参构造函数DynamicClass（Long，String，String）
+				要用全限定类名
+	2分页查询(设置分页)
+		query.setFirstResult(10)		//设置从第10行开始取得结果
+		query.setMaxResult(40)		//设置每次取得40行结果
+		或
+		用数据库游标cursor
+	
+	3执行查询
+		得到所有结果
+			q.getResultList()		//没结果就返回空list
+			
+		得到单个结果
+			q.getSingleResult()	//若没结果throw NoResultException,若返回不止一个结果throw NoUniqueResultException
+			
+	遍历结果
+		使用迭代器iterator
+	
+	原生SQL语言查询
+		
+		
 hibernate抓取策略
 	延时加载
 		通过代理proxy的方式，延迟关联实体的加载，只有在关联实体被调用时才从数据库查询。
@@ -976,11 +1178,45 @@ hibernate抓取策略
 				OneToOne必需设置为option=false 才可用代理来进行懒加载
 			对多关联和组件集合
 				默认是懒加载即 @*ToMany(fetch=FetchType.Lazy)
+				
+				集合的额外懒加载配置
+					@LazyCollection(EXTRA)
+					可以在不查询集合中所有结果的情况下，取得集合的元素个数，用Count()来取得元素个数
 		通过拦截器的方式进行懒加载
+			1.先在实体类上@Proxy(lazy=false)关闭代理的懒加载
 			
-			
+		使用延时加载问题
+			n+1问题
+				若要遍历实体所关联的实体集合时，1条select用于取得本实体记录，另外再用n条select语句取得被关联的实体的集合
+		
 	急加载
-	
+		FetchType.Meger
+		
+		使用急加载问题
+			笛卡尔积问题n*n
+				用一条select语句，一次性把所有关联的实体加载起来，会产生多余的记录，加大数据库内存的消耗。
+				1-n-m		加载1个实体，并会加载n个直接关联的实体，n个实体又会加载与之关联的m个实体，
+						select语句用joins来连接这些关联查询，导致n*m的笛卡尔积查询，在数据库内存中加载n*m条记录
+	批量抓取(折中解决以上问题)
+		设置每次抓取批量大小
+			懒加载
+				在实体类a上@BatchSize（size=10）	,当a第一次被使用，便会一次性加载10条a的实例，当第11个a被使用，又再加载10个实例
+				或
+				在集合上@BatchSize（size=10）
+			
+通过拦截器侦听实体的操作，实现审计日志追踪
+	用JTA拦截器
+		1定义一个侦听类
+			@PostLoad@PrePersist，@PostPersist@PreUpdate@PostUpdate@PreRemove@PostRemove
+			分别定义对不同实体类操作的回调方法
+		2.使用侦听器
+			在实体类上@EntityListeners(listener.class)
+	用hibernate拦截器（**）
+		hibernate拦截器可进行粒度更细的拦截，用于记录操作
+		1实现hibernate.interceptor接口
+		2.在配置文件中配置"hibernate.ejb.interceptor"属性为interceptor接口的实现类
+		
+			
 缓存
 	有一级缓存与二级缓存，都存在于内存或硬盘
 	默认下，Hibernate 将缓存所有的在会话层缓存中的持久的对象
@@ -1039,4 +1275,6 @@ hibernate抓取策略
 		
 拦截器
 	在session对数据库操作时，对其各个阶段进行拦截
-	通过直接实现 Interceptor 类或者继承 EmptyInterceptor 类，使用拦截器
+	1通过直接实现 Interceptor 接口或者继承 EmptyInterceptor 类，使用拦截器
+	2.在cfg.xml中配置hibernate.ejb.interceptor属性指定interceptor类
+	3进行查询，拦截器会拦截到每个阶段的动作，并做出反应
