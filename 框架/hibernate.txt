@@ -1042,11 +1042,24 @@ EntityManager 	//持久化上下文~=session
 				对分组后的记录筛选，predict是分组后关于列的限制条件,而where是原始记录进行筛选
 					CQ.having(Predicate)
 				Croup By i having 	
-			l
+			联结查询
+				通过一次查询的到关系表及其关联的其他表
+					on 指定联结条件
+				内联查询		// inner 表示每行的 h.id 与 m.id 都一一对应
+					select * from human as h inner join man as m on m.id=h.id;
+				
+				左外联查询		// left outer 表示每行的 左边的 h.id 不可有空，右边的 m.id 可以有空
+					select * from human as h left outer join man as m on m.id=h.id;
 					
+				右外联查询		// right outer 表示左边表的记录可以为空，右边表的每行都不可空
+					select * from human as h left outer join man as m on m.id=h.id;
 			
+			子查询
+				
+				量化
+					any，all，exist
 			
-		5.where				//为查询添加条件如id>0....  从原始数据的所有列上设置条件
+		5.where				//为查询添加条件如id>0....  在原始数据的所有列上设置条件
 			CQ.where(id>0)	的入参是条件
 				select * from human where[ id>0 ,..];
 			CQ.where(Condition)
@@ -1079,6 +1092,12 @@ EntityManager 	//持久化上下文~=session
 			
 		9.Query(取得查询)
 			Q=session.createQuery(CQ);
+		
+		select [function()|column]+ from table1 
+			[[join | left outer join | right outer join] table2 on [predicate]]*
+			[where [predicate[function()]]+]? 
+			[Group by [Cloumn|function()]+ [Group by [cloumn|function()]+]? ]?
+			[Order by [column|function()]+ [desc|asc]?]?
 		
 	11简单查询(createQuery(SQL))
 		类型化查询(准备)
