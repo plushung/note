@@ -170,6 +170,11 @@ Hibernate 架构
 								   context---->getTransaction----transaction!=null---->return transaction
 												    |-----transaction=null----->gettransactionFactory
 																		|------>createTransaction----->return transaction 
+		session的4个阶段												
+		    同步 session（flush，刷出到磁盘）
+			提交事务
+			关闭 session
+			处理异常 
 		
 	事务提供者：事务工厂transactionFactory有3种	
 		事务策略配置
@@ -194,15 +199,28 @@ Hibernate 架构
 					事务的开始、提交、回滚交给容器决定
 	
 	事务管理
-		jdbc连接池
+		hibernate是对JDBC的轻量封装，本身并不对事务进行管理
+		jdbc连接池		JDBCTransactionFactory
 			直接取得一个数据库连接即一个事务
 			由程序员手动管理事务
-		事务管理器
+			顺序
+				getSession--》beginTransaction--->transaction.commit---->session.close
+		事务管理器		JTATransactionFactory
 			通过JTA等的事务管理器取得一个数据库的连接
 			由ORM框架的事务管理器自动管理事务，hibernate本身没有事务管理器，可通过Spring的事务管理器管理hibernate事务
-		事务管理系统
+			顺序
+				beginTransaction--->getSession---->session.close--》transaction.commit
+		事务管理系统	CMTTransactionFactory
 			通过第三方专门管理事务的事务管理系统框架（如Bitronix），取得事务
 			由专业的事务管理系统托管事务
+	
+	JTA管理事务过程
+		新请求来了，
+		事务管理器冲连接池（c3p0）取得一条连接，并与session绑定
+		session执行业务逻辑
+		session结束
+		事务管理器commit/rollback事务，不用关闭连接，由DataSource来处理
+		事务管理器释放从连接池取得的连接
 	
 	事务与并发
 		事务边界
@@ -571,10 +589,10 @@ Hibernate 架构
 			jap说明时序属性要有@Temporal()
 			可以用hibernate的@CreationTimestamp（），自动产生一个时间
 	
-	!映射继承关系
+	！映射继承关系
 		@AttributeOverrides({		//在子类上使用时，将重写父类属性到表的映射字段
-							  @AttributeOverride(name="key.street1", column=@Column(name="fld_street")),
-							  @AttributeOverride(name="value.stars", column=@Column(name="fld_note"))
+			  @AttributeOverride(name="key.street1", column=@Column(name="fld_street")),
+			  @AttributeOverride(name="value.stars", column=@Column(name="fld_note"))
 						   })
 		1:@MappedSuperClass								//只要维护子表，没有父表。对多关联时，不能用这种继承方式，必需用下面的
 			在父类上使用，使子类继承父类的所有字段，在子类上可以用@AttributeOverride重写字段映射
@@ -1038,16 +1056,19 @@ EntityManager 	//持久化上下文~=session
 				CQ.GroupBy(Root)
 				or
 				。。。 Group by column;
+			
 			分组过滤（根据限制条件过滤分组）				从分组后的数据列上设置条件
 				对分组后的记录筛选，predict是分组后关于列的限制条件,而where是原始记录进行筛选
 					CQ.having(Predicate)
 				Croup By i having 	
+			
 			联结查询
 				通过一次查询的到关系表及其关联的其他表
 					on 指定联结条件
 				内联查询		// inner 表示每行的 h.id 与 m.id 都一一对应
 					select * from human as h inner join man as m on m.id=h.id;
 				
+				外联查询一定要用on
 				左外联查询		// left outer 表示每行的 左边的 h.id 不可有空，右边的 m.id 可以有空
 					select * from human as h left outer join man as m on m.id=h.id;
 					
@@ -1055,9 +1076,15 @@ EntityManager 	//持久化上下文~=session
 					select * from human as h left outer join man as m on m.id=h.id;
 			
 			子查询
-				
+				where exists（subselect）
 				量化
-					any，all，exist
+					any，all，exists 
+					
+			Row value 构造函数语法
+				一次性对多列进行比较
+					where not ( cat.name, cat.color ) in (
+							select cat.name, cat.color from DomesticCat cat
+						)
 			
 		5.where				//为查询添加条件如id>0....  在原始数据的所有列上设置条件
 			CQ.where(id>0)	的入参是条件
@@ -1093,13 +1120,15 @@ EntityManager 	//持久化上下文~=session
 		9.Query(取得查询)
 			Q=session.createQuery(CQ);
 		
-		select [function()|column]+ from table1 
+		select 
+			[function()|column|subselect]+ 
+		from table1 
 			[[join | left outer join | right outer join] table2 on [predicate]]*
-			[where [predicate[function()]]+]? 
+		[where [predicate[function()|column] | subselect]+]? 
 			[Group by [Cloumn|function()]+ [Group by [cloumn|function()]+]? ]?
 			[Order by [column|function()]+ [desc|asc]?]?
 		
-	11简单查询(createQuery(SQL))
+	1.1简单查询(createQuery(SQL))
 		类型化查询(准备)
 			JPA的type query
 				TypeQuery<T> q=em.createQuery（‘sql’，T.class）	//sql为HQL/JPQL/SQL语言，通过T.class指定类型，通过安全检查
@@ -1114,7 +1143,7 @@ EntityManager 	//持久化上下文~=session
 				sql中的?1,?2
 					通过setParameter(1,name) 把name的值绑定到?1位置上，防止sql注入
 	或
-	12外部命名查询(手动预先编写复杂的sql语句，通过名字直接调用)
+	1.2外部命名查询(手动预先编写复杂的sql语句，通过名字直接调用)
 		命名与外部查询
 			调用命名查询
 				JPA
@@ -1281,7 +1310,7 @@ hibernate抓取策略
 				Fetch Size 是设定JDBC的Statement读取数据的时候每次从数据库中取出的记录条数
 				合理配置，可减少对数据库的读取，加快了速度
 		程序中
-			每50条记录就执行一次session.flush() 和 session.clear()
+			每50条记录就执行一次session.flush() 和 session.clear()，防止缓存区爆满
 			
 		flush()
 			将缓存区的缓存写入数据库
@@ -1289,11 +1318,28 @@ hibernate抓取策略
 			清空缓存区
 		
 	hibernate.jdbc.fetch_size 50 //读 读取时，每次从数据库取50条查询记录，50性能显著提升，100为提升阀值，》100无明显提升
-	hibernate.jdbc.batch_size 30 //写 UCD操作时批量删除，批量更新和批量插入的时候的批次大小
+	hibernate.jdbc.batch_size 30 //写 UCD操作时批量删除，批量更新和批量插入的时候的批次大小，每30条sql向数据库发送一次
 		CUD 操作时Hibernate都会往二级缓存充入相应的数据。性能上就会有很大损失，建议在批处理情况下禁用二级缓存。
 		
 拦截器
-	在session对数据库操作时，对其各个阶段进行拦截
+	在session对数据库操作时，对其各个阶段进行拦截，一个可能的用途，就是用来跟踪审核（auditing）信息。
 	1通过直接实现 Interceptor 接口或者继承 EmptyInterceptor 类，使用拦截器
 	2.在cfg.xml中配置hibernate.ejb.interceptor属性指定interceptor类
+		或在sessionFactory.setInterceptor(interceptor)	//此interceptor的范围是属于SessionFactory的
+	或
+	openSession（interceptor）	//在一个session范围内定义一个interceptor
 	3进行查询，拦截器会拦截到每个阶段的动作，并做出反应
+	
+session事件	
+	session的每个方法都会激发一个事件，如load()：LoadEvent，这些事件可以被对应的事件监听器接收到并做出反应
+	可作为拦截器的辅助工具
+	自定义事件监听器
+		1实现相应的事件监听器接口
+			如：LoadEventListener
+		2.配置监听器
+			Configuration.EventListeners().setLoadEventListener({ Listener })
+			或
+			<session-factory>
+				<event type="Load">
+					<listener class="listener">
+	
