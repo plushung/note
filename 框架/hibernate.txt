@@ -681,7 +681,7 @@ Hibernate 架构
 				@OrderColumn(name="orders_index")	//用持有集合索引值的字段的名称
 		
 		2映射基础类型集合和组件类集合
-			值类型集合必需用@CollectionTable来映射，集合默认是懒加载的，即在读取集合时才从数据库select，fetch属性决定抓去策略懒加载or立即加载
+			值类型(组件集合必需用@CollectionTable来映射，集合默认是懒加载的，即在读取集合时才从数据库select，fetch属性决定抓去策略懒加载or立即加载
 				1集合元素为基础值类型的映射
 					@ElementCollection					//声明该集合是值类型的集合
 					@CollectionTable(name="Nicknames", 		//声明中间表和外键
@@ -915,9 +915,22 @@ Hibernate 架构
 				<key column="productSerialNumber" on-delete="cascade"/>
 
 EntityManager 	//持久化上下文~=session
-	获得持久化上下文
-		@PresistanceContext
-		EntityManager em;
+	在spring中集成时的配置
+		spring声明LocalApplicationEntityFactoryBean或LocalContainerEntityFactoryBean的bean
+		分别用于配置应用程序管理的JPA与容器管理的JPA
+		应用程序管理的JPA
+			JPA的配置信息由presistance.xml提供包括datasource，实体类等信息的配置，Spring配置时要设置对应的presistanceUnit名，
+		容器管理的JPA
+			JPA的配置信息由Spring提供，此时Spring担任容器的角色，为JPA提供所需的datasource及JPA实现，以及指定实体类的获取
+			提供包括datasource等信息的配置，完全不用presistance.xml
+	使用
+		获得持久化上下文
+			@PresistanceContext		//与spring集成时，@PresistanceContext不会注入真正的em，只是一个代理，通过代理的方法，使用em
+			EntityManager em;
+		或
+		获得持久化单元
+			@PresistanceUnit
+			EntityManagerFactory emf
 	缓存
 		处于持久态的实体必定存在于在缓存中
 		持久化上下文EntityManager会自动在内存中缓存所加载的持久化实体实例，可通过detach(i)手动将缓存的实例i回收。

@@ -22,3 +22,42 @@ Spring配置文件中关于事务配置总是由三个组成部分，DataSource、SessionFactory，Tran
 2.DAO异常问题
 	因为Spring会把@Repository类产生的异常统统转换为DataAccessException，即使用框架实现的DAO类抛出了各种异常也不能直接通过捕抓正真异常名去捕捉异常
 	直接捕抓DataAccessException才能把异常捕捉到
+	
+spring 集成 JPA 的配置
+	在spring中集成时的配置
+		spring声明LocalEntityManagerFactoryBean或LocalContainerEntityFactoryBean的bean
+		分别用于配置应用程序管理的JPA与容器管理的JPA
+		应用程序管理的JPA
+			JPA的配置信息由presistance.xml提供包括datasource，实体类等信息的配置，Spring配置时要设置对应的presistanceUnit名，
+			1编写JPA的presistance.xml文件
+			2配置LocalEntityManagerFactoryBean
+			3指定presistance-unit
+		容器管理的JPA
+			JPA的配置信息由Spring提供，此时Spring担任容器的角色，为JPA提供所需的datasource及JPA实现，以及指定实体类的获取
+			提供包括datasource等信息的配置，完全不用presistance.xml
+			1.配置LocalContainerEntityManagerFactoryBean
+			2.设定数据源datasource
+			3.配置实体类的映射
+			4.值定JPA的实现类JPAVectorAdapter
+				用hibernate的jpa实现
+				1配置JPAVectorAdapter
+				2.用hibernateJapVectorAdapter类
+				3.配置hibernate信息：datasource，dialect，ShowSQl，
+			5.扫描注解的实体类
+			
+spring 集成 JPA 的使用	
+	获得持久化上下文
+		@PresistanceContext		//与spring集成时，@PresistanceContext不会注入真正的em，只是一个代理，通过代理的方法，使用em
+		EntityManager em;
+	或
+	获得持久化单元
+		@PresistanceUnit
+		EntityManagerFactory emf
+或
+使用Spring-data-jap
+	继承CrudRespository接口，不用实现，Spring-data为我们实现了常用的18中CRUD操作
+	CrudRespository接口的方法在spring上下文创建时被Spring-data框架创建实现
+	自定义Respository方法
+		1在继承接口时，声明一个要自定义的方法
+		2在方法声明上@Query('SQL') spring为我们用该SQL实现方法
+	在java配置类上@EnableJpaRespository启用Spring-data-jap
