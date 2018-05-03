@@ -25,11 +25,11 @@ Spring配置文件中关于事务配置总是由三个组成部分，DataSource、SessionFactory，Tran
 	
 spring 集成 JPA 的配置
 	在spring中集成时的配置
-		spring声明LocalEntityManagerFactoryBean或LocalContainerEntityFactoryBean的bean
+		spring声明LocalEntityManagerFactoryBean或LocalContainerEntityFactoryBean的bean，用作持久化单元
 		分别用于配置应用程序管理的JPA与容器管理的JPA
 		应用程序管理的JPA
 			JPA的配置信息由presistance.xml提供包括datasource，实体类等信息的配置，Spring配置时要设置对应的presistanceUnit名，
-			1编写JPA的presistance.xml文件
+			1编写JPA的presistance.xml文件，配置presistance-unit
 			2配置LocalEntityManagerFactoryBean
 			3指定presistance-unit
 		容器管理的JPA
@@ -38,7 +38,7 @@ spring 集成 JPA 的配置
 			1.配置LocalContainerEntityManagerFactoryBean
 			2.设定数据源datasource
 			3.配置实体类的映射
-			4.值定JPA的实现类JPAVectorAdapter
+			4.设定JPA的实现类JPAVectorAdapter
 				用hibernate的jpa实现
 				1配置JPAVectorAdapter
 				2.用hibernateJapVectorAdapter类
@@ -46,18 +46,65 @@ spring 集成 JPA 的配置
 			5.扫描注解的实体类
 			
 spring 集成 JPA 的使用	
+	
 	获得持久化上下文
 		@PresistanceContext		//与spring集成时，@PresistanceContext不会注入真正的em，只是一个代理，通过代理的方法，使用em
 		EntityManager em;
 	或
-	获得持久化单元
-		@PresistanceUnit
+	获得持久化单元			
+		@PresistanceUnit		
 		EntityManagerFactory emf
 或
-使用Spring-data-jap
+使用Spring-data-jpa
 	继承CrudRespository接口，不用实现，Spring-data为我们实现了常用的18中CRUD操作
 	CrudRespository接口的方法在spring上下文创建时被Spring-data框架创建实现
 	自定义Respository方法
 		1在继承接口时，声明一个要自定义的方法
 		2在方法声明上@Query('SQL') spring为我们用该SQL实现方法
 	在java配置类上@EnableJpaRespository启用Spring-data-jap
+
+事务管理器 --》 事务 	-------------------------》提交事务内持久化单元的操作
+	|--》实体管理器 --》 持久化单元			
+	spring管理的JTA事务
+		1.配置实体管理器，LocalEntityManagerFactoryBean|LocalContainerEntityManagerFactoryBean|通过JNDI取得EntityManagerFactory
+			配置持久化单元，persistance.xml的配置，有关与数据库连接的配置
+			一个EntityManagerFactory代表一个数据库连接
+			JpaVendorAdapter指定JPA的实现如hibernate
+		2.配置事务管理器，JtaTransactionManager
+			持有一个或多个实体管理器,提供transaction，一条事务可同时使用多个EntityManagerFactory,有多条数据库的连接，进行分布式数据库访问
+			
+			
+		3使用事务
+			1.编程式事务
+				JTA事务取得方式
+					UserTransaction =(UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+				UserTransaction.begin(),-->entityManager.persist()--->entityManager.close()---->UserTransaction.commit(),
+				将事务的管理编程式地写入业务逻辑，手动begin与commit与rollback
+			2.声明时事务
+				在service类上@transaction，声明事务切面，
+				<tx:annotation-driven transaction-manager="transactionManager"或在java配置类上@EnableTransactionManagement(proxyTargetClass=true)
+				让spring通过切面管理事务
+	spring管理的hibernate事务
+		1.配置实体管理器，LocalSessionFactoryBean
+			配置持久化单元，hibernate.cfg.xml的配置，有关与数据库连接的配置
+			一个SessionFactory代表一个数据库连接
+		2.配置事务管理器，HibernateTransactionManager
+			管理着SessionFactory
+			
+		3.使用事务
+			1.编程式事务
+				hibernate用JDBC事务时
+					SessionFactory.gerCurrentSession()---->Session.beginTransaction()--->session.persist()---->tx.commit()
+				hibernate用JTA事务时
+					JTA事务取得方式
+						cfg的配置hibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory
+						UserTransaction =(UserTransaction)new InitialContext().lookup("javax.transaction.UserTransaction");//定义在cfg.xml中的由hibernate实现的UserTransaction
+					UserTransaction.begin(),-->session.save()--->session.close()---->UserTransaction.commit(),
+				若session通过getCurrentSession的到，就不用手动close
+					将事务的管理编程式地写入业务逻辑，手动begin与commit与rollback
+			2.声明时事务
+				在service类上@transaction，声明事务切面，
+				<tx:annotation-driven transaction-manager="transactionManager"或在java配置类上@EnableTransactionManagement(proxyTargetClass=true)
+				让spring通过切面管理事务
+			
+		
