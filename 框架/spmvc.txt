@@ -2,12 +2,29 @@ Spring MVC
 	流程：
 					DispatcherServlet
 		HTTP request-------------------->|
-							|			
-							|<------->HandlerMapping	选择适当的Controller 
-							|<------->Controller			由handlerMappingAdaptor调用并在Controller前后调用拦截器，返回model and viewname
+							|					（handlerchain : 包含Handler本身及与该handler有关的拦截器，handler与拦截器的执行是链式的）
+							|<------->HandlerMapping	从所有HandlerMapping中查找看有无可处理该请求的handler，有则返回该handlerchain。
+							|					一个HandlerMapping映射一个controller，DispatcherServlet持有HandlerMapping的集合，选择适当的Controller 
+							|<------->Controller			从HandlerMapping取得Handler后，由handlerAdaptor调用Controller中的方法，并在Controller前后调用拦截器，返回model and viewname
 							|<------->ViewResolver		根据viewname解释取得实际视图名,仅仅是解析出真视图名，返回view，不渲染
 		HTTP request<--------------------|<------->View				用model渲染并返回视图，View接口就接收request与response以及Model，将Model的数据输出渲染到response	
 	
+	DispatchServlet初始化时初始化一系列Resolver，HandleMapping（s），HandlerAdapter（s），HandleExceptionresolver,RequestToViewNameTranslator,视图解析器（s），FlashMapManager
+		protected void initStrategies(ApplicationContext context) {  
+				initMultipartResolver(context);  
+				initLocaleResolver(context);  
+				initThemeResolver(context);  
+		//初始化一些HandlerMapping  
+				initHandlerMappings(context);  
+		//初始化一些HandlerAdapter  
+				initHandlerAdapters(context);  
+				initHandlerExceptionResolvers(context);  
+				initRequestToViewNameTranslator(context);  
+				initViewResolvers(context);  
+				initFlashMapManager(context);  
+			}  
+	Archive for required library: in project 'Gent' cannot be read or is not a valid ZIP file	Gent		构建路径	构建路径问题
+
 	HandlerMapping、Controller 和 ViewResolver 是 WebApplicationContext 的一部分，
 	而 WebApplicationContext 是带有一些对 web 应用程序必要的额外特性的 ApplicationContext 的扩展。
 		ApplicationContext
@@ -137,7 +154,7 @@ Spring MVC Content
 					推荐用MediaType定义好的一些常量为consumes/produces赋值
 
 		定义@requestMapping的处理方法:
-			使用@RequestParam将请求参数绑定至方法参数
+			使用@RequestParam将请求参数绑定至方法参数,如表单的参数
 				@RequestParam(path="id", required=false)）指定要绑定的参数，非必需
 			
 			使用@RequestBody注解映射请求体

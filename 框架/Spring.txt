@@ -38,6 +38,8 @@ Spring IoC 容器
 
 Spring 依赖注入
 	依赖注入有助于把这些类装配在一起，同时保持他们独立。 
+	
+	
 	注入方式：
 		基于构造函数
 			<constructor-arg type="int" value="2001"/>注入直接值
@@ -67,10 +69,11 @@ Spring 依赖注入
 		
 Spring Beans 自动装配
 	xml:<bean autowire="byName/byType/constructor">
-
+	
 Spring 基于注解的配置
 	@Required 注释应用于 bean 属性的 setter 方法,表示必需配置属性值
-	@Autowired 用于构造函数，Setter 方法，属性
+	@Autowired 用于构造函数，Setter 方法，属性,按类型注入
+	@Resource 按名称注入
 	@Qualifier 注释，指定要注入的BeanId
 	JSR-250 注解
 		@PostConstruct， @PreDestroy 相当于initMethod和destoryMethod，用于方法上
@@ -184,19 +187,34 @@ Spring 事务管理（commit，rollback。。。）
 		PlatformTransactionManager 接口
 			TransactionDefinition 是在 Spring 中事务支持的核心接口
 			TransactionStatus 接口为事务代码提供了一个简单的方法来控制事务
-	声明式事务：
-		一种为通过使用Spring的<tx:advice>定义事务通知与AOP相关配置实现，
+	
+	1定义事务管理器TransactionManager的bean
+		<bean name="managerneme" class="hibernatetransactionmanager"> 
+		Spring的支持的事务管理器
+			DataSourceTransactionManager
+			HibernateTransactionManager
+			JtaTransactionManager
+	2声明式事务：
+		一种为通过使用Spring的<tx:advice transaction-manager="managerneme">定义事务通知与实现通知的事务管理器
+			应用通知
+				<aop:config>
+					<aop:pointcut exeception="execition(*.*.method)">	//定义切点（哪里）
+					<aop:advisor advice-ref="txmanager">			//引用通知（做什么）,引用事务管理器作切点上的通知
 		或	
-		另为一种通过@Transactional实现事务管理实现
+		另为一种通过@Transactional实现事务管理实现，
+		要在cfg.xml添加<tx:annotation-driven transaction-manager="managername"/>开启注解方式的声明式事务
+		Spring会自动在@Transactional上通过AOP的方式将事务管理器用作通知
+	3.选择事务传播属性propegation
+		
 	continue。。。。。。。。。。。。。。。。。。。。。。。。。
 
 	
-	ORM事务实体管理
+	ORM实体管理
 		
 		JPA:
 			1.EntityManagerFactory中取得EntityManager
 			2.EntityManager执行事务
-			JPA事务实体管理分为 应用程序管理类型 和 容器管理类型
+			JPA实体管理分为 应用程序管理类型 和 容器管理类型
 				应用程序管理类型的EntityManagerFactory
 					通过PresistenceProvider的createEntityManagerFactory()取得
 				容器管理类型的EntityManagerFactory
@@ -205,18 +223,18 @@ Spring 事务管理（commit，rollback。。。）
 			若通过Spring管理JPA
 				使用Spring提供的FactoryBean生成EntityManagerFactory
 				Spring提供的这两个类封装了PresistenceProvider，为我们创建EntityManagerFactory
-				JPA应用程序类管理器（Spring作为应用）
+				JPA应用程序类管理器（Spring作为应用管理实体）
 					Spring的LocalEntityManagerFactoryBean产生EntityManagerFactory
 					配置LocalEntityManagerFactoryBean时要指定persistence.xml
-				JPA容器类管理器（Spring作为容器）
+				JPA容器类管理器（Spring作为容器管理实体）
 					Spring的LocalContainerEntityManagerFactoryBean产生EntityManagerFactory
 					配置LocalContainerEntityManagerFactoryBean时要指定使用哪中JPA的实现
 					
 		Hibernate:
 			1.SessionFactory中取得Session
-			2.Session执行事务
+			2.Session执行持久化操作
 			
-			hibernate用SessionFactory管理事务，一个程序应该只有一个
+			hibernate用SessionFactory管理持久化实体，一个程序应该只有一个
 			
 			若通过Spring管理Hibernate
 				使用Spring提供的FactoryBean生成SessionFactory

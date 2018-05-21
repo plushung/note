@@ -120,7 +120,7 @@ Hibernate 架构
 		
 	4可选的配置属性
 		常用:	
-			Hibernate 配置属性
+			配置属性
 				hibernate.dialect					//允许 Hibernate 针对特定的关系数据库生成优化的 SQL
 				hibernate.show_sql				//输出所有 SQL 语句到控制台
 				hibernate.session_factory_name		//SessionFactory 创建后，将自动使用这个名字绑定到 JNDI 中。 
@@ -132,12 +132,12 @@ Hibernate 架构
 				hibernate.jdbc.batch_size			//允许 Hibernate 使用 JDBC2 的批量更新,即hibernate每产生n条更新语句，就向JDBC提交一批语句
 				hibernate.connection.provider_class		//指定自定义的Connection提供类，向Hibernate提供JDBC链接	Class
 				
-			Hibernate 缓存相关属性
+			缓存相关属性
 				hibernate.cache.provider_class		//指定自定义的CacheProvider的类名,为hibernate提供二级缓存 ：Class
 				hibernate.cache.use_query_cache		//允许查询缓存，个别查询仍然需要被设置为可缓存的。例如：true | false 
 				hibernate.cache.use_second_level_cache	//允许二级缓存，对那些在类的映射定义中指定 <cache> 的类，会默认开启二级缓存。 
 				
-			Hibernate 事务属性
+			事务属性
 				hibernate.transaction.factory_class		//一个 TransactionFactory 的类名，用于 Hibernate Transaction API（默认为 JDBCTransactionFactory）。
 				
 			其他属性
@@ -209,7 +209,9 @@ Hibernate 架构
 				3.执行查询
 				4.用Connection对象实现事务，commit，rollback
 			顺序
-				getSession--》beginTransaction--->transaction.commit---->session.close
+				getSession-->beginTransaction--->transaction.commit---->session.close 
+				//若通过getcrrentsession()取得Session，commit会将session.close
+				//若通过opensession()取得Session，要手动session.close，再commit
 		JTA事务		JTATransactionFactory
 			通过JTA等的事务管理器取得数据库的连接，一条事务可以同时从多个数据源中取得连接，简单的说 jta是多库的事务 jdbc是单库的事务
 			应用程序应该使用 UserTransaction.begin()、 UserTransaction.commit() 和 serTransaction.rollback() 
@@ -217,9 +219,11 @@ Hibernate 架构
 				beginTransaction|--->getSession1---->session1.close-->|transaction.commit
 						   |--->getsession2---->session2.close--->|
 		容器事务		CMTTransactionFactory
-			通过第三方专门管理事务的事务管理系统框架（如Bitronix），取得事务
-			事务由J2EE应用服务器提供的，由服务器托管事务
-	
+			由应用服务器容器管理事务，取得事务
+			事务由J2EE应用服务器提供的，由服务器（如tomcat）托管事务，这是一个基于JNDI的基于JTA的，相当复杂的API实现
+			在服务器的<Context>中添加<transaction>，来使用容器事务
+			<Transaction>添加一个资源工厂，用于对从 java:comp/UserTransaction 获得的 UserTransaction 接口进行实例化。
+			不用编程式地begin()与commit()
 	JTA管理事务过程
 		新请求来了，
 		事务管理器从连接池（c3p0）取得一条连接，并与session绑定
@@ -232,11 +236,8 @@ Hibernate 架构
 		事务边界
 			JTA编程式事务
 				JTA标准化了事务管理与事务分布式事务，他begin(),与commit()系统事务，通过编程地begin()和commit()确定事务边界
-				JTA的EntityManager有两种:应用程序托管的与容器托管的
-					应用程序托管的事务
-						EntityManager的创建与关闭通过应用程序显式地执行
-					容器托管的事务
-						EntityManager的创建与关闭由容器来管理，不用显式关闭
+				手动使用UserTransaction的begin()和commit()
+				
 			声明式事务
 				在javaEE中可以通过声明的方式确定一个事务的边界，在DAO实现类上@Transactional，声明地区分事务边界
 				
@@ -255,15 +256,15 @@ Hibernate 架构
 						事务A执行两次读取操作期间，事务B插入或删除了数据，使事务A两次读取到的数据数目不同
 					
 				数据库事务隔离级别
-					1.读未提交		//解决丢失更新
+					1.读未提交		//解决丢失更新   	b事务可读不可写
 						事务A修改某行并未提交时，其他事务不可在这行进行写操作，只可以读操作，读写其他行不受影响
 						读取时，其他事务可写可读，写入时，其他事务不可写只可读			1101	
-					2.读提交		//解决读脏数据，
+					2.读提交		//解决读脏数据，		b事务不可读写
 						其他事务要等事务A的修改提交后才可读取A修改的行，读写其他行不受影响
 						读取时，其他事务不可写只可读，写入时，其他事务不可写只可读		0101
-					3.可重复读取	//解决不可重复读
+					3.可重复读取	//解决不可重复读		a读时，b不可写
 						读取时，其他事务不可写只可读，写入时，其他事务不可写不可读		0100
-					4.序列化		//解决幻读
+					4.序列化		//解决幻读			其他事务不能对当前表作任何操作
 						读写时，其他事务什么都不能做							0000
 						
 					1，2，3的隔离范围是同一行，4的隔离范围是同一个表
@@ -379,7 +380,7 @@ Hibernate 架构
 						<element type="string" column="EMAIL_ADDR"/>	//基本元素类型的集合用<element>定义，column指定表中与Persion关联的字段，”string“是向你表明它是一个 Hibernate 的映射类型
 					</set>									//包含的是String类型的集合
 			
-			关联映射 1-1 1-* *-1 *-*
+			关联映射 1-1 1-* *-1 *-* 	<set name table> <key> <*To* type column class>
 				<many-to-one name=“father”></many-to-one>//与<porperty>差不多
 				单向关联映射
 					一个实体类与另一个实体类有关联，且他们关系是	
@@ -411,12 +412,13 @@ Hibernate 架构
 					双向关联要在关联的两端都配置映射，且要在多的一端配置inverse=“true”属性
 					必要时table属性指明保存两者关联关系的那个表
 					*对多关联中，<key>表示‘我‘在关联表中是哪个列,class属性表示关联的是哪个实体
+			
 			组件映射 对应数据库中与另一个表的关联
-				属性是另一种实体类(组件类)，由另一种实体类构成当前的实体类(组件映射)
+				属性是另一种POJO类(组件类)，由另一种POJO类构成当前的实体类(组件映射)
 				如果引用的类没有自己的生命周期并且完全依靠于拥有它的那个实体类的生命周期的话，
 				那么这个引用类因此就可以叫做组件类。
 				<Component Mappings>
-	----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	通过注释配置映射
 		先导入依赖包hibernate-annotations.jar, lib/hibernate-comons-annotations.jar 和 lib/ejb3-persistence.jar
 		类级注释
@@ -593,7 +595,8 @@ Hibernate 架构
 		
 		7.时序属性
 			jap说明时序属性要有@Temporal()
-			可以用hibernate的@CreationTimestamp（），自动产生一个时间
+			可以用hibernate的
+			@CreationTimestamp（），自动产生一个时间
 	
 	！映射继承关系
 		@AttributeOverrides({		//在子类上使用时，将重写父类属性到表的映射字段
@@ -703,7 +706,7 @@ Hibernate 架构
 								@CollectionId（｛					//为collection添加一个主键，用以区分每条记录
 									column=" PrimaryKey "，			//定义主键字段名
 									type=@Type(type=“Long”)，			//定义主键的类型
-									generator=Contants.ID_GENERATOR	//定义主键值生成策略,可用hibernate的Generator
+									generator=identifier	//定义主键值生成策略,可用hibernate的Generator
 								｝）
 								主键: 主动为collection添加一个代理主键，使得可存在重复值
 								
@@ -749,6 +752,7 @@ Hibernate 架构
 							unique="true|false"
 							node="element-name"
 					/>
+		
 		3高级
 			集合排序sort
 				@SortNatural	//使集合元素按自然排序
@@ -814,7 +818,8 @@ Hibernate 架构
 			若b的fieldB 属性有 mappedBy“a.fieldA”，
 			则当a的fieldA属性保存了b之后才能把ab关系持久化到数据库，
 			若a.fieldA没保存过b，那么ab关系不会被存储到数据库，即使b.fieldB保存了a，也不能保存ab关系
-		1.@OneToMany @ManyToOne		//若有基于外键，则外键位于必位于多侧
+			
+		1.@OneToMany @ManyToOne		//若有基于外键，则外键必位于多侧
 			@OneToMany：
 				单向：		
 					基于外键列：
@@ -867,7 +872,7 @@ Hibernate 架构
 					被控端@JoinColum()		//这端拥有外键
 					或
 					主控端mappedBy=“owner”
-					被控端@PrimaryKeyColumn	//或通过共享主键确定关联关系，外键=主键，表的主键取用外键的值
+					被控端@PrimaryKeyColumn	//被控端通过共享主键确定关联关系，外键=主键，表控表的主键取用外键的值
 						同时被控端要把主键生成策略设置为“foreign”，parmaters添加一个属性:“property” 及value:“user”//user指外键的属性名
 						本实体的主键与外键相同，引用的是关联实体的主键值
 				X基于中间表：			//此时的表有 两个外键，其中 本侧的外键作作主键
@@ -922,7 +927,7 @@ Hibernate 架构
 
 EntityManager 	//持久化上下文~=session
 	在spring中集成时的配置
-		spring声明LocalApplicationEntityFactoryBean或LocalContainerEntityFactoryBean的bean
+		spring声明LocalEntityManagerFactoryBean或LocalContainerEntityFactoryBean的bean
 		分别用于配置应用程序管理的JPA与容器管理的JPA
 		应用程序管理的JPA
 			JPA的配置信息由presistance.xml提供包括datasource，实体类等信息的配置，Spring配置时要设置对应的presistanceUnit名，
@@ -964,7 +969,7 @@ EntityManager 	//持久化上下文~=session
 		contains(i)
 			检查实例i是否在缓存中，是否处于持久态
 		getReference()
-				
+			
 会话	
 	Session s=SessionFactory.getCurrentSession()
 		SessionFactory会把当前当前java线程与一个Session对象绑定，调用getCurrentSession()时，会把当前线程绑定的Session对象返回
@@ -988,7 +993,7 @@ EntityManager 	//持久化上下文~=session
 		聚合方法
 			avg(),count().max(),min(),sum()
 			
-	Hibernate 标准查询 Criteria
+	1.0.Hibernate标准查询 Criteria
 		创建Criteria:
 			session.creatCriteria()
 		添加查询规则:
@@ -1008,8 +1013,8 @@ EntityManager 	//持久化上下文~=session
 		获取查询结果
 			cr.list()
 		用于创造与执行面向规则的对象 来查询对象
-	
-	00.JPA条件查询
+	或
+	1.0.JPA标准查询
 		1CriteriaBuilder			//取得条件建造器
 			CB=session.getCriteriaBuilder()
 			或
@@ -1134,7 +1139,6 @@ EntityManager 	//持久化上下文~=session
 
 		7.order 排序
 			CQ.orderBy(CB.asc(root)|CB.desc(root))
-		
 			
 		9.Query(取得查询)
 			Q=session.createQuery(CQ);
@@ -1146,8 +1150,8 @@ EntityManager 	//持久化上下文~=session
 		[where [predicate[function()|column] | subselect]+]? 
 			[Group by [Cloumn|function()]+ [Group by [cloumn|function()]+]? ]?
 			[Order by [column|function()]+ [desc|asc]?]?
-		
-	1.1简单查询(createQuery(SQL))
+	或	
+	1.1简单查询(createQuery(JPQL))
 		类型化查询(准备)
 			JPA的type query
 				TypeQuery<T> q=em.createQuery（‘sql’，T.class）	//sql为HQL/JPQL/SQL语言，通过T.class指定类型，通过安全检查
@@ -1166,7 +1170,7 @@ EntityManager 	//持久化上下文~=session
 		命名与外部查询
 			调用命名查询
 				JPA
-					typequery em.getNamedQuery（“queryName”，T.class）
+					typequery em.createNamedQuery（“queryName”，T.class）
 				Hibernate 
 					session.getNamedQuery（“queryName”）
 					session.createNamedQuery（“queryName”，T.class）
@@ -1184,7 +1188,7 @@ EntityManager 	//持久化上下文~=session
 					hibernate	query.hbm.xml
 						要在query返回的实体类的映射文件中定义，如果实体通过注解定义的就通过注解定义命名查询
 						<hibernate-mapping>
-							<class name="huamn">
+							<class name="huamn"/>
 								....
 							<query name="name"> JPQL </query>				//不用指定实体类
 							或
@@ -1209,14 +1213,17 @@ EntityManager 	//持久化上下文~=session
 	返回Tuple的查询
 		若查询返回的每条记录包含多个实体类，可用元组（Object[]）接受返回，此时Object数组中的每个元素都是实体类
 		倘若有多条记录可用List<Object[]> 接受返回的结果集
+	
 	返回标量（scalar）
 		同样用object[]接受查询结果，但查询的结果不能构成实体类，此时Object[]的每个元素是标量
 		标量即不能构成实体的元素
+	
 	返回动态实例
 		用返回的标量构成一个非实体类的实例
 			select new package.DynamicClass(h.id,h.name,b.title) from human h,book b;
 				返回DynamicClass的实例化对象，注意，他有有参构造函数DynamicClass（Long，String，String）
 				要用全限定类名
+	
 	2分页查询(设置分页)
 		query.setFirstResult(10)		//设置从第10行开始取得结果
 		query.setMaxResult(40)		//设置每次取得40行结果
@@ -1234,7 +1241,49 @@ EntityManager 	//持久化上下文~=session
 		使用迭代器iterator
 	
 	原生SQL语言查询
+
+自定义实体类的加载，创建，更新，删除
+	1自定义实体类的加载SQL
+		实体类上hibernate的@Loader(namedQuery="NativeQuery")
+		将通过自定义的命名查询"NativeQuery"的结果加载目标实体
+	2.自定义insert，updata，delete
+		实体类上@SQLInsert，@SQLUpdate，@SQLDelete
+		sql属性为自定义sql语句
 		
+			
+映射标准SQL查询(NativeQuery)的结果
+	映射的结果有3种
+		1.实体类entities
+		2.非实体类classes
+		3.单纯的标量columns
+	xml		//定义在NativeQuery.xml中
+		<sql-result-set-mapping name=“NAME”>			//定义映射的名子，通过名字应用映射
+			<entity-result entity-class=“*.*.User”>		//SQL查询结果映射为User实体
+				<field-result name=“id” column="ID">	//指定结果中的列映射到哪个字段
+				....
+			<constructor-result target-class=“*.*.sumary”>	//SQL查询结果映射为有构造器的普通POJO类-sumary
+				<column name="ID" class="Long">	//指定构造器参数映射的列
+				....
+			<column name=“NUM_BER”>				//将结果中的某列映射为标量Object
+	注解
+		在实体类上				//@ColumnResult(name="lie") 引用结果中的列,name指定列名，用于标量和构造器的结果列映射
+							//@FieldResult(name="ddd")	引用结果中的列,name指定列名，用于实体类的列-属性映射
+		@SqlResultSetMapping(name="mapname",
+						entities={
+							@EntityResult(
+								entityClass,fields )},	//至少指定entityClass
+						classes={
+							@ConstructorResult(
+								targetClass,columns )},	//至少指定targetClass
+						columns={
+							@ColumnResulr(name="")})	//至少指定name
+	
+		混合实体，非实体，标量映射时，通过元组（Object[]）取得结果,Object[]的元素代表每个sql映射
+		
+	使用JPA规范进行SQL查询
+		em.createNativeQuery("SQL"),还可以添加参数指定sql结果集映射使用上面定义的映射
+	
+	
 		
 hibernate抓取策略
 	延时加载
@@ -1264,6 +1313,15 @@ hibernate抓取策略
 				用一条select语句，一次性把所有关联的实体加载起来，会产生多余的记录，加大数据库内存的消耗。
 				1-n-m		加载1个实体，并会加载n个直接关联的实体，n个实体又会加载与之关联的m个实体，
 						select语句用joins来连接这些关联查询，导致n*m的笛卡尔积查询，在数据库内存中加载n*m条记录
+						
+	动态急抓取
+		1.动态急抓取会忽略在映射中定义的抓取策略，@Fetch
+		2.动态急抓取
+		JPQL中使用fetch关键字，通过left join fetch的方式动态抓取原本被懒加载的集合属性
+		或
+		使用标准查询时
+			通过Root的fetch(“propertyName”,JoinType.LEFT)实现动态抓取
+	
 	批量抓取(折中解决以上问题)
 		设置每次抓取批量大小
 			懒加载
@@ -1297,13 +1355,15 @@ hibernate抓取策略
 		
 		Hibernate 配置二级缓存通过两步设置
 			1.在配置文件hibernate.cfg.xml中	配置二级缓存提供者
+				h4前
 				<property name="hibernate.cache.provider_class">
 				  org.hibernate.cache.EhCacheProvider		//缓存提供者
 			   </property>
-					声明缓存提供者
+				h4后
+				<property name="hibernate.cache.region.factory_class">
 					
 			2.激活二级缓存
-				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+				<property key="hibernate.cache.use_second_level_cache">true</prop>
 			
 	使用缓存
 		1.使用配置文件中的 hibernate.cache.use_query_cache="true" 属性 	
@@ -1311,14 +1371,35 @@ hibernate抓取策略
 				激活查询层次缓存
 				使用查询缓存:Query 类的 setCacheable(Boolean)
 		2.在配置文件中决定好使用哪个并发策略
-			Read-only 	Nonstrict-read-write 	Read-write 	Transactional
-			在配置文件中配置<cache usage="read-write">	//在映射文件中配置
+			缓存策略
+				Read-only 
+				Nonstrict-read-write 	
+				Read-write 	
+				Transactional
+			在映射文件中配置<cache usage="read-write">	//在映射文件中配置
 				表示使用并发策略  read-write
 					<cache 
 						usage="transactional|read-write|nonstrict-read-write|read-only"
 						region="RegionName"
 						include="all|non-lazy"/>
-				
+				或
+				注解方式
+					实体类上@Cacheable为实体类启用共享缓存
+					@Cache（usage=。。）配置该实体类的缓存策略
+					在实体类的标志属性上@natureId作为该实体在缓存区的标识符，通过该标志符查找缓存
+					//在加载实体时缓存实体
+		
+	
+	使用二级缓存时机
+		1.更新频率低的实体
+		2.不会被更改的实体
+		3.数据状态稳定的实体
+		4.不被其他应用共享的数据
+		5.容忍少量并发访问的数据
+		
+	
+	
+	
 批处理
 	启用批处理
 		配置文件中配置每批大小

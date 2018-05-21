@@ -35,8 +35,20 @@ xhr.responseXML	  获得 XML 形式的响应数据。 是一个xml 的 DOM对象
 
 	onreadystatechange 属性：readState改变时触发的事件函数,给他赋值某函数，他就调用函数
 
-	status属性，响应状态码 404 200 。。。
-
+	status属性 服务器响应状态码 404 200 。。。
+	
+	statusText 服务器响应状态描述Not Found,OK
+	
+	responseText 服务器返回的文本响应
+	
+	responseXML 服务器返回的XML响应
+	
+5.xhr内置方法
+	open(method,url,isAsync,username,password) //创建一个请求连接
+	send(content)					   //发送content的给服务器
+	setRequestHeader(header,value)		   //设置请求头
+	getResponseHeader(header)			   //取得响应头
+	abort()						   //终止请求连接
 
 JQuery的ajax
 

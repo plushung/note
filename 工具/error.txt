@@ -52,3 +52,8 @@ Spring err
 	解决
 		去掉ContextLoaderListener和contextConfigLocation的配置
 		或修改servlet.xml的名
+		
+eclipse err
+Java compiler level does not match the version of the installed Java project facet.
+eclicpse的java编译器版本与机器安装的不一致，通过配置项目属性修改java编译器版本，
+以及修改.setting文件的org.eclipse.wst.common.project.facet.core.xml文件的<installed face="java" version="...">

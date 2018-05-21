@@ -1,0 +1,27 @@
+git 远程仓库
+1.ssh-keygen -t rsa -C "youremail@example.com"
+	产生ssh密码
+2.copy .ssh 的 id_rsa.pub 里的key到github的 SSH and GPG keys，然后点击 New SSH key 按钮
+3.在github 创建仓库
+
+4.在git bash 用 
+$ git remote add origin git@github.com:tianqixin/test.git
+增加一个链接到github库
+$ git push -u origin master
+把本地提交的文件push到github仓库
+
+退回到某个版本
+	git reset --hard 139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96 
+
+通过标签退回版本
+	git reset --hard tagname 
+
+提取远程仓库
+
+Git 有两个命令用来提取远程仓库的更新。
+
+1、从远程仓库下载新分支与数据：git fetch
+
+2、从远端仓库提取数据并尝试合并到当前分支：git merge
+	 git merge origin/master 把新数据合并更新同步到本地
+你可以首先执行 git fetch [alias] 告诉 Git 去获取它有你没有的数据，然后你可以执行 git merge [alias]/[branch] 以将服务器上的任何更新（假设有人这时候推送到服务器了）合并到你的当前分支。 

@@ -23,10 +23,28 @@ DML （Data Manipulation Language 数据操作语言）
 	删除用户
 		drop user 'username@localhost'
 	授权
-		grant select，update On datebaseName.tableName To 'user'@'localhost'
+		grant 
+			select，update（column ） 
+		On datebaseName.tableName 
+		To 'user'@'localhost'
+		with grant option //将自己的权限授予用户
 		
 	撤销授权		
 		revoke select，update On datebaseName.tableName FROM 'user'@'localhost'
+		或
+		revoke all privileges,grant option	//回收所有权限及
+！！！！！
+	列名一定要用（）括起来
+	
+替换查询结果的数据
+	select 
+		case
+			when score < 50 then 'fail'
+			when score >50 and score <90 then ‘pass’
+			else ‘good'
+		end as 'rank' from student
+
+	
 插入数据
 	直接插入
 		insert into table_name （column1，cloumn2）values(,,,) 
@@ -93,7 +111,6 @@ alias 名别名
 NULL值处理
 	用is null / is not null 判断null值
 	
-
 	
 修改表项
 	删除列	drop
@@ -102,11 +119,11 @@ NULL值处理
 		alter table table_name add column_name char(10);
 	修改列属性	modify		//sqlserver为alter column_name
 		alter table table_name modify column_name int;
-	修改列名及属性
+	修改列名及属性 change
 		alter table table_name change column_name newname int;
-	直接修改某列的默认值
+	直接修改某列的默认值 alter
 		ALTER TABLE testalter_tbl ALTER i SET DEFAULT 1000
-	修改表名
+	修改表名 
 		alter table table_name RENAME TO new_table_name
 		
 		
@@ -127,7 +144,7 @@ NULL值处理
 		只在查询频繁的列上建立索引，不在频繁修改的列上建立索引
 		
 	创建表时创建索引
-		简单索引	//在某个表的某列上on创建索引
+		简单索引	//在 某个表的 某列上on创建索引
 			CREATE INDEX index_Name ON table_name (cloumn_name,..) 
 		唯一索引	
 			Create unique index index_Name on table_name (cloumn_name,..) 
@@ -136,7 +153,9 @@ NULL值处理
 		ALTER TABLE tbl_name ADD INDEX index_name (column_list)
 	
 	删除索引
-		alter table table_name DROP INDEX index_name ON table_name;
+		alter table table_name DROP INDEX index_name;
+		或
+		drop index `name` on `table_name`
 
 DATE函数
 	返回当前时间日期
@@ -204,8 +223,15 @@ DATE函数
 			foreign key reference table_name(column)
 		表级约束
 			foreign key（column） reference table_name(column)
-			
+				on update|on delete  cascade|set null|on action|restrict
+				//为外键定义级联动作
+					restrict:若外键父表尝试删除或更新时，拒绝父表的删除或更新
+					cascade：从表随父表的删除或更新而删除或更新从表
+					set null:父表更新或删除时，从表对应行的外键设置为null
+					set default：外键设置为默认值
 		constraint 为约束命名
+		
+		
 		
 		删除约束
 			alter table table_name drop foreign key ‘’keyname‘’
@@ -217,12 +243,47 @@ DATE函数
 		CHECK (P_Id>0)	//指定某列的范围
 	
 添加约束
-	alter table table_name add CONSTRAINT ‘name’ primary key(,,)
-	alter table table_name add CONSTRAINT “name” foreign key(,,) reference
+	alter table table_name add 
+		CONSTRAINT ‘name’ primary key(,,)
+	alter table table_name add 
+		CONSTRAINT “name” foreign key(,,) reference 
 删除约束
-	alter table table_name drop primary key
-	alter table table_name drop index indexname
+	alter table table_name drop primary key `dd`		//删除约束
+	alter table table_name drop index `indexname`;		//删除索引
+		//在约束上添加的索引一般随约束的删除而删除
 	
+触发器
+	创建
+		delimiter $
+		CREATE TRIGGER `9grid`.`tb_comments_BEFORE_INSERT` BEFORE INSERT 
+		ON `tb_comments` FOR EACH ROW
+		BEGIN
+			...;
+		END $
+		delimiter ;
+		不用begin-end可以只触发一条语句
+		关键字
+			NEW:代表新的一行，用法id=NEW.id
+			OLD:代表旧的记录
+	移除
+		drop trigger `trrger_name`;
+		
+delimiter $$
+	在使用begin-end过程体式临时改变结束符不用;防止过程体中的语句结束符(;)与过程体结束符发生冲突end$$
+	即使用$$做过程体的结束符，来定义过程体
+
+变量
+	用户变量
+		set @var="jj"	//定义用户变量并赋值，可以在sql语句中@var使用变量值
+		set @st=(select * from usertable)
+		在sql语句中给变量赋值 :=
+			select @var:=555+@var ;
+			
+	系统变量
+		@@version
+		@@前缀的变量是MYsql系统中定义的变量
+		
+
 	
 存储过程
 	1.存储过程只在创造时进行编译，以后每次执行存储过程都不需再重新编译，
@@ -230,39 +291,57 @@ DATE函数
 	
 	mysql存储过程
 		界定符 delimiter$$
-		创建	CREATE PROCEDURE myproc(IN in varchar，OUT out int)
-		输入 IN inparam int
-		输出 OUT outparam int
-		存储过程外定义并赋值给变量
-			set @var = 0
+		创建	CREATE PROCEDURE database.myproc(IN in varchar，OUT out int)
+			输入 IN inparam int
+			输出 OUT outparam int
+		局部变量
+			declare var int [default 100]
+			set var = 0
 		过程体	begin ...... end	可嵌套
 			条件 if .... then ....[elseif ...then] else ..... end if
-			循环语句 while ...do ... end while；repeat ... until .... end repeat;
-			选择语句 case exception when ... then ... when ... then... else ..end case;	//case--switch when--case else--default 
+			循环语句 
+				while ...do ... 
+				end while；
+				
+				repeat ... until .... 
+				end repeat;
+				
+				lable:loop
+					...
+					leave lable		//退出lable的loop循环
+					...
+					end loop lable
+			选择语句 
+				case exception 
+					when ... then ... 
+					when ... then... 
+					else ..
+				end case;	//case--switch when--case else--default 
 			dml
 			ddl
 			declare		//局部变量声明
-	
-	mysql存储函数
-		定义
-		delimiter$$
-			create function functionname(param,param1) return varchar(10)
-			begin
-				...
-				...
-			return (v1v)
-			end$$
-		delimiter;
 		
 	将查询结果赋值给变量
 		select count（gg） into var		//产生的select不会输出，只会赋值给var
 	
 	
-	CREATE PROCEDURE  过程名([[IN|OUT|INOUT] 参数名 数据类型[,[IN|OUT|INOUT] 参数名 数据类型…]]) [特性 ...] 过程体
 	DELIMITER $$			//用$$作界定符
+	CREATE PROCEDURE  过程名([[IN|OUT|INOUT] 参数名 数据类型[,[IN|OUT|INOUT] 参数名 数据类型…]]) [特性 ...] 过程体
 	  CREATE PROCEDURE myproc(OUT out int)		//创建存储过程
 		BEGIN							
 		  SELECT COUNT(*) INTO s FROM students;
 		END
 		$$
 	DELIMITER ;
+	
+存储函数
+	存储函数可一用在sql语句中,只能有一个返回，不能有多的select返回
+	定义要有return type
+	delimiter$$
+		create function functionname(param,param1) return varchar(10)
+		begin
+			...
+			...
+		return (v1v)
+		end$$
+	delimiter;

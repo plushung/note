@@ -20,7 +20,8 @@ Content-Disposition: form-data; name=file;filename=test.txt;
 响应：
 第一行：请求行 
 type/version statecode stateCodeDescripty
-ex:http/1.0 200 ok
+ex:
+http/1.0 200 ok
 
 第二行开始：消息头
 下载文件的Header，要添加的东西
@@ -33,3 +34,19 @@ ex:http/1.0 200 ok
 
 
 Content-disposition是 MIME 协议的扩展，MIME 协议指示 MIME 用户代理如何处理附加的文件
+
+GET URL http/1.1
+常用请求头
+	每种属性一行
+	User-Agent:告知服务器client的浏览器类型，client发送请求的应用程序名
+	Accept:客户端可接受的MIME类型
+	Host:客户端要访问的主机名与端口号
+	Cookies:客户端要发给服务器的Cookies信息，包括JSESESSION也在里面
+	Referer:该请求来源于那个网站
+	Cache-Control:对缓存控制
+	
+http/1.1 200 OK
+常用响应头
+	Cache-Control:控制客户端的缓存信息，如max-age控制缓存信息的生存时间
+	Location:网页重定向的地址，让客户端跳转到该地址
+	Set-Cookie:设置客户端的cookie信息，可一设置多个cookie

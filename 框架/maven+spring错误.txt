@@ -19,7 +19,12 @@ maven error
 					</plugin>    
 				</plugins>    
 				 </build>    
-
+	请使用 -source 7 或更高版本
+		由于maven的编译器插件版本与机器安装的版本不同要统一版本，修改pom.xml添加
+		<properties>
+			<maven.compiler.source>1.8</maven.compiler.source>
+			<maven.compiler.target>1.8</maven.compiler.target>
+		</properties>
 spring用classpathcontextloader加载xml，必需在classes下有xml文件
 
 读取文件的路径问题：

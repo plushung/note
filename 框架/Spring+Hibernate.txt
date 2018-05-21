@@ -107,4 +107,12 @@ spring 集成 JPA 的使用
 				<tx:annotation-driven transaction-manager="transactionManager"或在java配置类上@EnableTransactionManagement(proxyTargetClass=true)
 				让spring通过切面管理事务
 			
+	事务管理器
+		两种事务HibernateTransactionManager 和DataSourceTransactionManager
+			DataSourceTransactionManager：
+				此事务管理器是针对传统的JDBC进行事务管理，对基于JDBC的DAO的事务管理
+			HibernateTransactionManager：
+				是对hibernate进行事务管理，对基于Hibernate的DAO的事务管理
+			JtaTransactionManager：
+				是对基于JTA的事务进行管理
 		
