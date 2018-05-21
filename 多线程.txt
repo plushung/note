@@ -59,6 +59,10 @@
 -------------------------------------------------------------------------------------------------------------------
 同步
 	synchronize控制同步临界区的访问
+		线程运行到同步临界区时，
+		若获得了锁，则从内存中取回变量的值，存储到线程的缓存中，
+		释放锁时再将同步块中的变量写到内存中，保证可见性 	//volatile唯一的作用
+		线程取得锁期间执行的操作为原子操作，保证操作的原子性
 	//基于监听器的同步及等待
 		synchronized修饰:
 			类方法(Class对象作锁)，方法(实例对象作锁)，同步块(可以指定任意对象作锁)
@@ -136,6 +140,61 @@
 		定时器，定期执行定时任务
 	TimeTask()
 		定时任务，是Runnable的一个抽象类
+
+
+什么是CAS		//像hibernate通过version来加乐观锁一样  比较新旧？赋值更新：啥都不做
+       CAS，Compare and Swap即比较并交换。 java.util.concurrent包借助CAS实现了区别于synchronized同步锁的一种乐观锁。
+	   CAS有3个操作数：内存值V，旧的预期值A，要修改的新值B。
+			V=V.equit(A)?B:V
+	   CAS的关键点在于，系统在硬件层面保证了比较并交换操作的原子性，处理器使用基于对缓存加锁或总线加锁的方式来实现多处理器之间的原子操作。
+	ABA问题
+		若一个变量由A变成B，再由B变成A，CAS的方法会认为变量的值无变化。
+		解决:
+			通过版本号来进行CAS，像hibernate通过version来对实体加乐观锁一样
+			实现类:AtomicStampedReference
+	使用场合
+		1.CAS不适合竞争十分频繁的场景。
+		2.CAS只能保证共享单一atomic类的原子性，当有多个共享的atomic被并发访问时，只能加同步锁访问
+并发工具类	java.util.concurrent.*
+	java.util.concurrent包
+		并发编程中常用到的类，如：Executors
+		
+		Executor:
+			执行单一的Runnable对象，无返回值
+		ExecutorService:
+			执行若干Runnable对象，无返回值
+			执行若干Callable对象，有返回值，返回Future对象，保存了Callable的返回结果，进行异步通信
+		ScheduleExecutorService：
+			与ExecutorService类似
+		
+		ExecutorService使用
+			execute()
+			或
+			submit()：执行若干Callable或Runnable对象并返回保存着结果的Future对象
+		Future保存Callable返回的结果
+			get()：取得Callable返回的结果
+		Executor执行完后要关闭，否则里面的线程会一直占用资源
+			shutdown()
+			shutdownNow()
+			
+		
+		Executors：	//
+			取得多种Executor的子类的实例，关联到callable和future
+			如：
+			单一线程方式
+				newSingleThreadExecutor()：创建只有一条线程的ExecutorService的实例
+				newSingleThreadScheduledExecutor()：创建只有一条线程的ScheduleExecutorService的实例
+			线程池方式
+				newFixThreadPool(int n)：创建带有容量为n的线程池的ExecutorService的实例
+				newScheduledThreadPool(int n)：创建带有容量为n的线程池的ScheduleExecutorService的实例
+			
+	java.util.concurrent.atomic包
+		包提供了一系列原子类,用于并发访问
+		在操作这些原子类时不会阻塞线程，因为没有用synchronize对其没有加同步锁访问，而是通过CAS乐观锁来保证变量的原子操作；
+		
+	java.util.concurrent.locks包
+		锁框架，提供一种比加synchronize同步锁更灵活的加锁方式
+		
 	
 
 
