@@ -1,0 +1,59 @@
+1.Error parsing HTTP request header Note: further occurrences of HTTP header parsing errors will be logged at DEBUG level
+	java.lang.IllegalArgumentException: Invalid character found in the request target. The valid characters are defined in RFC 7230 and RFC 3986
+表单提交了大量的数据，而这些数据量可能超过了Tomcatt的header缓冲区大小不够
+	使调整了server.xml <Connector maxHttpHeaderSize=" ">可能还是解决不了,还是用psot吧
+	
+2.The type ***** cannot be resolved
+	错误:某个类不能检索到，
+	原因:缺少需要的库
+	解决:导入对应的依赖
+	
+hibernate err
+	1.Caused by: javax.validation.NoProviderFoundException: 
+		加如jsr的依赖
+			使用Apache BVal :: BVal JSR ? 1.1.1
+	2.org.hibernate.InvalidMappingException
+		遇到这种错误时，要好好检查javabean与对应的hbm.xml文档相对应，尤其是大小写
+		
+	3.Repeated column in mapping for entity: column: id 
+		映射文件*.hbm.xml中存在重复列
+	4.tomcat 启动时 出现lifecycle错误，java.util.zip.ZipException: invalid LOC header (bad signature)
+		可能maven依赖下载时出错，删除依赖，从新下载依赖就可
+		或某些依赖包不在classpath下，增加依赖就可
+		
+	5.org.hibernate.HibernateException: Unable to get the default Bean
+		原因是在hibernate.cfg.xml的配置中如果没有配置<property name="javax.persistence.validation.mode"></property>的话，
+		默认它是auto的，它会自动去classpath下寻找validator，
+		所以在配置文件中配置<property name="javax.persistence.validation.mode">none</property>
+		
+	6.HTTP message: org.springframework.http.converter.HttpMessageNotWritableException: 
+	Could not write JSON: failed to lazily initialize a collection of role
+		因为hibernate在加载一个数据库数据到实体类时，若实体类关联了其他实体类，就会延时加载该实体类，会先去加载关联的实体类
+		这就是懒加载，这在转换json时出现问题
+		解决:
+			1.配置JSON插件需要排除的字段@JsonIgnore,把关联的那个属性上@JsonIgnore，忽略掉不转换他
+			2.或把关联属性的映射设置为懒加载 lazy=“false”
+	
+	7.query result offset is not supported
+		在配置文件中把hibernate方言配置好，最好连版本也指定
+	
+	
+Spring err
+！！Spring的控制台重复信息多次出现、、对象的实例化被重复实例化两次？？
+	原因:	
+		DispatcherServlet会根据它的Servlet名去类路径下找到*-servlet.xml的配置文件（如果有），并用配置文件里的信息构建应用
+		若在	<context-param>
+				<param-name>contextConfigLocation</param-name>
+				<param-value>/WEB-INF/springDispatcherServlet-servlet.xml</param-value>
+			</context-param>声明配置文件并配置了org.springframework.web.context.ContextLoaderListener
+		context.ContextLoaderListener会用这配置文件再进行一次配置
+		这就使得配置文件里的同一个bean被实例化多次
+		同时应用报错时也会重复报多次
+	解决
+		去掉ContextLoaderListener和contextConfigLocation的配置
+		或修改servlet.xml的名
+		
+eclipse err
+Java compiler level does not match the version of the installed Java project facet.
+eclicpse的java编译器版本与机器安装的不一致，通过配置项目属性修改java编译器版本，
+以及修改.setting文件的org.eclipse.wst.common.project.facet.core.xml文件的<installed face="java" version="...">

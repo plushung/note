@@ -1,0 +1,118 @@
+1.数据源问题
+	hibernate 数据源配置方式
+		1.在cfg.xml中配置连接参数
+			Jdbcdirver,usernamr,password,url
+			
+		2.用第三方连接池
+			c3p0等，在c3p0的配置文件中配置Jdbcdirver,usernamr,password,url
+			
+		3.在Spring中配置datasource
+			由Spring的事务管理HibernateTransactionManager去管理hibernate的transaction
+			要在hibernate配置文件中配置session_context_class 为thread
+			这样就不用显式地begainTransaction commit rollback
+			
+Spring配置文件中关于事务配置总是由三个组成部分，DataSource、SessionFactory，TransactionManager和代理机制这几部分
+	DataSource、TransactionManager是固定配置的
+	代理方式有几种:
+		1.通过注解@Transaction，生成目标类的子类对基于Hibernate的DAOimp进行代理
+		2.通过tx命名空间和aop命名空间在xml中配置事务的切面
+		3.通过TransactionProxyFactoryBean类代理
+		4.通过TransactionInterceptor类拦截代理
+		
+2.DAO异常问题
+	因为Spring会把@Repository类产生的异常统统转换为DataAccessException，即使用框架实现的DAO类抛出了各种异常也不能直接通过捕抓正真异常名去捕捉异常
+	直接捕抓DataAccessException才能把异常捕捉到
+	
+spring 集成 JPA 的配置
+	在spring中集成时的配置
+		spring声明LocalEntityManagerFactoryBean或LocalContainerEntityFactoryBean的bean，用作持久化单元
+		分别用于配置应用程序管理的JPA与容器管理的JPA
+		应用程序管理的JPA
+			JPA的配置信息由presistance.xml提供包括datasource，实体类等信息的配置，Spring配置时要设置对应的presistanceUnit名，
+			1编写JPA的presistance.xml文件，配置presistance-unit
+			2配置LocalEntityManagerFactoryBean
+			3指定presistance-unit
+		容器管理的JPA
+			JPA的配置信息由Spring提供，此时Spring担任容器的角色，为JPA提供所需的datasource及JPA实现，以及指定实体类的获取
+			提供包括datasource等信息的配置，完全不用presistance.xml
+			1.配置LocalContainerEntityManagerFactoryBean
+			2.设定数据源datasource
+			3.配置实体类的映射
+			4.设定JPA的实现类JPAVectorAdapter
+				用hibernate的jpa实现
+				1配置JPAVectorAdapter
+				2.用hibernateJapVectorAdapter类
+				3.配置hibernate信息：datasource，dialect，ShowSQl，
+			5.扫描注解的实体类
+			
+spring 集成 JPA 的使用	
+	
+	获得持久化上下文
+		@PresistanceContext		//与spring集成时，@PresistanceContext不会注入真正的em，只是一个代理，通过代理的方法，使用em
+		EntityManager em;
+	或
+	获得持久化单元			
+		@PresistanceUnit		
+		EntityManagerFactory emf
+或
+使用Spring-data-jpa
+	继承CrudRespository接口，不用实现，Spring-data为我们实现了常用的18中CRUD操作
+	CrudRespository接口的方法在spring上下文创建时被Spring-data框架创建实现
+	自定义Respository方法
+		1在继承接口时，声明一个要自定义的方法
+		2在方法声明上@Query('SQL') spring为我们用该SQL实现方法
+	在java配置类上@EnableJpaRespository启用Spring-data-jap
+
+事务管理器 --》 事务 	-------------------------》提交事务内持久化单元的操作
+	|--》实体管理器 --》 持久化单元			
+	spring管理的JTA事务
+		1.配置实体管理器，LocalEntityManagerFactoryBean|LocalContainerEntityManagerFactoryBean|通过JNDI取得EntityManagerFactory
+			配置持久化单元，persistance.xml的配置，有关与数据库连接的配置
+			一个EntityManagerFactory代表一个数据库连接
+			JpaVendorAdapter指定JPA的实现如hibernate
+		2.配置事务管理器，JtaTransactionManager
+			持有一个或多个实体管理器,提供transaction，一条事务可同时使用多个EntityManagerFactory,有多条数据库的连接，进行分布式数据库访问
+			
+			
+		3使用事务
+			1.编程式事务
+				JTA事务取得方式
+					UserTransaction =(UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+				UserTransaction.begin(),-->entityManager.persist()--->entityManager.close()---->UserTransaction.commit(),
+				将事务的管理编程式地写入业务逻辑，手动begin与commit与rollback
+			2.声明时事务
+				在service类上@transaction，声明事务切面，
+				<tx:annotation-driven transaction-manager="transactionManager"或在java配置类上@EnableTransactionManagement(proxyTargetClass=true)
+				让spring通过切面管理事务
+	spring管理的hibernate事务
+		1.配置实体管理器，LocalSessionFactoryBean
+			配置持久化单元，hibernate.cfg.xml的配置，有关与数据库连接的配置
+			一个SessionFactory代表一个数据库连接
+		2.配置事务管理器，HibernateTransactionManager
+			管理着SessionFactory
+			
+		3.使用事务
+			1.编程式事务
+				hibernate用JDBC事务时
+					SessionFactory.gerCurrentSession()---->Session.beginTransaction()--->session.persist()---->tx.commit()
+				hibernate用JTA事务时
+					JTA事务取得方式
+						cfg的配置hibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory
+						UserTransaction =(UserTransaction)new InitialContext().lookup("javax.transaction.UserTransaction");//定义在cfg.xml中的由hibernate实现的UserTransaction
+					UserTransaction.begin(),-->session.save()--->session.close()---->UserTransaction.commit(),
+				若session通过getCurrentSession的到，就不用手动close
+					将事务的管理编程式地写入业务逻辑，手动begin与commit与rollback
+			2.声明时事务
+				在service类上@transaction，声明事务切面，
+				<tx:annotation-driven transaction-manager="transactionManager"或在java配置类上@EnableTransactionManagement(proxyTargetClass=true)
+				让spring通过切面管理事务
+			
+	事务管理器
+		两种事务HibernateTransactionManager 和DataSourceTransactionManager
+			DataSourceTransactionManager：
+				此事务管理器是针对传统的JDBC进行事务管理，对基于JDBC的DAO的事务管理
+			HibernateTransactionManager：
+				是对hibernate进行事务管理，对基于Hibernate的DAO的事务管理
+			JtaTransactionManager：
+				是对基于JTA的事务进行管理
+		

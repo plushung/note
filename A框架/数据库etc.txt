@@ -1,0 +1,347 @@
+DDL （Data Definition Language 数据定义语言）
+	create table 创建表     
+	alter table  修改表   
+	drop table 删除表   
+	truncate table 删除表中所有行     
+	create index 创建索引   
+	drop index  删除索引
+	当DDL语句执行完成时，DDL语句会被自动提交，不能回滚。
+DML （Data Manipulation Language 数据操作语言）
+	insert 将记录插入到数据库 
+	update 修改数据库的记录 
+	delete 删除数据库的记录
+
+管理
+	增加用户
+		use mysql；		//mysql存储系统各种信息的数据库为mysql
+		insert into user (host,user,authentication_string) values('localhost','username',password('password'));
+		insert into user (host,user,authentication_string) values('localhost','username',password('password'));
+		flush privileges;		//刷新
+			password（）函数用于加密密码
+			
+		create user 'username@localhost' identified by 'password'
+	删除用户
+		drop user 'username@localhost'
+	授权
+		grant 
+			select，update（column ） 
+		On datebaseName.tableName 
+		To 'user'@'localhost'
+		with grant option //将自己的权限授予用户
+		
+	撤销授权		
+		revoke select，update On datebaseName.tableName FROM 'user'@'localhost'
+		或
+		revoke all privileges,grant option	//回收所有权限及
+！！！！！
+	列名一定要用（）括起来
+	
+替换查询结果的数据
+	select 
+		case
+			when score < 50 then 'fail'
+			when score >50 and score <90 then ‘pass’
+			else ‘good'
+		end as 'rank' from student
+
+	
+插入数据
+	直接插入
+		insert into table_name （column1，cloumn2）values(,,,) 
+	用select的数据插入
+		insert into table_name select .. from table_name
+		
+更新
+	UPDATE table_name
+	SET column1 = value1, column2 = value2, ...
+	WHERE condition;
+		
+指定返回记录的条数
+	SQL Server / MS Access 语法	TOP n [percent]
+		返回 前number条记录/返回前number%条 记录
+			select top number [percent] * from table_name 
+	mysql
+		返回n条记录	.......limit n
+			select * from human limit 10;
+	oracle
+		返回n条记录	....... rownum<=n
+			rownum <=n
+		
+like / not like语句
+	%: 0个或多个字符
+	_:  任意单个字符
+	
+通过正则表达式匹配 //仅仅mysql可以
+	where name regexp '^ggs' 		//选择name以‘ggs’开头的行	
+
+In / not in
+	在where 时column从 指定的多个值里选
+		in （‘value’，‘value2’）
+		或
+		in （select 。。）
+		
+alias 名别名
+	column as name 
+		
+选择不同
+	在column前加 distinct 
+		
+排序
+	order by column desc|asc，column1 desc|asc //可指定多列排序
+		
+
+		
+连结查询
+	Inner join table_name on == 		//两个表的相交部分
+		等值查询,左边表的记录数目与有边表记录的数目相同,基于这些表之间的共同字段
+	left outer join table_name on ==		//左表的全部及两表的相交部分
+		LEFT JOIN 会读取左边数据表的全部数据，即便右边表无对应数据。
+	right outer join table_name on ==	//右表的全部及两表的相交部分
+		RIGHT JOIN 会读取右边数据表的全部数据，即便左边边表无对应数据。
+	full join 						//两个表的笛卡尔积
+		full join
+
+联合union查询
+	select * from table_name
+	union 
+	select * from table_name1;
+	//要保证union的两的select有相同列数列名
+	
+		
+NULL值处理
+	用is null / is not null 判断null值
+	
+	
+修改表项
+	删除列	drop
+		alter table Table_name drop column_name;
+	增加列	add
+		alter table table_name add column_name char(10);
+	修改列属性	modify		//sqlserver为alter column_name
+		alter table table_name modify column_name int;
+	修改列名及属性 change
+		alter table table_name change column_name newname int;
+	直接修改某列的默认值 alter
+		ALTER TABLE testalter_tbl ALTER i SET DEFAULT 1000
+	修改表名 
+		alter table table_name RENAME TO new_table_name
+		
+		
+		
+视图		//属于数据库的	as  drop		
+	创建视图		//选择一些记录来作为as视图
+		create view 'viewname' as select * from human ...
+	更新视图
+		create or replace view view_name as select ......
+	删除视图
+		drop view view_name；
+
+索引		//属于表的		on  alter
+	是一种数据结构，用B+tree实现，用于快速查找某节点，节点上存储着表中某列列值，根据该列通过索引快速查找记录
+	使用索引加快检索速度，但降低了写入速度
+	
+	建议：
+		只在查询频繁的列上建立索引，不在频繁修改的列上建立索引
+		
+	创建表时创建索引
+		简单索引	//在 某个表的 某列上on创建索引
+			CREATE INDEX index_Name ON table_name (cloumn_name,..) 
+		唯一索引	
+			Create unique index index_Name on table_name (cloumn_name,..) 
+		
+	创建表后修改索引	
+		ALTER TABLE tbl_name ADD INDEX index_name (column_list)
+	
+	删除索引
+		alter table table_name DROP INDEX index_name;
+		或
+		drop index `name` on `table_name`
+
+DATE函数
+	返回当前时间日期
+		sqlserver : getdate()
+		mysql  :	now()		
+			mysql：当前日期：curdate()
+				 当前时间：crutime()
+	在日期中加时间间隔
+		sqlserver : date_add()
+		mysql  : dateadd()
+	
+临时表
+	临时表只在当前事务有效
+	创建
+		create temporary table table_name（。。）
+
+复制表
+	create table table_name as select * from table_name1;
+		
+数据库的元数据
+	元数据:描述数据库的信息
+	
+	获取表结构
+		show create table table_name \g
+	
+	数据库与表的元数据
+		show tables；	查询当前数据库的表
+		show databases； 查询有哪些数据库
+		
+	获取服务器元数据
+		SELECT VERSION( )	服务器版本信息
+		SELECT DATABASE( )	当前数据库名 (或者返回空)
+		SELECT USER( )	当前用户名
+		SHOW STATUS	服务器状态
+		SHOW VARIABLES	服务器配置变量
+		
+自动增长序列
+	创建表时在列属性上添加属性AUTO_INCREMENT
+	或
+	在添加列时列属性上添加属性AUTO_INCREMENT
+		可指定初始序列 AUTO_INCREMENT=100
+		
+	//sqlserver 为 identity(1,1)
+
+约束
+	主键约束
+		列级约束
+			定义列时 添加 PrimaryKey
+		表级约束
+			创建表时 指定 PrimaryKey（column_name,......）
+			
+		constraint 为约束命名
+		
+		删除约束
+			alter table table_name drop primary key
+	
+	唯一约束
+		列级
+			unique
+		表级
+			unique （column_name,...）
+	
+	外键约束
+		列级约束
+			foreign key reference table_name(column)
+		表级约束
+			foreign key（column） reference table_name(column)
+				on update|on delete  cascade|set null|on action|restrict
+				//为外键定义级联动作
+					restrict:若外键父表尝试删除或更新时，拒绝父表的删除或更新
+					cascade：从表随父表的删除或更新而删除或更新从表
+					set null:父表更新或删除时，从表对应行的外键设置为null
+					set default：外键设置为默认值
+		constraint 为约束命名
+		
+		
+		
+		删除约束
+			alter table table_name drop foreign key ‘’keyname‘’
+			
+	非空约束
+		not null
+		
+	check约束
+		CHECK (P_Id>0)	//指定某列的范围
+	
+添加约束
+	alter table table_name add 
+		CONSTRAINT ‘name’ primary key(,,)
+	alter table table_name add 
+		CONSTRAINT “name” foreign key(,,) reference 
+删除约束
+	alter table table_name drop primary key `dd`		//删除约束
+	alter table table_name drop index `indexname`;		//删除索引
+		//在约束上添加的索引一般随约束的删除而删除
+	
+触发器
+	创建
+		delimiter $
+		CREATE TRIGGER `9grid`.`tb_comments_BEFORE_INSERT` BEFORE INSERT 
+		ON `tb_comments` FOR EACH ROW
+		BEGIN
+			...;
+		END $
+		delimiter ;
+		不用begin-end可以只触发一条语句
+		关键字
+			NEW:代表新的一行，用法id=NEW.id
+			OLD:代表旧的记录
+	移除
+		drop trigger `trrger_name`;
+		
+delimiter $$
+	在使用begin-end过程体式临时改变结束符不用;防止过程体中的语句结束符(;)与过程体结束符发生冲突end$$
+	即使用$$做过程体的结束符，来定义过程体
+
+变量
+	用户变量
+		set @var="jj"	//定义用户变量并赋值，可以在sql语句中@var使用变量值
+		set @st=(select * from usertable)
+		在sql语句中给变量赋值 :=
+			select @var:=555+@var ;
+			
+	系统变量
+		@@version
+		@@前缀的变量是MYsql系统中定义的变量
+		
+
+	
+存储过程
+	1.存储过程只在创造时进行编译，以后每次执行存储过程都不需再重新编译，
+	而一般SQL语句每执行一次就编译一次,所以使用存储过程可提高数据库执行速度，效率要比T-SQL语句高。
+	
+	mysql存储过程
+		界定符 delimiter$$
+		创建	CREATE PROCEDURE database.myproc(IN in varchar，OUT out int)
+			输入 IN inparam int
+			输出 OUT outparam int
+		局部变量
+			declare var int [default 100]
+			set var = 0
+		过程体	begin ...... end	可嵌套
+			条件 if .... then ....[elseif ...then] else ..... end if
+			循环语句 
+				while ...do ... 
+				end while；
+				
+				repeat ... until .... 
+				end repeat;
+				
+				lable:loop
+					...
+					leave lable		//退出lable的loop循环
+					...
+					end loop lable
+			选择语句 
+				case exception 
+					when ... then ... 
+					when ... then... 
+					else ..
+				end case;	//case--switch when--case else--default 
+			dml
+			ddl
+			declare		//局部变量声明
+		
+	将查询结果赋值给变量
+		select count（gg） into var		//产生的select不会输出，只会赋值给var
+	
+	
+	DELIMITER $$			//用$$作界定符
+	CREATE PROCEDURE  过程名([[IN|OUT|INOUT] 参数名 数据类型[,[IN|OUT|INOUT] 参数名 数据类型…]]) [特性 ...] 过程体
+	  CREATE PROCEDURE myproc(OUT out int)		//创建存储过程
+		BEGIN							
+		  SELECT COUNT(*) INTO s FROM students;
+		END
+		$$
+	DELIMITER ;
+	
+存储函数
+	存储函数可一用在sql语句中,只能有一个返回，不能有多的select返回
+	定义要有return type
+	delimiter$$
+		create function functionname(param,param1) return varchar(10)
+		begin
+			...
+			...
+		return (v1v)
+		end$$
+	delimiter;
