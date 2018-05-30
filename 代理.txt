@@ -2,10 +2,19 @@
 	代理对象实现被代理对象的接口，在编码时重写被代理目标的方法，增强被代理目标
 2.动态代理(接口代理)
 	JDK中生成代理对象的API:java.lang.reflect.Proxy类
-	Proxy的方法static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces,InvocationHandler h )取得代理对象
+	Proxy的方法static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces,InvocationHandler h )取得代理对象，用代理对象调用方法
 	反射包中的调用处理器 java.lang.reflect.InvocationHandler;		//用于配合代理对象，对被代理对象的方法调用增强
-	指定目标的 接口，类加载器，方法调用处理器，通过InvocationHandler来调用目标类的方法，用到了反射
+	指定目标的 接口，类加载器，方法调用处理器，通过重写InvocationHandler的invoke()来对方法拦截增强，用到了反射
 	目标类要一定要实现接口
+	
+	1.Invo implement InvocationHandler｛
+		invoke(...)
+		｝
+		
+	2.target=Proxy.newProxyInstance（ClassLoder，interface[],Invo）
+	
+	3.target.doAction()
+	
 3.CGlib代理	
 	通过生成目标类的子类的方法来实现代理，目标类不用实现接口，
 	通过拦截器拦截目标类方法的调用并在适当位置切入增强代码

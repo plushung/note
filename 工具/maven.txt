@@ -62,8 +62,6 @@ Maven 实际上是一个依赖插件执行的框架，每个任务实际上是由插件完成
 要先有一个pom.xml文件
 mvn archetype:generate
 
-
-
 package 打包
 
 build执行maven生命周期，生命周期各个阶段是一个phase，每个phase要执行的操作由plugins下的plugin处理，
@@ -72,3 +70,6 @@ build执行maven生命周期，生命周期各个阶段是一个phase，每个phase要执行的操作由plug
 若没有手动配置，maven默认从<项目根目录>/src/main/Java这个目录去查找Java源文件，
 编译后的class文件会保存在<项目根目录>/target/classes目录。
 
+Test测试
+	maven的test阶段会运行src/test/java中的测试类，
+	其中类名要以Test*开头，方法名以test开头

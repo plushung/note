@@ -3,6 +3,7 @@
 
 并发：
 	通过cpu调度算法，让用户看上去同时执行，实际上从cpu操作层面不是真正的同时。
+	并发用于提高在单个cup上运行的程序的性能
 
 线程安全：
 	一段代码在并发的情况下执行，经过多线程使用，线程的调度顺序不影响结果。线程不安全就意味着线程的调度顺序会影响最终结果。
@@ -61,17 +62,19 @@
 	synchronize控制同步临界区的访问
 		线程运行到同步临界区时，
 		若获得了锁，则从内存中取回变量的值，存储到线程的缓存中，
-		释放锁时再将同步块中的变量写到内存中，保证可见性 	//volatile唯一的作用
+		释放锁时再将同步块中的变量写到内存中，保证可见性 	
 		线程取得锁期间执行的操作为原子操作，保证操作的原子性
-	//基于监听器的同步及等待
+	基于监听器的同步及等待
 		synchronized修饰:
 			类方法(Class对象作锁)，方法(实例对象作锁)，同步块(可以指定任意对象作锁)
 			构造方法不能使用synchronized关键字
 
-		每个对象只有一个锁（lock）与之相关联，谁拿到这个锁谁就可以运行它所控制的那段代码。 
+		java中每个对象有一个监听器与之关联，哪条线程先锁住控制临界区的那个对象的监听器，就可以运行它所控制的那段代码。
+		监听器是互斥的，只能由一条线程锁住，
 
 		synchronized(obj){} //obj的锁控制着同步块，谁拿到这个锁谁就可以运行它所控制的那段代码。
-			synchronized 会指定把obj锁定，当有Thread访问同步块时，要先获得该obj对象锁，否则被阻塞，直到obj对象锁被其他Thread释放。obj必需是多个Thread所访问到的同一个对象，Threads用同一把锁，同步块才能正常运作。	
+			synchronized 会指定把obj锁定，当有Thread访问同步块时，要先获得该obj对象锁，否则被阻塞，直到obj对象锁被其他Thread释放。
+			obj必需是多个Thread所访问到的同一个对象，Threads用同一把锁，同步块才能正常运作。	
 			
 		wait（）会使线程释放获得的锁（线程放弃该锁）,进入锁的等待池 ;
 			lock.notify() 唤醒等待该对象监听器的一条线程，使得等待池的一个线程进入锁池，等待获得锁，回到调用wait的现场
@@ -80,8 +83,12 @@
 			so在同步块里用join会造成死锁
 	
 	valitile变量
-		volatile修饰的变量 [ 不允许线程内部缓存变量和指令重排序 ]，即直接修改内存	
+		volatile修饰的变量 [ 不允许线程内部缓存变量和指令重排序 ]，即直接修改内存
+			volatile关键字本身就包含了禁止指令重排序的语义
 			即只允许线程从主存中读写该变量，线程不缓存变量
+			
+		作用:
+			保证变量的可见性(直接读写内存，其他线程可见)与有序性(禁止JVM对变量的操作指令重排序，确保操作按顺序执行)
 			
 		volatile :在类的属性声明中使用
 			修饰被不同线程访问和修改的变量
@@ -90,17 +97,19 @@
 		volatile 的读性能消耗与普通变量几乎相同，但是写操作稍慢
 		
 	volatile、synchronized 和 final 实现可见性
-			在synchronized 中和在 lock、unlock 中操作保证原子性。
-			volatile 和 synchronized 两个关键字来保证线程之间操作的有序性
+	synchronized 中和在 lock、unlock 中操作保证原子性。或使用atomic类作变量保证操作原子性
+	volatile 和 synchronized 两个关键字来保证线程之间操作的有序性
 
 		可见性：
 			是指线程之间的可见性，一个线程修改的状态对另一个线程是一定可见的。也就是一个线程修改的结果。另一个线程马上就能看到。
+			变量的修改会被马上同步到内存
 
 		原子性：
-			原子是世界上的最小单位，具有不可分割性。一个不可分割的操作叫原子操作。：a++ 由a+1和a=a+1俩步操作组成，非原子操作
+			原子是世界上的最小单位，具有不可分割性。一个不可分割的操作叫原子操作。：a++ 由a+1和a=a+1俩步操作组成，非原子操作，
+			高并发操作a++时，会出错
 
 		有序性:
-			程序串行执行。
+			程序串行执行。保证对变量的操作是按照编写顺序执行的，使JVM不会对操作指令的执行顺序重排序
 
 		缓存变量
 			为提升性能，jvm会缓存线程的变量，将线程变量缓存在jvm的寄存器上或cpu的寄存器上
@@ -142,28 +151,35 @@
 		定时任务，是Runnable的一个抽象类
 
 
-什么是CAS		//像hibernate通过version来加乐观锁一样  比较新旧？赋值更新：啥都不做
-       CAS，Compare and Swap即比较并交换。 java.util.concurrent包借助CAS实现了区别于synchronized同步锁的一种乐观锁。
-	   CAS有3个操作数：内存值V，旧的预期值A，要修改的新值B。
+
+并发工具类	java.util.concurrent.* 	//为了不用synchronized来处理并发访问，提高性能
+	其里面的Lock锁，atomic都是建立在CAS上的
+	什么是CAS		//像hibernate通过version来加乐观锁一样  比较新旧？赋值更新：啥都不做
+		CAS，Compare and Swap即比较并交换。 java.util.concurrent包借助CAS实现了区别于synchronized同步锁的一种乐观锁。
+		CAS有3个操作数：内存值V，旧的预期值A，要修改的新值B。
 			V=V.equit(A)?B:V
-	   CAS的关键点在于，系统在硬件层面保证了比较并交换操作的原子性，处理器使用基于对缓存加锁或总线加锁的方式来实现多处理器之间的原子操作。
-	ABA问题
-		若一个变量由A变成B，再由B变成A，CAS的方法会认为变量的值无变化。
-		解决:
-			通过版本号来进行CAS，像hibernate通过version来对实体加乐观锁一样
-			实现类:AtomicStampedReference
-	使用场合
-		1.CAS不适合竞争十分频繁的场景。
-		2.CAS只能保证共享单一atomic类的原子性，当有多个共享的atomic被并发访问时，只能加同步锁访问
-并发工具类	java.util.concurrent.*
+		CAS的关键点在于，系统在硬件层面保证了比较并交换操作的原子性，处理器使用基于对缓存加锁或总线加锁的方式来实现多处理器之间的原子操作。
+		ABA问题
+			若一个变量由A变成B，再由B变成A，CAS的方法会认为变量的值无变化。
+			解决:
+				通过版本号来进行CAS，像hibernate通过version来对实体加乐观锁一样
+				实现类:AtomicStampedReference
+		使用场合
+			1.CAS不适合竞争十分频繁的场景。
+			2.CAS只能保证共享单一atomic类并发访问的原子性，当有多个共享的atomic被并发访问时，只能加同步锁访问
+	乐观锁
+		乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。
+		其实现过程就是CAS
+		
 	java.util.concurrent包
 		并发编程中常用到的类，如：Executors
 		
 		Executor:
+			执行器接口
 			执行单一的Runnable对象，无返回值
 		ExecutorService:
 			执行若干Runnable对象，无返回值
-			执行若干Callable对象，有返回值，返回Future对象，保存了Callable的返回结果，进行异步通信
+			执行若干Callable对象，有返回值，立即返回Future对象，用于跟踪若干个异步线程任务的处理，保存了Callable的返回结果，进行异步通信
 		ScheduleExecutorService：
 			与ExecutorService类似
 		
@@ -171,15 +187,23 @@
 			execute()
 			或
 			submit()：执行若干Callable或Runnable对象并返回保存着结果的Future对象
-		Future保存Callable返回的结果
+		Future
+			功能：
+				保存Callable返回的结果，取消线程任务，判断任务是否完成
 			get()：取得Callable返回的结果
+			cancle()：取消任务
+			isDone()：判断是否完成任务
+			
 		Executor执行完后要关闭，否则里面的线程会一直占用资源
 			shutdown()
+				shutdown后的Executor将不再就受新的任务。强行submit会抛出RejectedExecutionException
 			shutdownNow()
-			
-		
+				shutdownNow后的Executor将不再就受新的任务,并且取消正在执行的task。
+				抛出CancellationException，强行submit会抛出RejectedExecutionException
+				
 		Executors：	//
-			取得多种Executor的子类的实例，关联到callable和future
+			一个工厂类，用于创建Executor，ExecutorService，ScheduleExecutorService，ThreadFactory
+			用于取得多种Executor的子类的实例，关联到callable和future
 			如：
 			单一线程方式
 				newSingleThreadExecutor()：创建只有一条线程的ExecutorService的实例
@@ -189,12 +213,75 @@
 				newScheduledThreadPool(int n)：创建带有容量为n的线程池的ScheduleExecutorService的实例
 			
 	java.util.concurrent.atomic包
-		包提供了一系列原子类,用于并发访问
-		在操作这些原子类时不会阻塞线程，因为没有用synchronize对其没有加同步锁访问，而是通过CAS乐观锁来保证变量的原子操作；
+		包提供了一系列原子类,用于并发访问，实现原子性与可见性
+		在操作这些原子类时不会阻塞线程，提高性能，因为没有用synchronize对其没有加同步锁访问，而是通过CAS乐观锁来保证变量的原子操作；
 		
+		atomic类的CAS
+			修改atomic变量的值时，通过unsafe.compareAndSwapInt()来进行操作，保证操作原子性
+			
 	java.util.concurrent.locks包
-		锁框架，提供一种比加synchronize同步锁更灵活的加锁方式
-		
+		Lock接口	//取代synchronize
+			锁框架，提供一种比加synchronize监听器关联的锁更灵活的并发访问加锁操作
+			方法：
+				lock()	：线程取得锁，若锁不可用则被阻塞一直等待
+				tryLock()：尝试取得锁，若成功取得则返回ture，否则返回false，不用等待获得锁
+				unlock():释放获得的锁，若线程没持有锁却释放，抛出IllegalMonitorStateException，在finally中unlock(),以防止死锁
+			
+			ReentrantLock重入锁
+				Lock的一个实现，持有一个计数器，记录着该锁的被lock多少次，允许同一线程多次加锁lock()
+				线程调用加锁方法（lock，tryLock，lockInterruptily）时，持有量+1，调用unlock()时，持有量-1，持有量减为0时，线程释放该锁
+				其控制高并发的方式是CAS的实现，因此比synchronized有更高性能
+				
+				fair/unfair
+					公平模式：
+						线程想取得锁，若锁不可用则进入ReentrantLock的等待队列，即线程会保存到一个FIFO的Queue中
+						,等待时间最长的线程首先获得锁，先进先出
+					非公平模式：
+						线程想取得锁，若锁不可用则等待，所有线程尽可能快地取得锁，
+						有可能同一线程能连续获得锁，而等待了很久的线程迟迟不能取得锁
+						
+				方法：
+					isLocked():判断有any线程取得锁
+					isHeldByCurrentThread()：判断当前线程是否取得锁
+					lock.getHoldCount():返回持有量
+			
+		ReadWriteLock接口
+			用于对数据频繁读取而较少修改的场合，此时能比Lock锁有更高的性能
+			读写锁持有一对关联的锁Lock-----ReadLock和WriteLock
+				ReadLock
+					是一个Lock类
+					非互斥锁，读锁只锁定读操作，同一读锁可被多条线程持有
+				WriteLock
+					是一个Lock类
+					互斥锁，写锁只锁定写操作，同一时间只能被一条线程持有
+			
+				ReadWriteLock的writeLock被线程持有时，其他线程不能获得同一ReadWriteLock的任何锁
+				ReadWriteLock的readLock被线程持有时，其他线程不能获得同一ReadWriteLock的writeLock锁，但可以获取readLock
+			
+			方法：
+				readLock():取得读锁
+				writetLock():取得写锁
+				
+			ReadWriteReentrantLock重入读写锁
+				实现ReadWriteLock接口	，其中的ReadLock与WriteLock的实现是其实现了Lock接口的内部类
+				持有两个计数器读锁计数器，写锁计数器，记录着该读写锁的被lock多少次，允许同一线程多次加锁lock()
+				
+				方法：
+					getReadHoldCount():取得读锁持有量
+					getWriteHoldCount():取得写锁持有量
+								
+		Condition	//取代Object的wait,notify()和notifyAll()，配合Lock使用
+			通过LockInstance.newCondition()取得Condition
+			使用
+				用while（Condition），当满足某条件时使用await，使获得Lock的线程进入等待池
+			方法
+				await():使当前获得Lock的线程释放Lock，进入等待池一直等待
+				signal():唤醒一个等待中的线程，
+				signalAll():唤醒所有等待中的线程
+			
+			用于生产者/消费者
+				
+			
 	
 
 

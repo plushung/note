@@ -99,7 +99,7 @@ Connector组件
 				
 			！Processor解析完套接字后，将Request对象通过Connector组件的CoyoteAdaptor组件发送给Engine容器处理，
 			！Engine处理完请求后通过Adaptor返回Response给Connector，让Connector将响应送回给客户端
-			!connector与Engine的连接用的是适配器设计模式，实现不同类的通信
+			!Connector与Engine的连接用的是适配器设计模式，实现不同类的通信,CoyoteAdaptor
 	
 	配置不同的Protocol
 		<Connector protocol=“*.*.Http11Protocol”>
@@ -107,6 +107,10 @@ Connector组件
 
 Engine组件
 	从Engine组件开始，到Wrapper组件，Connector组件发来的Request对象将通过一系列PipeLine组件进行处理并传递，属于管道设计模式。
+				EnginePipe		HostPipe		ContextPipe	WrapperPipe
+		-------------++---------------------++------------------------++-------------------------++-------------------------
+	Request-->
+		-------------++---------------------++------------------------++-------------------------++-------------------------
 		
 Context
 	Context代表一个应用，通过<Context>或Context.xml定义一个应用的资源和运行环境
@@ -155,6 +159,7 @@ Tomcat Manager
 		在manager的Meta-inf/context.xml下添加<Valve>标签，使用org.apache.catalina.valves.RemoteAddrValve类，加上IP地址访问限制
 			<Valve className="org.apache.catalina.valves.RemoteAddrValve"
                 allow="127\.0\.0\.1"/>
+			Valve是每个pipeline节点中的阀门，对通过pipeline的数据处理
 	
 	查看服务器状态入口:
 		命令
@@ -197,24 +202,26 @@ Tomcat Manager
 
 部署事项
 	<Host>的unpackWars
-		会键war文件解压后，将解压文件放置在appBase下
+		会将war文件解压后，将解压文件放置在appBase下
 	
 访问安全
 	tomcat对用户进行认证
-		1.收集用户凭证信息
-		2.对凭证鉴权，看用户有无访问权限
+		1.收集用户凭证信息	<user>
+		2.对凭证鉴权，看用户有无访问权限	<role>
+		
 	Realm+验证模式
-	Realm:保存用户及密码及用户角色
-	xxxAuthenticator：认证器，不同认证模式用不同认证器
-		认证模式
-			Http规范的认证模式
-				Basic模式	在http报文头添加www-authenticate属性，对用户认证信息用Basic64编码后添加到www-authenticate属性后面
-				Digest模式	在http报文头添加www-authenticate属性
-			From模式
-			Spnego模式
-			SSL模式
-				基于SSL安全通信协议
-			NonLogin模式
+		Realm:保存用户及密码及用户角色
+		
+		xxxAuthenticator：认证器，不同认证模式用不同认证器
+			认证模式
+				Http规范的认证模式
+					Basic模式	在http报文头添加www-authenticate属性，对用户认证信息用Basic64编码后添加到www-authenticate属性后面
+					Digest模式	在http报文头添加www-authenticate属性
+				From模式
+				Spnego模式
+				SSL模式
+					基于SSL安全通信协议
+				NonLogin模式
 			
 	在web.xml中对指定的url加认证
 		
@@ -228,8 +235,10 @@ Tomcat Manager
 	
 	
 Realm组件 （Engine作用域，Host作用域，Context作用域）
+
 	Realm（安全域）其实就是一个存储用户名和密码及角色的“数据库”再加上一个枚举列表。配合tomcat资源认证模块使用
 	存储方式可以是内存，xml（conf/tomcat-users.xml），数据库
+	
 	提供了 6 种标准插件，支持与各种验证信息源的连接。决定从那取得验证信息
 		JDBCRealm 通过JDBC访问数据库取得验证信息
 		DataSourceRealm 通过直接访问配置好的数据源取得验证信息
@@ -268,6 +277,7 @@ TomcatＪＮＤＩ资源
 			Server全局的命名资源，在Server.xml中<GlobalNamingResources>中添加<Resource>
 			全局资源要在Context中进行连接才可一使用，在server.xml或context.xml<context>中添加<ResourceLink>对全局资源引用
 			<ResourceLink name="jdbc/GlobaldasM" global="jdbc/GlobaldasM" type="javax.sql.DataSource"/>
+			
 		NamingResource
 			Context的命名资源,在Server.xml或Context.xml的<Context>标签下添加<Resource>来定义命名资源，
 			
@@ -315,6 +325,7 @@ TomcatＪＮＤＩ资源
 			请求到达Servlet后，创建AsynContext交给用户自定义一个线程来处理耗时的业务逻辑，servlet不用等待处理是否完成，立即返回，归还Excutor的线程
 			当用户自定义的线程处理完业务逻辑后，再将响应返回给客户端
 			Request对象和Response对象将保存在异步上下文中，由用户定义的程处理。
+			
 		tomcat配置开启异步servlet
 			在Servlet标签下添加<async-supported>true</async-supported>开启异步
 		servlet中的具体实现
