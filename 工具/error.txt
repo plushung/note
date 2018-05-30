@@ -1,59 +1,59 @@
 1.Error parsing HTTP request header Note: further occurrences of HTTP header parsing errors will be logged at DEBUG level
 	java.lang.IllegalArgumentException: Invalid character found in the request target. The valid characters are defined in RFC 7230 and RFC 3986
-±íµ¥Ìá½»ÁË´óÁ¿µÄÊı¾İ£¬¶øÕâĞ©Êı¾İÁ¿¿ÉÄÜ³¬¹ıÁËTomcattµÄheader»º³åÇø´óĞ¡²»¹»
-	Ê¹µ÷ÕûÁËserver.xml <Connector maxHttpHeaderSize=" ">¿ÉÄÜ»¹ÊÇ½â¾ö²»ÁË,»¹ÊÇÓÃpsot°É
+è¡¨å•æäº¤äº†å¤§é‡çš„æ•°æ®ï¼Œè€Œè¿™äº›æ•°æ®é‡å¯èƒ½è¶…è¿‡äº†Tomcattçš„headerç¼“å†²åŒºå¤§å°ä¸å¤Ÿ
+	ä½¿è°ƒæ•´äº†server.xml <Connector maxHttpHeaderSize=" ">å¯èƒ½è¿˜æ˜¯è§£å†³ä¸äº†,è¿˜æ˜¯ç”¨psotå§
 	
 2.The type ***** cannot be resolved
-	´íÎó:Ä³¸öÀà²»ÄÜ¼ìË÷µ½£¬
-	Ô­Òò:È±ÉÙĞèÒªµÄ¿â
-	½â¾ö:µ¼Èë¶ÔÓ¦µÄÒÀÀµ
+	é”™è¯¯:æŸä¸ªç±»ä¸èƒ½æ£€ç´¢åˆ°ï¼Œ
+	åŸå› :ç¼ºå°‘éœ€è¦çš„åº“
+	è§£å†³:å¯¼å…¥å¯¹åº”çš„ä¾èµ–
 	
 hibernate err
 	1.Caused by: javax.validation.NoProviderFoundException: 
-		¼ÓÈçjsrµÄÒÀÀµ
-			Ê¹ÓÃApache BVal :: BVal JSR ? 1.1.1
+		åŠ å¦‚jsrçš„ä¾èµ–
+			ä½¿ç”¨Apache BVal :: BVal JSR ? 1.1.1
 	2.org.hibernate.InvalidMappingException
-		Óöµ½ÕâÖÖ´íÎóÊ±£¬ÒªºÃºÃ¼ì²éjavabeanÓë¶ÔÓ¦µÄhbm.xmlÎÄµµÏà¶ÔÓ¦£¬ÓÈÆäÊÇ´óĞ¡Ğ´
+		é‡åˆ°è¿™ç§é”™è¯¯æ—¶ï¼Œè¦å¥½å¥½æ£€æŸ¥javabeanä¸å¯¹åº”çš„hbm.xmlæ–‡æ¡£ç›¸å¯¹åº”ï¼Œå°¤å…¶æ˜¯å¤§å°å†™
 		
 	3.Repeated column in mapping for entity: column: id 
-		Ó³ÉäÎÄ¼ş*.hbm.xmlÖĞ´æÔÚÖØ¸´ÁĞ
-	4.tomcat Æô¶¯Ê± ³öÏÖlifecycle´íÎó£¬java.util.zip.ZipException: invalid LOC header (bad signature)
-		¿ÉÄÜmavenÒÀÀµÏÂÔØÊ±³ö´í£¬É¾³ıÒÀÀµ£¬´ÓĞÂÏÂÔØÒÀÀµ¾Í¿É
-		»òÄ³Ğ©ÒÀÀµ°ü²»ÔÚclasspathÏÂ£¬Ôö¼ÓÒÀÀµ¾Í¿É
+		æ˜ å°„æ–‡ä»¶*.hbm.xmlä¸­å­˜åœ¨é‡å¤åˆ—
+	4.tomcat å¯åŠ¨æ—¶ å‡ºç°lifecycleé”™è¯¯ï¼Œjava.util.zip.ZipException: invalid LOC header (bad signature)
+		å¯èƒ½mavenä¾èµ–ä¸‹è½½æ—¶å‡ºé”™ï¼Œåˆ é™¤ä¾èµ–ï¼Œä»æ–°ä¸‹è½½ä¾èµ–å°±å¯
+		æˆ–æŸäº›ä¾èµ–åŒ…ä¸åœ¨classpathä¸‹ï¼Œå¢åŠ ä¾èµ–å°±å¯
 		
 	5.org.hibernate.HibernateException: Unable to get the default Bean
-		Ô­ÒòÊÇÔÚhibernate.cfg.xmlµÄÅäÖÃÖĞÈç¹ûÃ»ÓĞÅäÖÃ<property name="javax.persistence.validation.mode"></property>µÄ»°£¬
-		Ä¬ÈÏËüÊÇautoµÄ£¬Ëü»á×Ô¶¯È¥classpathÏÂÑ°ÕÒvalidator£¬
-		ËùÒÔÔÚÅäÖÃÎÄ¼şÖĞÅäÖÃ<property name="javax.persistence.validation.mode">none</property>
+		åŸå› æ˜¯åœ¨hibernate.cfg.xmlçš„é…ç½®ä¸­å¦‚æœæ²¡æœ‰é…ç½®<property name="javax.persistence.validation.mode"></property>çš„è¯ï¼Œ
+		é»˜è®¤å®ƒæ˜¯autoçš„ï¼Œå®ƒä¼šè‡ªåŠ¨å»classpathä¸‹å¯»æ‰¾validatorï¼Œ
+		æ‰€ä»¥åœ¨é…ç½®æ–‡ä»¶ä¸­é…ç½®<property name="javax.persistence.validation.mode">none</property>
 		
 	6.HTTP message: org.springframework.http.converter.HttpMessageNotWritableException: 
 	Could not write JSON: failed to lazily initialize a collection of role
-		ÒòÎªhibernateÔÚ¼ÓÔØÒ»¸öÊı¾İ¿âÊı¾İµ½ÊµÌåÀàÊ±£¬ÈôÊµÌåÀà¹ØÁªÁËÆäËûÊµÌåÀà£¬¾Í»áÑÓÊ±¼ÓÔØ¸ÃÊµÌåÀà£¬»áÏÈÈ¥¼ÓÔØ¹ØÁªµÄÊµÌåÀà
-		Õâ¾ÍÊÇÀÁ¼ÓÔØ£¬ÕâÔÚ×ª»»jsonÊ±³öÏÖÎÊÌâ
-		½â¾ö:
-			1.ÅäÖÃJSON²å¼şĞèÒªÅÅ³ıµÄ×Ö¶Î@JsonIgnore,°Ñ¹ØÁªµÄÄÇ¸öÊôĞÔÉÏ@JsonIgnore£¬ºöÂÔµô²»×ª»»Ëû
-			2.»ò°Ñ¹ØÁªÊôĞÔµÄÓ³ÉäÉèÖÃÎªÀÁ¼ÓÔØ lazy=¡°false¡±
+		å› ä¸ºhibernateåœ¨åŠ è½½ä¸€ä¸ªæ•°æ®åº“æ•°æ®åˆ°å®ä½“ç±»æ—¶ï¼Œè‹¥å®ä½“ç±»å…³è”äº†å…¶ä»–å®ä½“ç±»ï¼Œå°±ä¼šå»¶æ—¶åŠ è½½è¯¥å®ä½“ç±»ï¼Œä¼šå…ˆå»åŠ è½½å…³è”çš„å®ä½“ç±»
+		è¿™å°±æ˜¯æ‡’åŠ è½½ï¼Œè¿™åœ¨è½¬æ¢jsonæ—¶å‡ºç°é—®é¢˜
+		è§£å†³:
+			1.é…ç½®JSONæ’ä»¶éœ€è¦æ’é™¤çš„å­—æ®µ@JsonIgnore,æŠŠå…³è”çš„é‚£ä¸ªå±æ€§ä¸Š@JsonIgnoreï¼Œå¿½ç•¥æ‰ä¸è½¬æ¢ä»–
+			2.æˆ–æŠŠå…³è”å±æ€§çš„æ˜ å°„è®¾ç½®ä¸ºæ‡’åŠ è½½ lazy=â€œfalseâ€
 	
 	7.query result offset is not supported
-		ÔÚÅäÖÃÎÄ¼şÖĞ°Ñhibernate·½ÑÔÅäÖÃºÃ£¬×îºÃÁ¬°æ±¾Ò²Ö¸¶¨
+		åœ¨é…ç½®æ–‡ä»¶ä¸­æŠŠhibernateæ–¹è¨€é…ç½®å¥½ï¼Œæœ€å¥½è¿ç‰ˆæœ¬ä¹ŸæŒ‡å®š
 	
 	
 Spring err
-£¡£¡SpringµÄ¿ØÖÆÌ¨ÖØ¸´ĞÅÏ¢¶à´Î³öÏÖ¡¢¡¢¶ÔÏóµÄÊµÀı»¯±»ÖØ¸´ÊµÀı»¯Á½´Î£¿£¿
-	Ô­Òò:	
-		DispatcherServlet»á¸ù¾İËüµÄServletÃûÈ¥ÀàÂ·¾¶ÏÂÕÒµ½*-servlet.xmlµÄÅäÖÃÎÄ¼ş£¨Èç¹ûÓĞ£©£¬²¢ÓÃÅäÖÃÎÄ¼şÀïµÄĞÅÏ¢¹¹½¨Ó¦ÓÃ
-		ÈôÔÚ	<context-param>
+ï¼ï¼Springçš„æ§åˆ¶å°é‡å¤ä¿¡æ¯å¤šæ¬¡å‡ºç°ã€ã€å¯¹è±¡çš„å®ä¾‹åŒ–è¢«é‡å¤å®ä¾‹åŒ–ä¸¤æ¬¡ï¼Ÿï¼Ÿ
+	åŸå› :	
+		DispatcherServletä¼šæ ¹æ®å®ƒçš„Servletåå»ç±»è·¯å¾„ä¸‹æ‰¾åˆ°*-servlet.xmlçš„é…ç½®æ–‡ä»¶ï¼ˆå¦‚æœæœ‰ï¼‰ï¼Œå¹¶ç”¨é…ç½®æ–‡ä»¶é‡Œçš„ä¿¡æ¯æ„å»ºåº”ç”¨
+		è‹¥åœ¨	<context-param>
 				<param-name>contextConfigLocation</param-name>
 				<param-value>/WEB-INF/springDispatcherServlet-servlet.xml</param-value>
-			</context-param>ÉùÃ÷ÅäÖÃÎÄ¼ş²¢ÅäÖÃÁËorg.springframework.web.context.ContextLoaderListener
-		context.ContextLoaderListener»áÓÃÕâÅäÖÃÎÄ¼şÔÙ½øĞĞÒ»´ÎÅäÖÃ
-		Õâ¾ÍÊ¹µÃÅäÖÃÎÄ¼şÀïµÄÍ¬Ò»¸öbean±»ÊµÀı»¯¶à´Î
-		Í¬Ê±Ó¦ÓÃ±¨´íÊ±Ò²»áÖØ¸´±¨¶à´Î
-	½â¾ö
-		È¥µôContextLoaderListenerºÍcontextConfigLocationµÄÅäÖÃ
-		»òĞŞ¸Äservlet.xmlµÄÃû
+			</context-param>å£°æ˜é…ç½®æ–‡ä»¶å¹¶é…ç½®äº†org.springframework.web.context.ContextLoaderListener
+		context.ContextLoaderListenerä¼šç”¨è¿™é…ç½®æ–‡ä»¶å†è¿›è¡Œä¸€æ¬¡é…ç½®
+		è¿™å°±ä½¿å¾—é…ç½®æ–‡ä»¶é‡Œçš„åŒä¸€ä¸ªbeanè¢«å®ä¾‹åŒ–å¤šæ¬¡
+		åŒæ—¶åº”ç”¨æŠ¥é”™æ—¶ä¹Ÿä¼šé‡å¤æŠ¥å¤šæ¬¡
+	è§£å†³
+		å»æ‰ContextLoaderListenerå’ŒcontextConfigLocationçš„é…ç½®
+		æˆ–ä¿®æ”¹servlet.xmlçš„å
 		
 eclipse err
 Java compiler level does not match the version of the installed Java project facet.
-eclicpseµÄjava±àÒëÆ÷°æ±¾Óë»úÆ÷°²×°µÄ²»Ò»ÖÂ£¬Í¨¹ıÅäÖÃÏîÄ¿ÊôĞÔĞŞ¸Äjava±àÒëÆ÷°æ±¾£¬
-ÒÔ¼°ĞŞ¸Ä.settingÎÄ¼şµÄorg.eclipse.wst.common.project.facet.core.xmlÎÄ¼şµÄ<installed face="java" version="...">
+eclicpseçš„javaç¼–è¯‘å™¨ç‰ˆæœ¬ä¸æœºå™¨å®‰è£…çš„ä¸ä¸€è‡´ï¼Œé€šè¿‡é…ç½®é¡¹ç›®å±æ€§ä¿®æ”¹javaç¼–è¯‘å™¨ç‰ˆæœ¬ï¼Œ
+ä»¥åŠä¿®æ”¹.settingæ–‡ä»¶çš„org.eclipse.wst.common.project.facet.core.xmlæ–‡ä»¶çš„<installed face="java" version="...">

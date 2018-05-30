@@ -1,9 +1,9 @@
-maven clean »áÇå¿ÕtargetÄ¿Â¼
+maven clean ä¼šæ¸…ç©ºtargetç›®å½•
 
 maven error
 	Error assembling WAR: webxml attribute is required (or pre-existing WEB-INF/web.xml if executing in update mode)
-		mavenµÄwebÏîÄ¿Ä¬ÈÏµÄwebrootÊÇÔÚsrc\main\webapp¡£Èç¹ûÔÚ´ËÄ¿Â¼ÏÂÕÒ²»µ½web.xml¾ÍÅ×³öÒÔÉÏµÄÒì³£¡£
-		½â¾ö
+		mavençš„webé¡¹ç›®é»˜è®¤çš„webrootæ˜¯åœ¨src\main\webappã€‚å¦‚æœåœ¨æ­¤ç›®å½•ä¸‹æ‰¾ä¸åˆ°web.xmlå°±æŠ›å‡ºä»¥ä¸Šçš„å¼‚å¸¸ã€‚
+		è§£å†³
 			<build>    
 				<finalName>simple-webapp</finalName>    
 				<plugins>    
@@ -13,43 +13,43 @@ maven error
 						<version>2.1.1</version>    
 						<configuration>    
 					
-							  <webXml>WebContent\WEB-INF\web.xml</webXml>   £¡£¡£¡£¡£¡         
+							  <webXml>WebContent\WEB-INF\web.xml</webXml>   ï¼ï¼ï¼ï¼ï¼         
 					
 						</configuration>    
 					</plugin>    
 				</plugins>    
 				 </build>    
-	ÇëÊ¹ÓÃ -source 7 »ò¸ü¸ß°æ±¾
-		ÓÉÓÚmavenµÄ±àÒëÆ÷²å¼ş°æ±¾Óë»úÆ÷°²×°µÄ°æ±¾²»Í¬ÒªÍ³Ò»°æ±¾£¬ĞŞ¸Äpom.xmlÌí¼Ó
+	è¯·ä½¿ç”¨ -source 7 æˆ–æ›´é«˜ç‰ˆæœ¬
+		ç”±äºmavençš„ç¼–è¯‘å™¨æ’ä»¶ç‰ˆæœ¬ä¸æœºå™¨å®‰è£…çš„ç‰ˆæœ¬ä¸åŒè¦ç»Ÿä¸€ç‰ˆæœ¬ï¼Œä¿®æ”¹pom.xmlæ·»åŠ 
 		<properties>
 			<maven.compiler.source>1.8</maven.compiler.source>
 			<maven.compiler.target>1.8</maven.compiler.target>
 		</properties>
-springÓÃclasspathcontextloader¼ÓÔØxml£¬±ØĞèÔÚclassesÏÂÓĞxmlÎÄ¼ş
+springç”¨classpathcontextloaderåŠ è½½xmlï¼Œå¿…éœ€åœ¨classesä¸‹æœ‰xmlæ–‡ä»¶
 
-¶ÁÈ¡ÎÄ¼şµÄÂ·¾¶ÎÊÌâ£º
-	¿ÉÓÃSpringµÄClassPathResourceÀà¶ÁÈ¡Î»ÓÚWEB-INF/classesÎÄ¼ş¼ĞÏÂµÄÅäÖÃÎÄ¼ş¡£properties
+è¯»å–æ–‡ä»¶çš„è·¯å¾„é—®é¢˜ï¼š
+	å¯ç”¨Springçš„ClassPathResourceç±»è¯»å–ä½äºWEB-INF/classesæ–‡ä»¶å¤¹ä¸‹çš„é…ç½®æ–‡ä»¶ã€‚properties
 
-Ê¹ÓÃmavenÊ±sourceÎÄ¼ş¼ĞÏÂµÄÎÄ¼ş»á±»¸´ÖÆµ½target/classesÏÂ£¬´ò°üÊ±target/classesÀïµÄÎÄ¼ş»á±»¸´ÖÆµ½WEB-INFÎÄ¼ş¼ĞÏÂµÄclassesÏÂ
+ä½¿ç”¨mavenæ—¶sourceæ–‡ä»¶å¤¹ä¸‹çš„æ–‡ä»¶ä¼šè¢«å¤åˆ¶åˆ°target/classesä¸‹ï¼Œæ‰“åŒ…æ—¶target/classesé‡Œçš„æ–‡ä»¶ä¼šè¢«å¤åˆ¶åˆ°WEB-INFæ–‡ä»¶å¤¹ä¸‹çš„classesä¸‹
 
-mavenÏîÄ¿
-maven ±àÒëÊ±°Ñsrc/mainÏÂµÄresourceÀïµÄÎÄ¼şºÍÔÚjavaÀï±àÒë²úÉúµÄ.classÎÄ¼şÒ²·ÅÔÚµ½target/classesÖĞ£¬
-	      srcmain/ÏÂµÄwebappÎÄ¼ş¼ĞÔò¸´ÖÆµ½target¸ùÄ¿Â¼ÏÂ²¢¸ÄÃû³É´ò°ü¡¶war¡·Ê±¶¨ÒåµÄÏîÄ¿Ãû
-	webÏîÄ¿ÒÀÀµµÄ¿âÎÄ¼şÔò·ÅÔÚsrc/main/webapp/libÏÂ£¬Ëæwebapp¸´ÖÆµ½targetÎÄ¼ş¼Ğ
+mavené¡¹ç›®
+maven ç¼–è¯‘æ—¶æŠŠsrc/mainä¸‹çš„resourceé‡Œçš„æ–‡ä»¶å’Œåœ¨javaé‡Œç¼–è¯‘äº§ç”Ÿçš„.classæ–‡ä»¶ä¹Ÿæ”¾åœ¨åˆ°target/classesä¸­ï¼Œ
+	      srcmain/ä¸‹çš„webappæ–‡ä»¶å¤¹åˆ™å¤åˆ¶åˆ°targetæ ¹ç›®å½•ä¸‹å¹¶æ”¹åæˆæ‰“åŒ…ã€Šwarã€‹æ—¶å®šä¹‰çš„é¡¹ç›®å
+	webé¡¹ç›®ä¾èµ–çš„åº“æ–‡ä»¶åˆ™æ”¾åœ¨src/main/webapp/libä¸‹ï¼Œéšwebappå¤åˆ¶åˆ°targetæ–‡ä»¶å¤¹
 
-	¿É½«xml·ÅÔÚsrc/main/webapp/WEB-INF/classesÏÂÖĞ
+	å¯å°†xmlæ”¾åœ¨src/main/webapp/WEB-INF/classesä¸‹ä¸­
 
-eclipse£º
-	Í¨¹ı¹¹½¨Â·¾¶-¡·Ô´ÂëÉèÖÃ±àÒëÎÄ¼şµÄÊä³öÎ»ÖÃ
+eclipseï¼š
+	é€šè¿‡æ„å»ºè·¯å¾„-ã€‹æºç è®¾ç½®ç¼–è¯‘æ–‡ä»¶çš„è¾“å‡ºä½ç½®
 
-ÎŞ·¨ÕÒµ½ÀàÎÊÌâ£º
-´íÎó: ÕÒ²»µ½»òÎŞ·¨¼ÓÔØÖ÷Àà  ¿ÉÄÜÔÚmavenÖ´ĞĞcleanºó³öÏÖ(cause:cleanÇå³ıtargetÏÂµÄÎÄ¼ş)
-	Ô­ÒòÎªjavaeeÏîÄ¿Ã»ÕÒµ½±àÒëºóµÄ.classÎÄ¼ş£¬Òª±àÒë³ö.classÎÄ¼şºó²ÅÄÜÔËĞĞ
-	½â¾ö£ºÇåÀíÏîÄ¿
-		µã»÷ÏîÄ¿->clean->Ñ¡µÚ2¸öClean projects selected below
-		ÏîÄ¿cleanÍêºó×Ô¶¯ÖØĞÂ±àÒë³öclassÎÄ¼ş
+æ— æ³•æ‰¾åˆ°ç±»é—®é¢˜ï¼š
+é”™è¯¯: æ‰¾ä¸åˆ°æˆ–æ— æ³•åŠ è½½ä¸»ç±»  å¯èƒ½åœ¨mavenæ‰§è¡Œcleanåå‡ºç°(cause:cleanæ¸…é™¤targetä¸‹çš„æ–‡ä»¶)
+	åŸå› ä¸ºjavaeeé¡¹ç›®æ²¡æ‰¾åˆ°ç¼–è¯‘åçš„.classæ–‡ä»¶ï¼Œè¦ç¼–è¯‘å‡º.classæ–‡ä»¶åæ‰èƒ½è¿è¡Œ
+	è§£å†³ï¼šæ¸…ç†é¡¹ç›®
+		ç‚¹å‡»é¡¹ç›®->clean->é€‰ç¬¬2ä¸ªClean projects selected below
+		é¡¹ç›®cleanå®Œåè‡ªåŠ¨é‡æ–°ç¼–è¯‘å‡ºclassæ–‡ä»¶
 
 The type ***** cannot be resolved
-	´íÎó:Ä³¸öÀà²»ÄÜ¼ìË÷µ½£¬
-	Ô­Òò:È±ÉÙĞèÒªµÄ¿â
-	½â¾ö:µ¼Èë¶ÔÓ¦µÄÒÀÀµ
+	é”™è¯¯:æŸä¸ªç±»ä¸èƒ½æ£€ç´¢åˆ°ï¼Œ
+	åŸå› :ç¼ºå°‘éœ€è¦çš„åº“
+	è§£å†³:å¯¼å…¥å¯¹åº”çš„ä¾èµ–

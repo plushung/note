@@ -1,94 +1,94 @@
 
-Collection�����浥��Ԫ��
-	��һ�����У������Ԫ�ض���
-	�洢��ʽ�������б� ���ȿɱ�
+Collection：保存单个元素
+	是一个序列，里面的元素独立
+	存储方式：线性列表 长度可变
 
-	Iterator��������
-		�ṩһ�ַ�ʽȥ������������������������������ʵ�֣�
-		��next����Ԫ��ʱ��ֻ�ܵ����ƶ���ͨ��remove�Ƴ����һ��next�õ���Ԫ��
+	Iterator迭代器：
+		提供一种方式去遍历容器，而不必理会容器是哪种实现，
+		用next遍历元素时，只能单向移动，通过remove移除最后一次next得到的元素
 	
 	listIterator
-		���ڵ���List�ĵ�����������ǰ���ƶ�����Ԫ��
-		hasNext():������һ��Ԫ��
-		next()����һ��Ԫ��
-		hasPrevious():������һ��Ԫ��
-		previous():��һ��Ԫ��
-		set()������Ԫ�ظ�ֵ
+		用于迭代List的迭代器，可以前后移动遍历元素
+		hasNext():有无下一个元素
+		next()：下一个元素
+		hasPrevious():有无上一个元素
+		previous():上一个元素
+		set()：迭代元素赋值
 	
-	List��
-		��Ԫ�ز���˳�򱣴�Ԫ��
-		����Ч�ʸ�Ч��ɾ���Ͳ���Ч�ʵ��£������ɾ��������Ԫ��λ�øı�
+	List：
+		按元素插入顺序保存元素
+		检索效率高效，删除和插入效率低下，插入和删除会引起元素位置改变
 		
-		��������:
+		基本方法:
 			add(),get(),remove(),contains()
-			subList(start,end)��������Ƭ����ԴList��start��end���Ԫ������е�List
-			set(index,element)����index�е�Ԫ���滻
-			retainAll(Collection):�뽻��
+			subList(start,end)：序列切片，将源List的start到end间的元素组成行的List
+			set(index,element)：将index中的元素替换
+			retainAll(Collection):与交集
 		
-		ArrayList��
-			�ײ�������Object[]ʵ�ֱ������ݣ������������Ԫ�أ������ٶȿ죬��ɾ���ݽ���
-			��ArrayList�ĳߴ�����ɾ�����ݵĴ��ۻ�Խ��Խ��
+		ArrayList：
+			底层用数组Object[]实现保存数据，用于随机访问元素，访问速度快，插删数据较慢
+			随ArrayList的尺寸增大，删插数据的代价会越来越大
 			
-		LinkedList��
-			��˫�������������ݣ����������������ɾ�ٶȿ�
-			�Ա�LIst�����������ڗ������У�˫�˶��еķ���
+		LinkedList：
+			用双向链表保存数据，访问熟读稍慢，插删速度快
+			对比LIst，添加了用于棧，队列，双端队列的方法
 			
-			����List�Ļ��������⣬���з���
-				getFirst(),element()��peek()��ȡ�������еı�ͷԪ�أ����Ƴ�,peek����Ԫ��ʱ����null
-				removeFirst(),remove()��poll():�Ƴ������ر�ͷԪ��,poll����Ԫ��ʱ����null
-				removeLast():�����һ�����Ƴ�ʱ�䳤��Ԫ�أ��Ƴ���βԪ��
+			除了List的基本方法外，特有方法
+				getFirst(),element()，peek()：取得链表中的表头元素，不移除,peek在无元素时返回null
+				removeFirst(),remove()，poll():移除并返回表头元素,poll在无元素时返回null
+				removeLast():像队列一样，移除时间长的元素，移除队尾元素
 				
 		Stack
-			LinkedList��������ջ��������LIFO��ջ��Ԫ���������ı�ͷ
-			push():��ջ��ѹ��Ԫ�أ���Ԫ�س���list��ǰ��
-			pop():����ջ��Ԫ��
-			peek():�鿴ջ������ͷ��Ԫ�أ���ɾ�����������򷵻�null
+			LinkedList可以用于栈操作，是LIFO，栈顶元素是链表的表头
+			push():向栈顶压入元素，将元素出入list的前面
+			pop():弹出栈顶元素
+			peek():查看栈顶（表头）元素，不删除，不存在则返回null
 			
-	Set��
-		�����ظ�Ԫ��
-		����Ч�ʵ��£�ɾ���Ͳ���Ч�ʸߣ������ɾ����������Ԫ��λ�øı�
-		set�ӿ���Collectionһ��������ͬ�ķ�����ֻ��set���ڲ�Ԫ�ش洢��ʵ�ַ�ʽ��ͬ�������ظ�Ԫ��
+	Set：
+		不含重复元素
+		检索效率低下，删除和插入效率高，插入和删除不会引起元素位置改变
+		set接口与Collection一样，有相同的方法，只是set的内部元素存储的实现方式不同，不含重复元素
 		
-		HashSet��
-			ͨ��Hash�������洢Ԫ�أ������ٶȿ죬������֤Ԫ��˳�򣬴����Ԫ��Ҫʵ��HashCode()������������Hash�洢
-			�ڲ�ά��һ��HashMap��Ԫ�ر������HashMap��key�ϣ����ڿ��ٲ���Ԫ��
+		HashSet：
+			通过Hash函数来存储元素，访问速度快，但不保证元素顺序，存入的元素要实现HashCode()方法，才能用Hash存储
+			内部维护一个HashMap，元素被存放在HashMap的key上，用于快速查找元素
 			
-		TreeSet��
-			ʵ����SortSet�ӿڣ�ͨ�����Tree���ݽṹ���沢����Ԫ�أ���������Ȼ���������Ԫ�أ�
-			�����Ԫ��Ҫʵ��Comparable�ӿڣ����ܽ��бȽ����򣬹�ComparaTo�����Ƚ�
+		TreeSet：
+			实现了SortSet接口，通过红黑Tree数据结构保存并排序元素，按升序（自然排序）来存放元素，
+			存入的元素要实现Comparable接口，才能进行比较排序，过ComparaTo方法比较
 			
-		LinkedHashSet��
-			ͨ��˫������ά��Ԫ�ز���˳��ͨ��hash�洢���ݣ�����Ԫ�صĲ���˳�򣬴����Ԫ��Ҫʵ��HashCode()����
-			�ڲ�ά����һ��HashSet
+		LinkedHashSet：
+			通过双向链表维护元素插入顺序，通过hash存储数据，保持元素的插入顺序，存入的元素要实现HashCode()方法
+			内部维护着一个HashSet
 	
-		HashSet�ŵ㣺���Ӳ�ѯԪ�ؿ�
-		TreeSet�ŵ�:�����Ԫ��
-		LinkedHashSet�ŵ㣺����Ԫ�ش��˳���ٶȱ�TreeSet�죬����HashSet��
-		Ҫ���ٶ�:HashSet>LinkedHashSet>TreeSet
-		Ҫ��˳��:TreeSet>LinkedHashSet>HashSet
+		HashSet优点：添加查询元素快
+		TreeSet优点:排序的元素
+		LinkedHashSet优点：保持元素存放顺序，速度比TreeSet快，但比HashSet慢
+		要求速度:HashSet>LinkedHashSet>TreeSet
+		要求顺序:TreeSet>LinkedHashSet>HashSet
 		
-	Queue��
-		���Ŷӹ���ȡ��Ԫ�أ�ͨ����FIFO��Ԫ�ش�һ�˲�����һ��ȡ����ͨ��Comparable�ӿڱȽ�����Ԫ�أ��������˳��
-		���Ŷӹ���ȡ��Ԫ�أ�ͨ����FIFO��Ԫ�ش�һ�˲�����һ��ȡ����ͨ��Comparable�ӿڱȽ�����Ԫ�أ��������˳��
+	Queue：
+		按排队规则取得元素，通常是FIFO，元素从一端插入另一端取出，通过Comparable接口比较排列元素，决定输出顺序
+		按排队规则取得元素，通常是FIFO，元素从一端插入另一端取出，通过Comparable接口比较排列元素，决定输出顺序
 		
-		������У�һ����һ�߳� 
+		单向队列，一边入一边出 
 		
-		����������
-			offer()�����β�ṩһ��Ԫ��
-			peek()�����ض�ͷ(����ͷ)Ԫ�أ����򷵻�null
-			poll()�����ز��Ƴ���ͷ(����ͷ)Ԫ�أ����򷵻�null
+		基本方法：
+			offer()：向队尾提供一个元素
+			peek()：返回队头(链表头)元素，无则返回null
+			poll()：返回并移除队头(链表头)元素，无则返回null
 			
-		LinkedList�Ƚ��ȳ�����
-			LinkedListʵ�ֵ�Queue������Deque�ӿڣ�����LinkedList�Ѿ���һ��queue��Deque
-			��һ��FIFO���У���Ԫ���ڶ����еȴ�ʱ�����Ԫ���ȳ�
+		LinkedList先进先出队列
+			LinkedList实现的Queue的子类Deque接口，所以LinkedList已经是一种queue，Deque
+			是一种FIFO队列，以元素在队列中等待时间最长的元素先出
 			
-		PriorityQueue���ȶ���(�ö����ʵ��)
-			��FIFO���У����ȼ��ߵ�Ԫ���ȳ��У��д���ģ�Ҳ��ͨ��ʵ����Comparable�ӿڵ�Ԫ����ʵ��������treeSet
-			offer()ʱ��Ԫ�ؾ����������ڶ����ݽṹ�У�Ĭ���ǰ�Ԫ�ص���Ȼ˳�����򣬿�Ϊ���ṩComparator�������Լ������˳������
-			peek()���鿴��βԪ��
-			,poll(),remove(),��ȡ���Ѹ�Ԫ�أ������ȼ���ߵ�Ԫ��
+		PriorityQueue优先队列(用二叉堆实现)
+			非FIFO队列，优先级高的元素先出列，有次序的，也是通过实现了Comparable接口的元素来实现排序，像treeSet
+			offer()时，元素经过排序存放在堆数据结构中，默认是按元素的自然顺序排序，可为其提供Comparator来按照自己定义的顺序排序
+			peek()，查看队尾元素
+			,poll(),remove(),将取出堆根元素，即优先级最高的元素
 			
-		�̰߳�ȫ�汾Queue
+		线程安全版本Queue
 			ConcurrentLinkedQueue
 			
 			LinkedBlockingQueue
@@ -98,56 +98,56 @@ Collection�����浥��Ԫ��
 			ArrayBlockingQueue
 			
 			
-Map������һ��Ԫ��
-	��һ�顰��ֵ�ԡ���������ÿ��������Key�Ͷ�Ӧ��value��ͨ������equals()�Ƚϼ���ȷ�����ظ���
-	�洢��ʽ��key/value�� ���ȿɱ�,
+Map：保存一对元素
+	是一组“键值对“对象，里面每个对象有Key和对应的value，通过键的equals()比较键，确保无重复键
+	存储方式：key/value对 长度可变,
 	
-	��������:
+	基本方法:
 			put()
 			get()
 
- 	HashMap �ࣺ
-		ʹ��ɢ�к����洢���ݣ����кܿ�ķ����ٶȣ�ͬʱҲ�Ͳ��ܱ�֤˳��
-		ͨ��hashCode()ȡ�ü�,�м��ߵļ����ٶȡ���˼�Ԫ��Ҫʵ��hashCode()������ͬʱҪ��equals()���ж�Ԫ���Ƿ�Ϊͬһ��
+ 	HashMap 类：
+		使用散列函数存储数据，具有很快的访问速度，同时也就不能保证顺序
+		通过hashCode()取得键,有极高的检索速度。因此键元素要实现hashCode()方法，同时要用equals()来判定元素是否为同一个
 		
-		���洢��Ԫ�ش�3/4ʱ�Զ����ݲ���Ԫ����ɢ��
+		当存储的元素达3/4时自动扩容并对元素再散列
 	
-	TreeMap��
-		ʵ����SortedMap�ӿڣ�ͨ�����Tree���ݽṹ����Ԫ�أ��������������Ԫ�أ���Ԫ��Ҫʵ��Comparable�ӿ���ȷ��˳������
+	TreeMap：
+		实现了SortedMap接口，通过红黑Tree数据结构保存元素，按键升序来存放元素，键元素要实现Comparable接口来确定顺序排序
 		
-	LinkedHashMap��
-		ͨ��˫�������洢���ݣ��ڲ�ά����HashMap����Ԫ�أ�����Ԫ�صĲ���˳��
+	LinkedHashMap：
+		通过双向链表存储数据，内部维护着HashMap保存元素，保持元素的插入顺序
 		
-	HashMap�ŵ㣺���Ӳ�ѯԪ�ؿ�
-	TreeMap�ŵ�:�����Ԫ��
-	LinkedHashMap�ŵ㣺����Ԫ�ش��˳���ٶȱ�TreeSet�죬����HashSet��
-	Ҫ���ٶ�:HashMap>LinkedHashMap>TreeMap
-	Ҫ������:TreeMap>LinkedHashMap>HashMap
+	HashMap优点：添加查询元素快
+	TreeMap优点:排序的元素
+	LinkedHashMap优点：保持元素存放顺序，速度比TreeSet快，但比HashSet慢
+	要求速度:HashMap>LinkedHashMap>TreeMap
+	要求有序:TreeMap>LinkedHashMap>HashMap
 
-Hash�洢��ʽ		hashSet��hashMap��LinkedHashSet��LinkedHashMap
-	ͨ��Hash��ɢ�У����洢���ݿɼӿ����ݵļ����ٶ�
-	ʹ��Hashʱ��Ԫ��Ҫʵ��hashCode()�����������Զ����Hash�룬Object��hashCode()Ĭ�����ö���ĵ�ַ������hashCode��
+Hash存储方式		hashSet，hashMap，LinkedHashSet，LinkedHashMap
+	通过Hash（散列）来存储数据可加快数据的检索速度
+	使用Hash时，元素要实现hashCode()方法，生成自定义的Hash码，Object的hashCode()默认是用对象的地址来计算hashCode的
 	
-	ͨ��hashCode����õ���ɢ�����п��ܳ�ͻ��ʹ��һ��hashCode��Ӧ�����(Ҫ�������д洢�������ļ���)��
-	�����ϣ��ͻ��ͬʱҪʵ��equals()����,�Ӽ�����ȡ����Ӧ����ʵ�壬��֤Ԫ�ص�Ψһ��
+	通过hashCode计算得到的散列码有可能冲突，使得一个hashCode对应多个键(要在数组中存储这多个键的集合)，
+	解决哈希冲突，同时要实现equals()方法,从集合中取得相应键的实体，保证元素的唯一性
 	
-Tree�洢��ʽ		�ӿ�:SortedSet,SortedMap. Ψһʵ��:TreeSet��TreeMap
-	ͨ����ڶ������洢Ԫ�أ��漰��Ԫ�صıȽ��������Ԫ��Ҫʵ��Comparable�ӿڻ�̳�comparator��
+Tree存储方式		接口:SortedSet,SortedMap. 唯一实现:TreeSet，TreeMap
+	通过红黑二叉树存储元素，涉及到元素的比较排序，因此元素要实现Comparable接口或继承comparator类
 
-��ͨ���������޸�
-	�������ƣ�
-		���ٱ�������ʹ��Iterator��������ʱ���������̶߳�ͬһ���������޸ģ���ᱨ������java�ı�������----fail-fast
-			�׳�ConcurrentModificationException�������޸��쳣
+普通容器并发修改
+	保护机制：
+		快速报错：当使用Iterator遍历容器时，有其他线程对同一容器做出修改，则会报错，是java的保护机制----fail-fast
+			抛出ConcurrentModificationException，并发修改异常
 			
-	�������
-		ʹ�ò�������
+	解决方法
+		使用并发容器
 
-������
+遍历：
 1.foreach
-2.forѭ��
+2.for循环
 3.iteraor
 
-map����
-1.����keySetȡֵ
-2.ͨ��entrySetȡ��Map.Entry�ڲ�����󼯺ϣ���������getKey��getValue
+map遍历
+1.遍历keySet取值
+2.通过entrySet取得Map.Entry内部类对象集合，并遍历，getKey，getValue
 

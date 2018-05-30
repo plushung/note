@@ -1,68 +1,68 @@
-ä¯ÀÀÆ÷ÄÚÖÃÒ»¸öXMLHttpRequest¶ÔÏó£¨ajaxÒýÇæ£©£¬¸Ã¶ÔÏóÊÇajaxµÄ»ù´¡£¬ËõÐ´XHR
-XMLHttpRequest ¶ÔÏó¿ÉÒÔÔÚ²»Ïò·þÎñÆ÷Ìá½»Õû¸öÒ³ÃæµÄÇé¿öÏÂ£¬ÊµÏÖ¾Ö²¿¸üÐÂÍøÒ³¡£
-Ê¹ÓÃ»§²Ù×÷Óë·þÎñÆ÷ÏìÓ¦Òì²½»¯¡£
+æµè§ˆå™¨å†…ç½®ä¸€ä¸ªXMLHttpRequestå¯¹è±¡ï¼ˆajaxå¼•æ“Žï¼‰ï¼Œè¯¥å¯¹è±¡æ˜¯ajaxçš„åŸºç¡€ï¼Œç¼©å†™XHR
+XMLHttpRequest å¯¹è±¡å¯ä»¥åœ¨ä¸å‘æœåŠ¡å™¨æäº¤æ•´ä¸ªé¡µé¢çš„æƒ…å†µä¸‹ï¼Œå®žçŽ°å±€éƒ¨æ›´æ–°ç½‘é¡µã€‚
+ä½¿ç”¨æˆ·æ“ä½œä¸ŽæœåŠ¡å™¨å“åº”å¼‚æ­¥åŒ–ã€‚
 
-1.´´½¨xhr¶ÔÏó
-	var xhr=new XMLHttpRequest();//´´½¨xhr¶ÔÏó
-	variable=new ActiveXObject("Microsoft.XMLHTTP");//ÀÏä¯ÀÀÆ÷´´½¨xhr
+1.åˆ›å»ºxhrå¯¹è±¡
+	var xhr=new XMLHttpRequest();//åˆ›å»ºxhrå¯¹è±¡
+	variable=new ActiveXObject("Microsoft.XMLHTTP");//è€æµè§ˆå™¨åˆ›å»ºxhr
 
-2.·¢ËÍÇëÇó
-	xhr.setRequestHeader("Accepts","application/json");//ÉèÖÃÇëÇóÍ·
-	xhr.open("method=[GET | POST]","url",Async=[true | false])//AsyncÔÊÐíÒì²½´«Êä
-	xhr.send("string") //string ½öÓÃÓÚpost
+2.å‘é€è¯·æ±‚
+	xhr.setRequestHeader("Accepts","application/json");//è®¾ç½®è¯·æ±‚å¤´
+	xhr.open("method=[GET | POST]","url",Async=[true | false])//Asyncå…è®¸å¼‚æ­¥ä¼ è¾“
+	xhr.send("string") //string ä»…ç”¨äºŽpost
 
 
 post or get :
-	ÓÃpost£º
-		ÎÞ·¨Ê¹ÓÃ»º´æÎÄ¼þ£¨¸üÐÂ·þÎñÆ÷ÉÏµÄÎÄ¼þ»òÊý¾Ý¿â£©
+	ç”¨postï¼š
+		æ— æ³•ä½¿ç”¨ç¼“å­˜æ–‡ä»¶ï¼ˆæ›´æ–°æœåŠ¡å™¨ä¸Šçš„æ–‡ä»¶æˆ–æ•°æ®åº“ï¼‰
 
-		Ïò·þÎñÆ÷·¢ËÍ´óÁ¿Êý¾Ý£¨POST Ã»ÓÐÊý¾ÝÁ¿ÏÞÖÆ£©
+		å‘æœåŠ¡å™¨å‘é€å¤§é‡æ•°æ®ï¼ˆPOST æ²¡æœ‰æ•°æ®é‡é™åˆ¶ï¼‰
 
-		·¢ËÍ°üº¬Î´Öª×Ö·ûµÄÓÃ»§ÊäÈëÊ±£¬POST ±È GET ¸üÎÈ¶¨Ò²¸ü¿É¿¿£¬Ìá½»±íµ¥ÓÃpost
+		å‘é€åŒ…å«æœªçŸ¥å­—ç¬¦çš„ç”¨æˆ·è¾“å…¥æ—¶ï¼ŒPOST æ¯” GET æ›´ç¨³å®šä¹Ÿæ›´å¯é ï¼Œæäº¤è¡¨å•ç”¨post
 
-	Í¨¹ýajax·¢ËÍ±íµ¥ÐÅÏ¢Ê±£¬
-	ÏÈxhr.setRequestHeader("Content-Type","x-www-application/form-urlencoded")
-	È»ºóxhr.send£¨¡°paramName=value¡±£©
+	é€šè¿‡ajaxå‘é€è¡¨å•ä¿¡æ¯æ—¶ï¼Œ
+	å…ˆxhr.setRequestHeader("Content-Type","x-www-application/form-urlencoded")
+	ç„¶åŽxhr.sendï¼ˆâ€œparamName=valueâ€ï¼‰
 
-3.ÏìÓ¦
-xhr.responseText  »ñµÃ×Ö·û´®ÐÎÊ½µÄÏìÓ¦Êý¾Ý¡£
-xhr.responseXML	  »ñµÃ XML ÐÎÊ½µÄÏìÓ¦Êý¾Ý¡£ ÊÇÒ»¸öxml µÄ DOM¶ÔÏó
+3.å“åº”
+xhr.responseText  èŽ·å¾—å­—ç¬¦ä¸²å½¢å¼çš„å“åº”æ•°æ®ã€‚
+xhr.responseXML	  èŽ·å¾— XML å½¢å¼çš„å“åº”æ•°æ®ã€‚ æ˜¯ä¸€ä¸ªxml çš„ DOMå¯¹è±¡
 
 
-4.xhrµÄÄÚÖÃÊôÐÔ
-	readyState ÊôÐÔ´æÓÐ XMLHttpRequest µÄ×´Ì¬ÐÅÏ¢¡£ 
-		µ±readyState=4 Ê±±íÊ¾ajaxÒÑÍê³ÉÇëÇó£¬²¢ÇÒÏìÓ¦¾ÍÐ÷
+4.xhrçš„å†…ç½®å±žæ€§
+	readyState å±žæ€§å­˜æœ‰ XMLHttpRequest çš„çŠ¶æ€ä¿¡æ¯ã€‚ 
+		å½“readyState=4 æ—¶è¡¨ç¤ºajaxå·²å®Œæˆè¯·æ±‚ï¼Œå¹¶ä¸”å“åº”å°±ç»ª
 
-	onreadystatechange ÊôÐÔ£ºreadState¸Ä±äÊ±´¥·¢µÄÊÂ¼þº¯Êý,¸øËû¸³ÖµÄ³º¯Êý£¬Ëû¾Íµ÷ÓÃº¯Êý
+	onreadystatechange å±žæ€§ï¼šreadStateæ”¹å˜æ—¶è§¦å‘çš„äº‹ä»¶å‡½æ•°,ç»™ä»–èµ‹å€¼æŸå‡½æ•°ï¼Œä»–å°±è°ƒç”¨å‡½æ•°
 
-	statusÊôÐÔ ·þÎñÆ÷ÏìÓ¦×´Ì¬Âë 404 200 ¡£¡£¡£
+	statuså±žæ€§ æœåŠ¡å™¨å“åº”çŠ¶æ€ç  404 200 ã€‚ã€‚ã€‚
 	
-	statusText ·þÎñÆ÷ÏìÓ¦×´Ì¬ÃèÊöNot Found,OK
+	statusText æœåŠ¡å™¨å“åº”çŠ¶æ€æè¿°Not Found,OK
 	
-	responseText ·þÎñÆ÷·µ»ØµÄÎÄ±¾ÏìÓ¦
+	responseText æœåŠ¡å™¨è¿”å›žçš„æ–‡æœ¬å“åº”
 	
-	responseXML ·þÎñÆ÷·µ»ØµÄXMLÏìÓ¦
+	responseXML æœåŠ¡å™¨è¿”å›žçš„XMLå“åº”
 	
-5.xhrÄÚÖÃ·½·¨
-	open(method,url,isAsync,username,password) //´´½¨Ò»¸öÇëÇóÁ¬½Ó
-	send(content)					   //·¢ËÍcontentµÄ¸ø·þÎñÆ÷
-	setRequestHeader(header,value)		   //ÉèÖÃÇëÇóÍ·
-	getResponseHeader(header)			   //È¡µÃÏìÓ¦Í·
-	abort()						   //ÖÕÖ¹ÇëÇóÁ¬½Ó
+5.xhrå†…ç½®æ–¹æ³•
+	open(method,url,isAsync,username,password) //åˆ›å»ºä¸€ä¸ªè¯·æ±‚è¿žæŽ¥
+	send(content)					   //å‘é€contentçš„ç»™æœåŠ¡å™¨
+	setRequestHeader(header,value)		   //è®¾ç½®è¯·æ±‚å¤´
+	getResponseHeader(header)			   //å–å¾—å“åº”å¤´
+	abort()						   //ç»ˆæ­¢è¯·æ±‚è¿žæŽ¥
 
-JQueryµÄajax
+JQueryçš„ajax
 
 	option={
 		url:"",
 		method:"post|get|put|.."
-		data:"",//·¢¸ø·þÎñÆ÷µÄÊý¾Ý
-		dataType:"",//json¡¢xml¡¢html...ÆÚÍûÊÕµ½µÄÊý¾ÝÀàÐÍÉèÖÃacceptÍ·£¬
-		contentType:"application/json",//ÉèÖÃContentType
-		success:function(data,status,xhr){}//³É¹¦½ÓÊÜÏìÓ¦Ê±µ÷ÓÃº¯Êý
+		data:"",//å‘ç»™æœåŠ¡å™¨çš„æ•°æ®
+		dataType:"",//jsonã€xmlã€html...æœŸæœ›æ”¶åˆ°çš„æ•°æ®ç±»åž‹è®¾ç½®acceptå¤´ï¼Œ
+		contentType:"application/json",//è®¾ç½®ContentType
+		success:function(data,status,xhr){}//æˆåŠŸæŽ¥å—å“åº”æ—¶è°ƒç”¨å‡½æ•°
 		error:function(xhr,status){}
 		complete(xhr,staths){}
 	}
-	$.ajax(option) //optionÎªjs¶ÔÏó
+	$.ajax(option) //optionä¸ºjså¯¹è±¡
 	
-	·¢ËÍjsonÓÃJSON.stringify(obj)-->json String
-	½ÓÊÕjsonÓÃJSON.parse(json)-->javascript object
+	å‘é€jsonç”¨JSON.stringify(obj)-->json String
+	æŽ¥æ”¶jsonç”¨JSON.parse(json)-->javascript object

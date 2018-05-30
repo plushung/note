@@ -1,118 +1,118 @@
-1.Êı¾İÔ´ÎÊÌâ
-	hibernate Êı¾İÔ´ÅäÖÃ·½Ê½
-		1.ÔÚcfg.xmlÖĞÅäÖÃÁ¬½Ó²ÎÊı
+1.æ•°æ®æºé—®é¢˜
+	hibernate æ•°æ®æºé…ç½®æ–¹å¼
+		1.åœ¨cfg.xmlä¸­é…ç½®è¿æ¥å‚æ•°
 			Jdbcdirver,usernamr,password,url
 			
-		2.ÓÃµÚÈı·½Á¬½Ó³Ø
-			c3p0µÈ£¬ÔÚc3p0µÄÅäÖÃÎÄ¼şÖĞÅäÖÃJdbcdirver,usernamr,password,url
+		2.ç”¨ç¬¬ä¸‰æ–¹è¿æ¥æ± 
+			c3p0ç­‰ï¼Œåœ¨c3p0çš„é…ç½®æ–‡ä»¶ä¸­é…ç½®Jdbcdirver,usernamr,password,url
 			
-		3.ÔÚSpringÖĞÅäÖÃdatasource
-			ÓÉSpringµÄÊÂÎñ¹ÜÀíHibernateTransactionManagerÈ¥¹ÜÀíhibernateµÄtransaction
-			ÒªÔÚhibernateÅäÖÃÎÄ¼şÖĞÅäÖÃsession_context_class Îªthread
-			ÕâÑù¾Í²»ÓÃÏÔÊ½µØbegainTransaction commit rollback
+		3.åœ¨Springä¸­é…ç½®datasource
+			ç”±Springçš„äº‹åŠ¡ç®¡ç†HibernateTransactionManagerå»ç®¡ç†hibernateçš„transaction
+			è¦åœ¨hibernateé…ç½®æ–‡ä»¶ä¸­é…ç½®session_context_class ä¸ºthread
+			è¿™æ ·å°±ä¸ç”¨æ˜¾å¼åœ°begainTransaction commit rollback
 			
-SpringÅäÖÃÎÄ¼şÖĞ¹ØÓÚÊÂÎñÅäÖÃ×ÜÊÇÓÉÈı¸ö×é³É²¿·Ö£¬DataSource¡¢SessionFactory£¬TransactionManagerºÍ´úÀí»úÖÆÕâ¼¸²¿·Ö
-	DataSource¡¢TransactionManagerÊÇ¹Ì¶¨ÅäÖÃµÄ
-	´úÀí·½Ê½ÓĞ¼¸ÖÖ:
-		1.Í¨¹ı×¢½â@Transaction£¬Éú³ÉÄ¿±êÀàµÄ×ÓÀà¶Ô»ùÓÚHibernateµÄDAOimp½øĞĞ´úÀí
-		2.Í¨¹ıtxÃüÃû¿Õ¼äºÍaopÃüÃû¿Õ¼äÔÚxmlÖĞÅäÖÃÊÂÎñµÄÇĞÃæ
-		3.Í¨¹ıTransactionProxyFactoryBeanÀà´úÀí
-		4.Í¨¹ıTransactionInterceptorÀàÀ¹½Ø´úÀí
+Springé…ç½®æ–‡ä»¶ä¸­å…³äºäº‹åŠ¡é…ç½®æ€»æ˜¯ç”±ä¸‰ä¸ªç»„æˆéƒ¨åˆ†ï¼ŒDataSourceã€SessionFactoryï¼ŒTransactionManagerå’Œä»£ç†æœºåˆ¶è¿™å‡ éƒ¨åˆ†
+	DataSourceã€TransactionManageræ˜¯å›ºå®šé…ç½®çš„
+	ä»£ç†æ–¹å¼æœ‰å‡ ç§:
+		1.é€šè¿‡æ³¨è§£@Transactionï¼Œç”Ÿæˆç›®æ ‡ç±»çš„å­ç±»å¯¹åŸºäºHibernateçš„DAOimpè¿›è¡Œä»£ç†
+		2.é€šè¿‡txå‘½åç©ºé—´å’Œaopå‘½åç©ºé—´åœ¨xmlä¸­é…ç½®äº‹åŠ¡çš„åˆ‡é¢
+		3.é€šè¿‡TransactionProxyFactoryBeanç±»ä»£ç†
+		4.é€šè¿‡TransactionInterceptorç±»æ‹¦æˆªä»£ç†
 		
-2.DAOÒì³£ÎÊÌâ
-	ÒòÎªSpring»á°Ñ@RepositoryÀà²úÉúµÄÒì³£Í³Í³×ª»»ÎªDataAccessException£¬¼´Ê¹ÓÃ¿ò¼ÜÊµÏÖµÄDAOÀàÅ×³öÁË¸÷ÖÖÒì³£Ò²²»ÄÜÖ±½ÓÍ¨¹ı²¶×¥ÕıÕæÒì³£ÃûÈ¥²¶×½Òì³£
-	Ö±½Ó²¶×¥DataAccessException²ÅÄÜ°ÑÒì³£²¶×½µ½
+2.DAOå¼‚å¸¸é—®é¢˜
+	å› ä¸ºSpringä¼šæŠŠ@Repositoryç±»äº§ç”Ÿçš„å¼‚å¸¸ç»Ÿç»Ÿè½¬æ¢ä¸ºDataAccessExceptionï¼Œå³ä½¿ç”¨æ¡†æ¶å®ç°çš„DAOç±»æŠ›å‡ºäº†å„ç§å¼‚å¸¸ä¹Ÿä¸èƒ½ç›´æ¥é€šè¿‡æ•æŠ“æ­£çœŸå¼‚å¸¸åå»æ•æ‰å¼‚å¸¸
+	ç›´æ¥æ•æŠ“DataAccessExceptionæ‰èƒ½æŠŠå¼‚å¸¸æ•æ‰åˆ°
 	
-spring ¼¯³É JPA µÄÅäÖÃ
-	ÔÚspringÖĞ¼¯³ÉÊ±µÄÅäÖÃ
-		springÉùÃ÷LocalEntityManagerFactoryBean»òLocalContainerEntityFactoryBeanµÄbean£¬ÓÃ×÷³Ö¾Ã»¯µ¥Ôª
-		·Ö±ğÓÃÓÚÅäÖÃÓ¦ÓÃ³ÌĞò¹ÜÀíµÄJPAÓëÈİÆ÷¹ÜÀíµÄJPA
-		Ó¦ÓÃ³ÌĞò¹ÜÀíµÄJPA
-			JPAµÄÅäÖÃĞÅÏ¢ÓÉpresistance.xmlÌá¹©°üÀ¨datasource£¬ÊµÌåÀàµÈĞÅÏ¢µÄÅäÖÃ£¬SpringÅäÖÃÊ±ÒªÉèÖÃ¶ÔÓ¦µÄpresistanceUnitÃû£¬
-			1±àĞ´JPAµÄpresistance.xmlÎÄ¼ş£¬ÅäÖÃpresistance-unit
-			2ÅäÖÃLocalEntityManagerFactoryBean
-			3Ö¸¶¨presistance-unit
-		ÈİÆ÷¹ÜÀíµÄJPA
-			JPAµÄÅäÖÃĞÅÏ¢ÓÉSpringÌá¹©£¬´ËÊ±Springµ£ÈÎÈİÆ÷µÄ½ÇÉ«£¬ÎªJPAÌá¹©ËùĞèµÄdatasource¼°JPAÊµÏÖ£¬ÒÔ¼°Ö¸¶¨ÊµÌåÀàµÄ»ñÈ¡
-			Ìá¹©°üÀ¨datasourceµÈĞÅÏ¢µÄÅäÖÃ£¬ÍêÈ«²»ÓÃpresistance.xml
-			1.ÅäÖÃLocalContainerEntityManagerFactoryBean
-			2.Éè¶¨Êı¾İÔ´datasource
-			3.ÅäÖÃÊµÌåÀàµÄÓ³Éä
-			4.Éè¶¨JPAµÄÊµÏÖÀàJPAVectorAdapter
-				ÓÃhibernateµÄjpaÊµÏÖ
-				1ÅäÖÃJPAVectorAdapter
-				2.ÓÃhibernateJapVectorAdapterÀà
-				3.ÅäÖÃhibernateĞÅÏ¢£ºdatasource£¬dialect£¬ShowSQl£¬
-			5.É¨Ãè×¢½âµÄÊµÌåÀà
+spring é›†æˆ JPA çš„é…ç½®
+	åœ¨springä¸­é›†æˆæ—¶çš„é…ç½®
+		springå£°æ˜LocalEntityManagerFactoryBeanæˆ–LocalContainerEntityFactoryBeançš„beanï¼Œç”¨ä½œæŒä¹…åŒ–å•å…ƒ
+		åˆ†åˆ«ç”¨äºé…ç½®åº”ç”¨ç¨‹åºç®¡ç†çš„JPAä¸å®¹å™¨ç®¡ç†çš„JPA
+		åº”ç”¨ç¨‹åºç®¡ç†çš„JPA
+			JPAçš„é…ç½®ä¿¡æ¯ç”±presistance.xmlæä¾›åŒ…æ‹¬datasourceï¼Œå®ä½“ç±»ç­‰ä¿¡æ¯çš„é…ç½®ï¼ŒSpringé…ç½®æ—¶è¦è®¾ç½®å¯¹åº”çš„presistanceUnitåï¼Œ
+			1ç¼–å†™JPAçš„presistance.xmlæ–‡ä»¶ï¼Œé…ç½®presistance-unit
+			2é…ç½®LocalEntityManagerFactoryBean
+			3æŒ‡å®špresistance-unit
+		å®¹å™¨ç®¡ç†çš„JPA
+			JPAçš„é…ç½®ä¿¡æ¯ç”±Springæä¾›ï¼Œæ­¤æ—¶Springæ‹…ä»»å®¹å™¨çš„è§’è‰²ï¼Œä¸ºJPAæä¾›æ‰€éœ€çš„datasourceåŠJPAå®ç°ï¼Œä»¥åŠæŒ‡å®šå®ä½“ç±»çš„è·å–
+			æä¾›åŒ…æ‹¬datasourceç­‰ä¿¡æ¯çš„é…ç½®ï¼Œå®Œå…¨ä¸ç”¨presistance.xml
+			1.é…ç½®LocalContainerEntityManagerFactoryBean
+			2.è®¾å®šæ•°æ®æºdatasource
+			3.é…ç½®å®ä½“ç±»çš„æ˜ å°„
+			4.è®¾å®šJPAçš„å®ç°ç±»JPAVectorAdapter
+				ç”¨hibernateçš„jpaå®ç°
+				1é…ç½®JPAVectorAdapter
+				2.ç”¨hibernateJapVectorAdapterç±»
+				3.é…ç½®hibernateä¿¡æ¯ï¼šdatasourceï¼Œdialectï¼ŒShowSQlï¼Œ
+			5.æ‰«ææ³¨è§£çš„å®ä½“ç±»
 			
-spring ¼¯³É JPA µÄÊ¹ÓÃ	
+spring é›†æˆ JPA çš„ä½¿ç”¨	
 	
-	»ñµÃ³Ö¾Ã»¯ÉÏÏÂÎÄ
-		@PresistanceContext		//Óëspring¼¯³ÉÊ±£¬@PresistanceContext²»»á×¢ÈëÕæÕıµÄem£¬Ö»ÊÇÒ»¸ö´úÀí£¬Í¨¹ı´úÀíµÄ·½·¨£¬Ê¹ÓÃem
+	è·å¾—æŒä¹…åŒ–ä¸Šä¸‹æ–‡
+		@PresistanceContext		//ä¸springé›†æˆæ—¶ï¼Œ@PresistanceContextä¸ä¼šæ³¨å…¥çœŸæ­£çš„emï¼Œåªæ˜¯ä¸€ä¸ªä»£ç†ï¼Œé€šè¿‡ä»£ç†çš„æ–¹æ³•ï¼Œä½¿ç”¨em
 		EntityManager em;
-	»ò
-	»ñµÃ³Ö¾Ã»¯µ¥Ôª			
+	æˆ–
+	è·å¾—æŒä¹…åŒ–å•å…ƒ			
 		@PresistanceUnit		
 		EntityManagerFactory emf
-»ò
-Ê¹ÓÃSpring-data-jpa
-	¼Ì³ĞCrudRespository½Ó¿Ú£¬²»ÓÃÊµÏÖ£¬Spring-dataÎªÎÒÃÇÊµÏÖÁË³£ÓÃµÄ18ÖĞCRUD²Ù×÷
-	CrudRespository½Ó¿ÚµÄ·½·¨ÔÚspringÉÏÏÂÎÄ´´½¨Ê±±»Spring-data¿ò¼Ü´´½¨ÊµÏÖ
-	×Ô¶¨ÒåRespository·½·¨
-		1ÔÚ¼Ì³Ğ½Ó¿ÚÊ±£¬ÉùÃ÷Ò»¸öÒª×Ô¶¨ÒåµÄ·½·¨
-		2ÔÚ·½·¨ÉùÃ÷ÉÏ@Query('SQL') springÎªÎÒÃÇÓÃ¸ÃSQLÊµÏÖ·½·¨
-	ÔÚjavaÅäÖÃÀàÉÏ@EnableJpaRespositoryÆôÓÃSpring-data-jap
+æˆ–
+ä½¿ç”¨Spring-data-jpa
+	ç»§æ‰¿CrudRespositoryæ¥å£ï¼Œä¸ç”¨å®ç°ï¼ŒSpring-dataä¸ºæˆ‘ä»¬å®ç°äº†å¸¸ç”¨çš„18ä¸­CRUDæ“ä½œ
+	CrudRespositoryæ¥å£çš„æ–¹æ³•åœ¨springä¸Šä¸‹æ–‡åˆ›å»ºæ—¶è¢«Spring-dataæ¡†æ¶åˆ›å»ºå®ç°
+	è‡ªå®šä¹‰Respositoryæ–¹æ³•
+		1åœ¨ç»§æ‰¿æ¥å£æ—¶ï¼Œå£°æ˜ä¸€ä¸ªè¦è‡ªå®šä¹‰çš„æ–¹æ³•
+		2åœ¨æ–¹æ³•å£°æ˜ä¸Š@Query('SQL') springä¸ºæˆ‘ä»¬ç”¨è¯¥SQLå®ç°æ–¹æ³•
+	åœ¨javaé…ç½®ç±»ä¸Š@EnableJpaRespositoryå¯ç”¨Spring-data-jap
 
-ÊÂÎñ¹ÜÀíÆ÷ --¡· ÊÂÎñ 	-------------------------¡·Ìá½»ÊÂÎñÄÚ³Ö¾Ã»¯µ¥ÔªµÄ²Ù×÷
-	|--¡·ÊµÌå¹ÜÀíÆ÷ --¡· ³Ö¾Ã»¯µ¥Ôª			
-	spring¹ÜÀíµÄJTAÊÂÎñ
-		1.ÅäÖÃÊµÌå¹ÜÀíÆ÷£¬LocalEntityManagerFactoryBean|LocalContainerEntityManagerFactoryBean|Í¨¹ıJNDIÈ¡µÃEntityManagerFactory
-			ÅäÖÃ³Ö¾Ã»¯µ¥Ôª£¬persistance.xmlµÄÅäÖÃ£¬ÓĞ¹ØÓëÊı¾İ¿âÁ¬½ÓµÄÅäÖÃ
-			Ò»¸öEntityManagerFactory´ú±íÒ»¸öÊı¾İ¿âÁ¬½Ó
-			JpaVendorAdapterÖ¸¶¨JPAµÄÊµÏÖÈçhibernate
-		2.ÅäÖÃÊÂÎñ¹ÜÀíÆ÷£¬JtaTransactionManager
-			³ÖÓĞÒ»¸ö»ò¶à¸öÊµÌå¹ÜÀíÆ÷,Ìá¹©transaction£¬Ò»ÌõÊÂÎñ¿ÉÍ¬Ê±Ê¹ÓÃ¶à¸öEntityManagerFactory,ÓĞ¶àÌõÊı¾İ¿âµÄÁ¬½Ó£¬½øĞĞ·Ö²¼Ê½Êı¾İ¿â·ÃÎÊ
+äº‹åŠ¡ç®¡ç†å™¨ --ã€‹ äº‹åŠ¡ 	-------------------------ã€‹æäº¤äº‹åŠ¡å†…æŒä¹…åŒ–å•å…ƒçš„æ“ä½œ
+	|--ã€‹å®ä½“ç®¡ç†å™¨ --ã€‹ æŒä¹…åŒ–å•å…ƒ			
+	springç®¡ç†çš„JTAäº‹åŠ¡
+		1.é…ç½®å®ä½“ç®¡ç†å™¨ï¼ŒLocalEntityManagerFactoryBean|LocalContainerEntityManagerFactoryBean|é€šè¿‡JNDIå–å¾—EntityManagerFactory
+			é…ç½®æŒä¹…åŒ–å•å…ƒï¼Œpersistance.xmlçš„é…ç½®ï¼Œæœ‰å…³ä¸æ•°æ®åº“è¿æ¥çš„é…ç½®
+			ä¸€ä¸ªEntityManagerFactoryä»£è¡¨ä¸€ä¸ªæ•°æ®åº“è¿æ¥
+			JpaVendorAdapteræŒ‡å®šJPAçš„å®ç°å¦‚hibernate
+		2.é…ç½®äº‹åŠ¡ç®¡ç†å™¨ï¼ŒJtaTransactionManager
+			æŒæœ‰ä¸€ä¸ªæˆ–å¤šä¸ªå®ä½“ç®¡ç†å™¨,æä¾›transactionï¼Œä¸€æ¡äº‹åŠ¡å¯åŒæ—¶ä½¿ç”¨å¤šä¸ªEntityManagerFactory,æœ‰å¤šæ¡æ•°æ®åº“çš„è¿æ¥ï¼Œè¿›è¡Œåˆ†å¸ƒå¼æ•°æ®åº“è®¿é—®
 			
 			
-		3Ê¹ÓÃÊÂÎñ
-			1.±à³ÌÊ½ÊÂÎñ
-				JTAÊÂÎñÈ¡µÃ·½Ê½
+		3ä½¿ç”¨äº‹åŠ¡
+			1.ç¼–ç¨‹å¼äº‹åŠ¡
+				JTAäº‹åŠ¡å–å¾—æ–¹å¼
 					UserTransaction =(UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
 				UserTransaction.begin(),-->entityManager.persist()--->entityManager.close()---->UserTransaction.commit(),
-				½«ÊÂÎñµÄ¹ÜÀí±à³ÌÊ½µØĞ´ÈëÒµÎñÂß¼­£¬ÊÖ¶¯beginÓëcommitÓërollback
-			2.ÉùÃ÷Ê±ÊÂÎñ
-				ÔÚserviceÀàÉÏ@transaction£¬ÉùÃ÷ÊÂÎñÇĞÃæ£¬
-				<tx:annotation-driven transaction-manager="transactionManager"»òÔÚjavaÅäÖÃÀàÉÏ@EnableTransactionManagement(proxyTargetClass=true)
-				ÈÃspringÍ¨¹ıÇĞÃæ¹ÜÀíÊÂÎñ
-	spring¹ÜÀíµÄhibernateÊÂÎñ
-		1.ÅäÖÃÊµÌå¹ÜÀíÆ÷£¬LocalSessionFactoryBean
-			ÅäÖÃ³Ö¾Ã»¯µ¥Ôª£¬hibernate.cfg.xmlµÄÅäÖÃ£¬ÓĞ¹ØÓëÊı¾İ¿âÁ¬½ÓµÄÅäÖÃ
-			Ò»¸öSessionFactory´ú±íÒ»¸öÊı¾İ¿âÁ¬½Ó
-		2.ÅäÖÃÊÂÎñ¹ÜÀíÆ÷£¬HibernateTransactionManager
-			¹ÜÀí×ÅSessionFactory
+				å°†äº‹åŠ¡çš„ç®¡ç†ç¼–ç¨‹å¼åœ°å†™å…¥ä¸šåŠ¡é€»è¾‘ï¼Œæ‰‹åŠ¨beginä¸commitä¸rollback
+			2.å£°æ˜æ—¶äº‹åŠ¡
+				åœ¨serviceç±»ä¸Š@transactionï¼Œå£°æ˜äº‹åŠ¡åˆ‡é¢ï¼Œ
+				<tx:annotation-driven transaction-manager="transactionManager"æˆ–åœ¨javaé…ç½®ç±»ä¸Š@EnableTransactionManagement(proxyTargetClass=true)
+				è®©springé€šè¿‡åˆ‡é¢ç®¡ç†äº‹åŠ¡
+	springç®¡ç†çš„hibernateäº‹åŠ¡
+		1.é…ç½®å®ä½“ç®¡ç†å™¨ï¼ŒLocalSessionFactoryBean
+			é…ç½®æŒä¹…åŒ–å•å…ƒï¼Œhibernate.cfg.xmlçš„é…ç½®ï¼Œæœ‰å…³ä¸æ•°æ®åº“è¿æ¥çš„é…ç½®
+			ä¸€ä¸ªSessionFactoryä»£è¡¨ä¸€ä¸ªæ•°æ®åº“è¿æ¥
+		2.é…ç½®äº‹åŠ¡ç®¡ç†å™¨ï¼ŒHibernateTransactionManager
+			ç®¡ç†ç€SessionFactory
 			
-		3.Ê¹ÓÃÊÂÎñ
-			1.±à³ÌÊ½ÊÂÎñ
-				hibernateÓÃJDBCÊÂÎñÊ±
+		3.ä½¿ç”¨äº‹åŠ¡
+			1.ç¼–ç¨‹å¼äº‹åŠ¡
+				hibernateç”¨JDBCäº‹åŠ¡æ—¶
 					SessionFactory.gerCurrentSession()---->Session.beginTransaction()--->session.persist()---->tx.commit()
-				hibernateÓÃJTAÊÂÎñÊ±
-					JTAÊÂÎñÈ¡µÃ·½Ê½
-						cfgµÄÅäÖÃhibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory
-						UserTransaction =(UserTransaction)new InitialContext().lookup("javax.transaction.UserTransaction");//¶¨ÒåÔÚcfg.xmlÖĞµÄÓÉhibernateÊµÏÖµÄUserTransaction
+				hibernateç”¨JTAäº‹åŠ¡æ—¶
+					JTAäº‹åŠ¡å–å¾—æ–¹å¼
+						cfgçš„é…ç½®hibernate.transaction.factory_class=org.hibernate.transaction.JTATransactionFactory
+						UserTransaction =(UserTransaction)new InitialContext().lookup("javax.transaction.UserTransaction");//å®šä¹‰åœ¨cfg.xmlä¸­çš„ç”±hibernateå®ç°çš„UserTransaction
 					UserTransaction.begin(),-->session.save()--->session.close()---->UserTransaction.commit(),
-				ÈôsessionÍ¨¹ıgetCurrentSessionµÄµ½£¬¾Í²»ÓÃÊÖ¶¯close
-					½«ÊÂÎñµÄ¹ÜÀí±à³ÌÊ½µØĞ´ÈëÒµÎñÂß¼­£¬ÊÖ¶¯beginÓëcommitÓërollback
-			2.ÉùÃ÷Ê±ÊÂÎñ
-				ÔÚserviceÀàÉÏ@transaction£¬ÉùÃ÷ÊÂÎñÇĞÃæ£¬
-				<tx:annotation-driven transaction-manager="transactionManager"»òÔÚjavaÅäÖÃÀàÉÏ@EnableTransactionManagement(proxyTargetClass=true)
-				ÈÃspringÍ¨¹ıÇĞÃæ¹ÜÀíÊÂÎñ
+				è‹¥sessioné€šè¿‡getCurrentSessionçš„åˆ°ï¼Œå°±ä¸ç”¨æ‰‹åŠ¨close
+					å°†äº‹åŠ¡çš„ç®¡ç†ç¼–ç¨‹å¼åœ°å†™å…¥ä¸šåŠ¡é€»è¾‘ï¼Œæ‰‹åŠ¨beginä¸commitä¸rollback
+			2.å£°æ˜æ—¶äº‹åŠ¡
+				åœ¨serviceç±»ä¸Š@transactionï¼Œå£°æ˜äº‹åŠ¡åˆ‡é¢ï¼Œ
+				<tx:annotation-driven transaction-manager="transactionManager"æˆ–åœ¨javaé…ç½®ç±»ä¸Š@EnableTransactionManagement(proxyTargetClass=true)
+				è®©springé€šè¿‡åˆ‡é¢ç®¡ç†äº‹åŠ¡
 			
-	ÊÂÎñ¹ÜÀíÆ÷
-		Á½ÖÖÊÂÎñHibernateTransactionManager ºÍDataSourceTransactionManager
-			DataSourceTransactionManager£º
-				´ËÊÂÎñ¹ÜÀíÆ÷ÊÇÕë¶Ô´«Í³µÄJDBC½øĞĞÊÂÎñ¹ÜÀí£¬¶Ô»ùÓÚJDBCµÄDAOµÄÊÂÎñ¹ÜÀí
-			HibernateTransactionManager£º
-				ÊÇ¶Ôhibernate½øĞĞÊÂÎñ¹ÜÀí£¬¶Ô»ùÓÚHibernateµÄDAOµÄÊÂÎñ¹ÜÀí
-			JtaTransactionManager£º
-				ÊÇ¶Ô»ùÓÚJTAµÄÊÂÎñ½øĞĞ¹ÜÀí
+	äº‹åŠ¡ç®¡ç†å™¨
+		ä¸¤ç§äº‹åŠ¡HibernateTransactionManager å’ŒDataSourceTransactionManager
+			DataSourceTransactionManagerï¼š
+				æ­¤äº‹åŠ¡ç®¡ç†å™¨æ˜¯é’ˆå¯¹ä¼ ç»Ÿçš„JDBCè¿›è¡Œäº‹åŠ¡ç®¡ç†ï¼Œå¯¹åŸºäºJDBCçš„DAOçš„äº‹åŠ¡ç®¡ç†
+			HibernateTransactionManagerï¼š
+				æ˜¯å¯¹hibernateè¿›è¡Œäº‹åŠ¡ç®¡ç†ï¼Œå¯¹åŸºäºHibernateçš„DAOçš„äº‹åŠ¡ç®¡ç†
+			JtaTransactionManagerï¼š
+				æ˜¯å¯¹åŸºäºJTAçš„äº‹åŠ¡è¿›è¡Œç®¡ç†
 		

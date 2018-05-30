@@ -1,79 +1,79 @@
 Spring MVC
-	Á÷³Ì£º
+	æµç¨‹ï¼š
 					DispatcherServlet
 		HTTP request-------------------->|
-							|					£¨handlerchain : °üº¬Handler±¾Éí¼°Óë¸ÃhandlerÓĞ¹ØµÄÀ¹½ØÆ÷£¬handlerÓëÀ¹½ØÆ÷µÄÖ´ĞĞÊÇÁ´Ê½µÄ£©
-							|<------->HandlerMapping	´ÓËùÓĞHandlerMappingÖĞ²éÕÒ¿´ÓĞÎŞ¿É´¦Àí¸ÃÇëÇóµÄhandler£¬ÓĞÔò·µ»Ø¸Ãhandlerchain¡£
-							|					Ò»¸öHandlerMappingÓ³ÉäÒ»¸öcontroller£¬DispatcherServlet³ÖÓĞHandlerMappingµÄ¼¯ºÏ£¬Ñ¡ÔñÊÊµ±µÄController 
-							|<------->Controller			´ÓHandlerMappingÈ¡µÃHandlerºó£¬ÓÉhandlerAdaptorµ÷ÓÃControllerÖĞµÄ·½·¨£¬²¢ÔÚControllerÇ°ºóµ÷ÓÃÀ¹½ØÆ÷£¬·µ»Ømodel and viewname
-							|<------->ViewResolver		¸ù¾İviewname½âÊÍÈ¡µÃÊµ¼ÊÊÓÍ¼Ãû,½ö½öÊÇ½âÎö³öÕæÊÓÍ¼Ãû£¬·µ»Øview£¬²»äÖÈ¾
-		HTTP request<--------------------|<------->View				ÓÃmodeläÖÈ¾²¢·µ»ØÊÓÍ¼£¬View½Ó¿Ú¾Í½ÓÊÕrequestÓëresponseÒÔ¼°Model£¬½«ModelµÄÊı¾İÊä³öäÖÈ¾µ½response	
+							|					ï¼ˆhandlerchain : åŒ…å«Handleræœ¬èº«åŠä¸è¯¥handleræœ‰å…³çš„æ‹¦æˆªå™¨ï¼Œhandlerä¸æ‹¦æˆªå™¨çš„æ‰§è¡Œæ˜¯é“¾å¼çš„ï¼‰
+							|<------->HandlerMapping	ä»æ‰€æœ‰HandlerMappingä¸­æŸ¥æ‰¾çœ‹æœ‰æ— å¯å¤„ç†è¯¥è¯·æ±‚çš„handlerï¼Œæœ‰åˆ™è¿”å›è¯¥handlerchainã€‚
+							|					ä¸€ä¸ªHandlerMappingæ˜ å°„ä¸€ä¸ªcontrollerï¼ŒDispatcherServletæŒæœ‰HandlerMappingçš„é›†åˆï¼Œé€‰æ‹©é€‚å½“çš„Controller 
+							|<------->Controller			ä»HandlerMappingå–å¾—Handleråï¼Œç”±handlerAdaptorè°ƒç”¨Controllerä¸­çš„æ–¹æ³•ï¼Œå¹¶åœ¨Controllerå‰åè°ƒç”¨æ‹¦æˆªå™¨ï¼Œè¿”å›model and viewname
+							|<------->ViewResolver		æ ¹æ®viewnameè§£é‡Šå–å¾—å®é™…è§†å›¾å,ä»…ä»…æ˜¯è§£æå‡ºçœŸè§†å›¾åï¼Œè¿”å›viewï¼Œä¸æ¸²æŸ“
+		HTTP request<--------------------|<------->View				ç”¨modelæ¸²æŸ“å¹¶è¿”å›è§†å›¾ï¼ŒViewæ¥å£å°±æ¥æ”¶requestä¸responseä»¥åŠModelï¼Œå°†Modelçš„æ•°æ®è¾“å‡ºæ¸²æŸ“åˆ°response	
 	
-	DispatchServlet³õÊ¼»¯Ê±³õÊ¼»¯Ò»ÏµÁĞResolver£¬HandleMapping£¨s£©£¬HandlerAdapter£¨s£©£¬HandleExceptionresolver,RequestToViewNameTranslator,ÊÓÍ¼½âÎöÆ÷£¨s£©£¬FlashMapManager
+	DispatchServletåˆå§‹åŒ–æ—¶åˆå§‹åŒ–ä¸€ç³»åˆ—Resolverï¼ŒHandleMappingï¼ˆsï¼‰ï¼ŒHandlerAdapterï¼ˆsï¼‰ï¼ŒHandleExceptionresolver,RequestToViewNameTranslator,è§†å›¾è§£æå™¨ï¼ˆsï¼‰ï¼ŒFlashMapManager
 		protected void initStrategies(ApplicationContext context) {  
 				initMultipartResolver(context);  
 				initLocaleResolver(context);  
 				initThemeResolver(context);  
-		//³õÊ¼»¯Ò»Ğ©HandlerMapping  
+		//åˆå§‹åŒ–ä¸€äº›HandlerMapping  
 				initHandlerMappings(context);  
-		//³õÊ¼»¯Ò»Ğ©HandlerAdapter  
+		//åˆå§‹åŒ–ä¸€äº›HandlerAdapter  
 				initHandlerAdapters(context);  
 				initHandlerExceptionResolvers(context);  
 				initRequestToViewNameTranslator(context);  
 				initViewResolvers(context);  
 				initFlashMapManager(context);  
 			}  
-	Archive for required library: in project 'Gent' cannot be read or is not a valid ZIP file	Gent		¹¹½¨Â·¾¶	¹¹½¨Â·¾¶ÎÊÌâ
+	Archive for required library: in project 'Gent' cannot be read or is not a valid ZIP file	Gent		æ„å»ºè·¯å¾„	æ„å»ºè·¯å¾„é—®é¢˜
 
-	HandlerMapping¡¢Controller ºÍ ViewResolver ÊÇ WebApplicationContext µÄÒ»²¿·Ö£¬
-	¶ø WebApplicationContext ÊÇ´øÓĞÒ»Ğ©¶Ô web Ó¦ÓÃ³ÌĞò±ØÒªµÄ¶îÍâÌØĞÔµÄ ApplicationContext µÄÀ©Õ¹¡£
+	HandlerMappingã€Controller å’Œ ViewResolver æ˜¯ WebApplicationContext çš„ä¸€éƒ¨åˆ†ï¼Œ
+	è€Œ WebApplicationContext æ˜¯å¸¦æœ‰ä¸€äº›å¯¹ web åº”ç”¨ç¨‹åºå¿…è¦çš„é¢å¤–ç‰¹æ€§çš„ ApplicationContext çš„æ‰©å±•ã€‚
 		ApplicationContext
 			|-----------------WebApplicationContext
-							|------HandlerMapping¡¢Controller£¬ViewResolverµÈ
+							|------HandlerMappingã€Controllerï¼ŒViewResolverç­‰
 
-	Ò»¸öwebÓ¦ÓÃ³ÌĞò¿ÉÒÔÓĞ¶à¸öDispatcherServlet£¬´¦Àí²»Í¬Â·¾¶µÄÓ³Éä
-	ĞèÇóµÄÅäÖÃ(web.xml)
-		ÔÚweb.xmlÀï¶¨ÒåDispatcherServletÀàµÄbean£¬¼ÓÔØ[servletname]-servlet.xmlÅäÖÃÎÄ¼ş (webapplicationcontext)
-		»ò
+	ä¸€ä¸ªwebåº”ç”¨ç¨‹åºå¯ä»¥æœ‰å¤šä¸ªDispatcherServletï¼Œå¤„ç†ä¸åŒè·¯å¾„çš„æ˜ å°„
+	éœ€æ±‚çš„é…ç½®(web.xml)
+		åœ¨web.xmlé‡Œå®šä¹‰DispatcherServletç±»çš„beanï¼ŒåŠ è½½[servletname]-servlet.xmlé…ç½®æ–‡ä»¶ (webapplicationcontext)
+		æˆ–
 		<context-param>
    			<param-name>contextConfigLocation</param-name>
    			<param-value>/WEB-INF/HelloWeb-servlet.xml</param-value>  (RootWebApplicatonContext)
-		¶¨ÒåÉÏÏÂÎÄÅäÖÃÎÄ¼şÎ»ÖÃ
-		¿ÉÒÔÍ¨¹ıÔÚ web.xml ÎÄ¼şÖĞÌí¼Ó servlet ¼àÌıÆ÷ ContextLoaderListener ×Ô¶¨ÒåÅäÖÃÎÄ¼şµÄÃû³ÆºÍÎ»ÖÃ£¬¸ÃÅäÖÃÊÇ¸ùÓ¦ÓÃÉÏµÄ
-		ÔÚweb.xmlÀï¶¨ÒåContextLoaderListener ¼àÌıÆ÷
-		¾²Ì¬×ÊÔ´Ó³Éä
-			webÏÂÅäÖÃ
+		å®šä¹‰ä¸Šä¸‹æ–‡é…ç½®æ–‡ä»¶ä½ç½®
+		å¯ä»¥é€šè¿‡åœ¨ web.xml æ–‡ä»¶ä¸­æ·»åŠ  servlet ç›‘å¬å™¨ ContextLoaderListener è‡ªå®šä¹‰é…ç½®æ–‡ä»¶çš„åç§°å’Œä½ç½®ï¼Œè¯¥é…ç½®æ˜¯æ ¹åº”ç”¨ä¸Šçš„
+		åœ¨web.xmlé‡Œå®šä¹‰ContextLoaderListener ç›‘å¬å™¨
+		é™æ€èµ„æºæ˜ å°„
+			webä¸‹é…ç½®
 			<servlet-mapping>
 				<servlet-name>default</servlet-name>
 				<url-pattern>*.html</url-pattern>
 			</servlet-mapping>
-			»ò
-			springÅäÖÃÎÄ¼şÏÂÅäÖÃ
-			<mvc:resource mapping="/js/**" location="/js/" >	springÅäÖÃÎÄ¼şÏÂÅäÖÃ¾²Ì¬×ÊÔ´Ó³Éä
+			æˆ–
+			springé…ç½®æ–‡ä»¶ä¸‹é…ç½®
+			<mvc:resource mapping="/js/**" location="/js/" >	springé…ç½®æ–‡ä»¶ä¸‹é…ç½®é™æ€èµ„æºæ˜ å°„
 	
 	
-	servlet.xmlÅäÖÃÎÄ¼ş	//»òÕßÊ¹ÓÃ»ùÓÚ´úÂëµÄÅäÖÃ£¬¼Ì³ĞWebApplicationInitializer
-		ÆôÓÃ×é¼şÉ¨Ãè£¬É¨Ãècontroller <context:component-scan base-package="..">
-		ÆôÓÃjavaconfig  <context:annotation-config />
-		ÅäÖÃÊÓÍ¼½âÎöÆ÷	<Bean class="**viewResolver">
-		ÉùÃ÷bean		<baen class="..">
+	servlet.xmlé…ç½®æ–‡ä»¶	//æˆ–è€…ä½¿ç”¨åŸºäºä»£ç çš„é…ç½®ï¼Œç»§æ‰¿WebApplicationInitializer
+		å¯ç”¨ç»„ä»¶æ‰«æï¼Œæ‰«æcontroller <context:component-scan base-package="..">
+		å¯ç”¨javaconfig  <context:annotation-config />
+		é…ç½®è§†å›¾è§£æå™¨	<Bean class="**viewResolver">
+		å£°æ˜bean		<baen class="..">
 
 Spring MVC Content
 
-	WebApplicationInitializerÊÇSpring MVCÌá¹©µÄÒ»¸ö½Ó¿Ú
-		×÷ÓÃ:²éÕÒ»ùÓÚ´úÂëµÄÅäÖÃ£¬²¢Ó¦ÓÃÀ´³õÊ¼»¯servlet3ÒÔÉÏµÄwebÈİÆ÷
+	WebApplicationInitializeræ˜¯Spring MVCæä¾›çš„ä¸€ä¸ªæ¥å£
+		ä½œç”¨:æŸ¥æ‰¾åŸºäºä»£ç çš„é…ç½®ï¼Œå¹¶åº”ç”¨æ¥åˆå§‹åŒ–servlet3ä»¥ä¸Šçš„webå®¹å™¨
 		
-		³éÏóÊµÏÖ:AbstractDispatcherServletInitializer
-			ÓÃÓÚ¼ò»¯servletÅäÖÃ£¬Ö»ÒªÖ¸¶¨mappingÓ³Éä
+		æŠ½è±¡å®ç°:AbstractDispatcherServletInitializer
+			ç”¨äºç®€åŒ–servleté…ç½®ï¼Œåªè¦æŒ‡å®šmappingæ˜ å°„
 	
-	ApplicationContext£º
-		£¨ÆäÊµ¾ÍÊÇ¸ù¾İ[servletname]-servlet.xmlÅäÖÃÎÄ¼şÉú³ÉµÄÉÏÏÂÎÄ¶ÔÏó£©
-		WebApplicationContext¼Ì³Ğ×ÔApplicationContext
-			WebApplicationContextÖªµÀËü¹ØÁªµ½µÄÊÇÄÄ¸öservlet£¨Ëü³ÖÓĞÒ»¸ö¸ÃServletContextµÄÒıÓÃ)
+	ApplicationContextï¼š
+		ï¼ˆå…¶å®å°±æ˜¯æ ¹æ®[servletname]-servlet.xmlé…ç½®æ–‡ä»¶ç”Ÿæˆçš„ä¸Šä¸‹æ–‡å¯¹è±¡ï¼‰
+		WebApplicationContextç»§æ‰¿è‡ªApplicationContext
+			WebApplicationContextçŸ¥é“å®ƒå…³è”åˆ°çš„æ˜¯å“ªä¸ªservletï¼ˆå®ƒæŒæœ‰ä¸€ä¸ªè¯¥ServletContextçš„å¼•ç”¨)
 				WebApplicationContext
-						|--------------ServletContexts------¡·servlet--------¡··µ»Ø¸ø¿Í»§¶Ë
+						|--------------ServletContexts------ã€‹servlet--------ã€‹è¿”å›ç»™å®¢æˆ·ç«¯
 	
-		Ã¿¸öDispatcherServletÓĞÒ»¸ö×Ô¼ºµÄÉÏÏÂÎÄ¶ÔÏóWebApplicationContext£¬¼Ì³ĞÁËÒ»¸öÎ¨Ò»µÄRootWebApplicationContext
+		æ¯ä¸ªDispatcherServletæœ‰ä¸€ä¸ªè‡ªå·±çš„ä¸Šä¸‹æ–‡å¯¹è±¡WebApplicationContextï¼Œç»§æ‰¿äº†ä¸€ä¸ªå”¯ä¸€çš„RootWebApplicationContext
 			
 			RootWebApplicationContext<----DispatcherServlet1's  WebApplicationContext
 							|<----DispatcherServlet2's  WebApplicationContext
@@ -83,248 +83,248 @@ Spring MVC Content
 				<param-name>contextConfigLocation</param-name>
 				<param-value>/WEB-INF/springDispatcherServlet-servlet.xml</param-value>
 			</context-param>
-			//ÔÚcontext-paramÏÂÖ¸¶¨µÄÅäÖÃÎÄ¼şÊÇRootWebApplicationContext
+			//åœ¨context-paramä¸‹æŒ‡å®šçš„é…ç½®æ–‡ä»¶æ˜¯RootWebApplicationContext
 			
 			<init-param>
             	<param-name>contextConfigLocation</param-name>
            		<param-value>servletname-servlet.xml</param-value>
         	</init-param>
-			//ÔÚ<servlet><init-param>ÏÂÖ¸¶¨µÄÅäÖÃÎÄ¼şÊÇWebApplicationContext
+			//åœ¨<servlet><init-param>ä¸‹æŒ‡å®šçš„é…ç½®æ–‡ä»¶æ˜¯WebApplicationContext
 
-			//¿ÉÒÔÖ»ÅäÖÃRootWebApplicationContext	
+			//å¯ä»¥åªé…ç½®RootWebApplicationContext	
 	
-	DispatcherServlet£º
+	DispatcherServletï¼š
 
-		ËûÎ¬»¤ÁËÒ»¸öÁĞ±í£¬ÆäÖĞ±£´æÁËÆäËùÒÀÀµµÄËùÓĞbeanµÄÄ¬ÈÏÊµÏÖ(ÏÂÃæÕâĞ©ÌØÊâbeanµÄÄ¬ÈÏshixian)
+		ä»–ç»´æŠ¤äº†ä¸€ä¸ªåˆ—è¡¨ï¼Œå…¶ä¸­ä¿å­˜äº†å…¶æ‰€ä¾èµ–çš„æ‰€æœ‰beançš„é»˜è®¤å®ç°(ä¸‹é¢è¿™äº›ç‰¹æ®Šbeançš„é»˜è®¤shixian)
 
-		Ê¹ÓÃÁËÌØÊâµÄbeanÀ´´¦ÀíÇëÇó¡¢äÖÈ¾ÊÓÍ¼µÈ£¬ÕâĞ©ÌØ¶¨µÄbeanÊÇSpring MVC¿ò¼ÜµÄÒ»²¿·Ö£¬°üÀ¨:
-			HandlerMapping		È·¶¨ÒªÓÃÄÄ¸öController
-			HandlerAdapter		ÓÃÓÚµ÷ÓÃÇëÇómappingµ½µÄController(include interceptor)
-			HandlerExceptionResolver´¦ÀíÆ÷Òì³£½âÎöÆ÷
-			ViewResolver		½âÎöÊÓÍ¼
-			LocaleResolver & LocaleContextResolver	½âÎö¿Í»§¶ËËùÔÚµÄµØÇøĞÅÏ¢£¬¹ú¼Ê»¯µÄÊÓÍ¼¶¨ÖÆ
-			ThemeResolver		½âÎöÄãwebÓ¦ÓÃÖĞ¿ÉÓÃµÄÖ÷Ìâ
-			MultipartResolver	½âÎömulti-partµÄ´«ÊäÇëÇó£¬±ÈÈçÖ§³ÖÍ¨¹ıHTML±íµ¥½øĞĞµÄÎÄ¼şÉÏ´«µÈ
-			FlashMapManager		´æ´¢²¢È¡»ØÁ½´ÎÇëÇóÖ®¼äµÄFlashMap¶ÔÏó
+		ä½¿ç”¨äº†ç‰¹æ®Šçš„beanæ¥å¤„ç†è¯·æ±‚ã€æ¸²æŸ“è§†å›¾ç­‰ï¼Œè¿™äº›ç‰¹å®šçš„beanæ˜¯Spring MVCæ¡†æ¶çš„ä¸€éƒ¨åˆ†ï¼ŒåŒ…æ‹¬:
+			HandlerMapping		ç¡®å®šè¦ç”¨å“ªä¸ªController
+			HandlerAdapter		ç”¨äºè°ƒç”¨è¯·æ±‚mappingåˆ°çš„Controller(include interceptor)
+			HandlerExceptionResolverå¤„ç†å™¨å¼‚å¸¸è§£æå™¨
+			ViewResolver		è§£æè§†å›¾
+			LocaleResolver & LocaleContextResolver	è§£æå®¢æˆ·ç«¯æ‰€åœ¨çš„åœ°åŒºä¿¡æ¯ï¼Œå›½é™…åŒ–çš„è§†å›¾å®šåˆ¶
+			ThemeResolver		è§£æä½ webåº”ç”¨ä¸­å¯ç”¨çš„ä¸»é¢˜
+			MultipartResolver	è§£æmulti-partçš„ä¼ è¾“è¯·æ±‚ï¼Œæ¯”å¦‚æ”¯æŒé€šè¿‡HTMLè¡¨å•è¿›è¡Œçš„æ–‡ä»¶ä¸Šä¼ ç­‰
+			FlashMapManager		å­˜å‚¨å¹¶å–å›ä¸¤æ¬¡è¯·æ±‚ä¹‹é—´çš„FlashMapå¯¹è±¡
 
-			¿ÉÔÚWebApplicationContext(servlet.xml)ÖĞÅäÖÃÒÔÉÏÌØÊâBean
-			»ò 
-			ÓÃAbstractDispatcherServletInitializer£¬¼ò»¯ÅäÖÃ
-				AbstractDispatcherServletInitializerÍØÕ¹ÁËServletµÄServletContainerInitializer£¬
-				servlet3ÒÔÉÏµÄÈİÆ÷»á×Ô¶¯·¢ÏÖ²¢Ó¦ÓÃServletContainerInitializer½Ó¿ÚµÄÅäÖÃ
-		´¦ÀíÇëÇó:
-			1.ÏÈ°ÑWebApplicationContext¶ÔÏó×÷ÎªAttribute°ó¶¨µ½ÇëÇóÉÏ£¬ÒÔ±ãController»òÆäËû×é¼şÀûÓÃ
-			2.µØÇø£¨locale£©½âÎöÆ÷°ó¶¨µ½ÇëÇóÉÏ
-			3.Ö÷Ìâ£¨theme£©½âÎöÆ÷°ó¶¨µ½ÇëÇóÉÏ
-			4.Èç¹ûÄãÅäÖÃÁËmultipartÎÄ¼ş´¦ÀíÆ÷¡£Èç¹ûÎÄ¼şÊÇmultipartµÄ£¬Ôò½«¸ÃÇëÇó°ü×°³ÉÒ»¸öMultipartHttpServletRequest¶ÔÏó
-			5.Îª¸ÃÇëÇó²éÕÒÒ»¸öºÏÊÊµÄ´¦ÀíÆ÷£¬ÕÒµ½´¦ÀíÆ÷ÔòÖ´ĞĞ´¦ÀíÆ÷Á´
-			Èç¹û´¦ÀíÆ÷·µ»ØµÄÊÇÒ»¸öÄ£ĞÍ£¨model£©£¬ÄÇÃ´¿ò¼Ü½«äÖÈ¾ÏàÓ¦µÄÊÓÍ¼
+			å¯åœ¨WebApplicationContext(servlet.xml)ä¸­é…ç½®ä»¥ä¸Šç‰¹æ®ŠBean
+			æˆ– 
+			ç”¨AbstractDispatcherServletInitializerï¼Œç®€åŒ–é…ç½®
+				AbstractDispatcherServletInitializeræ‹“å±•äº†Servletçš„ServletContainerInitializerï¼Œ
+				servlet3ä»¥ä¸Šçš„å®¹å™¨ä¼šè‡ªåŠ¨å‘ç°å¹¶åº”ç”¨ServletContainerInitializeræ¥å£çš„é…ç½®
+		å¤„ç†è¯·æ±‚:
+			1.å…ˆæŠŠWebApplicationContextå¯¹è±¡ä½œä¸ºAttributeç»‘å®šåˆ°è¯·æ±‚ä¸Šï¼Œä»¥ä¾¿Controlleræˆ–å…¶ä»–ç»„ä»¶åˆ©ç”¨
+			2.åœ°åŒºï¼ˆlocaleï¼‰è§£æå™¨ç»‘å®šåˆ°è¯·æ±‚ä¸Š
+			3.ä¸»é¢˜ï¼ˆthemeï¼‰è§£æå™¨ç»‘å®šåˆ°è¯·æ±‚ä¸Š
+			4.å¦‚æœä½ é…ç½®äº†multipartæ–‡ä»¶å¤„ç†å™¨ã€‚å¦‚æœæ–‡ä»¶æ˜¯multipartçš„ï¼Œåˆ™å°†è¯¥è¯·æ±‚åŒ…è£…æˆä¸€ä¸ªMultipartHttpServletRequestå¯¹è±¡
+			5.ä¸ºè¯¥è¯·æ±‚æŸ¥æ‰¾ä¸€ä¸ªåˆé€‚çš„å¤„ç†å™¨ï¼Œæ‰¾åˆ°å¤„ç†å™¨åˆ™æ‰§è¡Œå¤„ç†å™¨é“¾
+			å¦‚æœå¤„ç†å™¨è¿”å›çš„æ˜¯ä¸€ä¸ªæ¨¡å‹ï¼ˆmodelï¼‰ï¼Œé‚£ä¹ˆæ¡†æ¶å°†æ¸²æŸ“ç›¸åº”çš„è§†å›¾
 
 	Controller:
-		ÓÃ@controllerÉùÃ÷Ò»¸öÀà×÷ÎªController ÓÉhandlerMapping²éÕÒ
-		»ò 
-		²»ÓÃ@Controller£¬Ö±½Ó°Ñ¸Ã¿ØÖÆÆ÷ÀàÉùÃ÷³ÉBean(@bean/<bean>)
+		ç”¨@controllerå£°æ˜ä¸€ä¸ªç±»ä½œä¸ºController ç”±handlerMappingæŸ¥æ‰¾
+		æˆ– 
+		ä¸ç”¨@Controllerï¼Œç›´æ¥æŠŠè¯¥æ§åˆ¶å™¨ç±»å£°æ˜æˆBean(@bean/<bean>)
 		
-		ÓÃ@Controller Ò»¶¨Òª¿ªÆô ComponentScan(xml/javaconfig),Ëü¼Ì³ĞÁË@Component
+		ç”¨@Controller ä¸€å®šè¦å¼€å¯ ComponentScan(xml/javaconfig),å®ƒç»§æ‰¿äº†@Component
 
-		@RequestMapping£¨"path"£©×¢½âÀ´½«ÇëÇóURLÓ³Éäµ½Õû¸öcontrollerÀà»òÄ³Ğ©·½·¨ÉÏ
-			method=GET Ö¸¶¨´¦ÀíµÄÇëÇóÀàĞÍ
+		@RequestMappingï¼ˆ"path"ï¼‰æ³¨è§£æ¥å°†è¯·æ±‚URLæ˜ å°„åˆ°æ•´ä¸ªcontrollerç±»æˆ–æŸäº›æ–¹æ³•ä¸Š
+			method=GET æŒ‡å®šå¤„ç†çš„è¯·æ±‚ç±»å‹
 		
-		Ó³ÉäÇëÇóÂ·¾¶:
-			URIÄ£°å:http://project/{paramName}
-				Ó³Éähttp://project/{paramName}ÇëÇó£¬
-				ÔÚ¿ØÖÆÆ÷·½·¨µÄÈë²ÎÓÃ @PathVariable£¨¡°paramName¡±£© È¡µÃparamNameÎ»ÖÃµÄÖµ
+		æ˜ å°„è¯·æ±‚è·¯å¾„:
+			URIæ¨¡æ¿:http://project/{paramName}
+				æ˜ å°„http://project/{paramName}è¯·æ±‚ï¼Œ
+				åœ¨æ§åˆ¶å™¨æ–¹æ³•çš„å…¥å‚ç”¨ @PathVariableï¼ˆâ€œparamNameâ€ï¼‰ å–å¾—paramNameä½ç½®çš„å€¼
 			
-			´øÕıÔò±í´ïÊ½µÄURIÄ£°å£¿£¡
-				/{varName:regex}/* regexÎªÕıÔò±í´ïÊ½
+			å¸¦æ­£åˆ™è¡¨è¾¾å¼çš„URIæ¨¡æ¿ï¼Ÿï¼
+				/{varName:regex}/* regexä¸ºæ­£åˆ™è¡¨è¾¾å¼
 	
-			×¢½âÖ§³ÖÔÚÂ·¾¶ÖĞÊ¹ÓÃÕ¼Î»·û£¬ÒÔÈ¡µÃÒ»Ğ©±¾µØÅäÖÃ¡¢ÏµÍ³ÅäÖÃ¡¢»·¾³±äÁ¿
+			æ³¨è§£æ”¯æŒåœ¨è·¯å¾„ä¸­ä½¿ç”¨å ä½ç¬¦ï¼Œä»¥å–å¾—ä¸€äº›æœ¬åœ°é…ç½®ã€ç³»ç»Ÿé…ç½®ã€ç¯å¢ƒå˜é‡
 				/${xxxx}/*
 			
-			¿ÉÏû·Ñ£¨contentType£©µÄÃ½ÌåÀàĞÍ£¨¸ù¾İÇëÇóÀàĞÍ´¦ÀíÇëÇó£©
-				consumes="application/json" ²ÎÊıÖ¸¶¨´¦Àí
-				ContentTypeÎª¡°ApplicationContext/json¡±µÄÇëÇó,
-				ÇëÇóÌåµÄÖµ·Åµ½@RequestBodyµÄ²ÎÊıÖĞ
+			å¯æ¶ˆè´¹ï¼ˆcontentTypeï¼‰çš„åª’ä½“ç±»å‹ï¼ˆæ ¹æ®è¯·æ±‚ç±»å‹å¤„ç†è¯·æ±‚ï¼‰
+				consumes="application/json" å‚æ•°æŒ‡å®šå¤„ç†
+				ContentTypeä¸ºâ€œApplicationContext/jsonâ€çš„è¯·æ±‚,
+				è¯·æ±‚ä½“çš„å€¼æ”¾åˆ°@RequestBodyçš„å‚æ•°ä¸­
 
-			¿ÉÉú²ú£¨Accept£©µÄÃ½ÌåÀàĞÍ£¨¸ù¾İÏìÓ¦ÀàĞÍ´¦ÀíÇëÇó£©
-				produces="application/json"²ÎÊıÖ¸¶¨´¦Àí
-				AcceptÎª¡°ApplicationContext/json¡±µÄÇëÇó
-				·şÎñÆ÷·µ»ØµÄÊÇApplicationContext/json
+			å¯ç”Ÿäº§ï¼ˆAcceptï¼‰çš„åª’ä½“ç±»å‹ï¼ˆæ ¹æ®å“åº”ç±»å‹å¤„ç†è¯·æ±‚ï¼‰
+				produces="application/json"å‚æ•°æŒ‡å®šå¤„ç†
+				Acceptä¸ºâ€œApplicationContext/jsonâ€çš„è¯·æ±‚
+				æœåŠ¡å™¨è¿”å›çš„æ˜¯ApplicationContext/json
 
-					ÍÆ¼öÓÃMediaType¶¨ÒåºÃµÄÒ»Ğ©³£Á¿Îªconsumes/produces¸³Öµ
+					æ¨èç”¨MediaTypeå®šä¹‰å¥½çš„ä¸€äº›å¸¸é‡ä¸ºconsumes/producesèµ‹å€¼
 
-		¶¨Òå@requestMappingµÄ´¦Àí·½·¨:
-			Ê¹ÓÃ@RequestParam½«ÇëÇó²ÎÊı°ó¶¨ÖÁ·½·¨²ÎÊı,Èç±íµ¥µÄ²ÎÊı
-				@RequestParam(path="id", required=false)£©Ö¸¶¨Òª°ó¶¨µÄ²ÎÊı£¬·Ç±ØĞè
+		å®šä¹‰@requestMappingçš„å¤„ç†æ–¹æ³•:
+			ä½¿ç”¨@RequestParamå°†è¯·æ±‚å‚æ•°ç»‘å®šè‡³æ–¹æ³•å‚æ•°,å¦‚è¡¨å•çš„å‚æ•°
+				@RequestParam(path="id", required=false)ï¼‰æŒ‡å®šè¦ç»‘å®šçš„å‚æ•°ï¼Œéå¿…éœ€
 			
-			Ê¹ÓÃ@RequestBody×¢½âÓ³ÉäÇëÇóÌå
-				¶ÁÈ¡RequestÇëÇóÌåÊı¾İ,°ó¶¨µ½·½·¨²ÎÊıÖĞ
-				@RequestBody×¢½â°µÊ¾ÁË·½·¨²ÎÊıÓ¦¸Ã±»°ó¶¨ÁËHTTPÇëÇóÌåµÄÖµ¡£
-				¿ÉÒÔ´¦ÀíµÄContentTypeÎª£¨GET£¬POST£©
-							   application/x-www-form-urlencoded ±íµ¥Êı¾İ£¨ÒÔPUT·½Ê½Ìá½»Ê±±ØĞèÓÃ@RequestBody£©
-							   application/json, application/xmlµÈmust
-				HttpMessageConverter¸ºÔğ½«HTTPÇëÇóĞÅÏ¢×ª»»³É¶ÔÏó (ex:½«jsonÄÚÈİ×ª»»Îª¶ÔÏó£¬ÒªÓÃjackson2.jar¿â)
+			ä½¿ç”¨@RequestBodyæ³¨è§£æ˜ å°„è¯·æ±‚ä½“
+				è¯»å–Requestè¯·æ±‚ä½“æ•°æ®,ç»‘å®šåˆ°æ–¹æ³•å‚æ•°ä¸­
+				@RequestBodyæ³¨è§£æš—ç¤ºäº†æ–¹æ³•å‚æ•°åº”è¯¥è¢«ç»‘å®šäº†HTTPè¯·æ±‚ä½“çš„å€¼ã€‚
+				å¯ä»¥å¤„ç†çš„ContentTypeä¸ºï¼ˆGETï¼ŒPOSTï¼‰
+							   application/x-www-form-urlencoded è¡¨å•æ•°æ®ï¼ˆä»¥PUTæ–¹å¼æäº¤æ—¶å¿…éœ€ç”¨@RequestBodyï¼‰
+							   application/json, application/xmlç­‰must
+				HttpMessageConverterè´Ÿè´£å°†HTTPè¯·æ±‚ä¿¡æ¯è½¬æ¢æˆå¯¹è±¡ (ex:å°†jsonå†…å®¹è½¬æ¢ä¸ºå¯¹è±¡ï¼Œè¦ç”¨jackson2.jaråº“)
 			
-			Ê¹ÓÃ@ResponseBody×¢½âÓ³ÉäÏìÓ¦Ìå
-				@ResponseBody¸ù¾İRequest¶ÔÏóheader²¿·ÖµÄAcceptÊôĞÔ£¬ÖğÒ»°´acceptÖĞµÄÀàĞÍ£¬È¥±éÀúÕÒµ½ÄÜ´¦ÀíµÄHttpMessageConverter
-				@ResponseBody×¢½âÓë@RequestBody×¢½âÀàËÆ¡£@ResponseBody×¢½â¿É±»Ó¦ÓÃÓÚ·½·¨ÉÏ£¬
-				±êÖ¾¸Ã·½·¨µÄ·µ»ØÖµÓ¦¸Ã±»Ö±½ÓĞ´»Øµ½HTTPÏìÓ¦ÌåÖĞÈ¥,SpringÊ¹ÓÃÁËÒ»¸öHttpMessageConverterÀ´½«·µ»Ø¶ÔÏó×ª»»µ½ÏìÓ¦Ìå
-				(ex:½«·µ»Ø¶ÔÏóÄÚÈİ×ª»»Îªjson£¬ÒªÓÃjackson2.jar¿âµÄMappingJackson2HttpMessageConverter)
+			ä½¿ç”¨@ResponseBodyæ³¨è§£æ˜ å°„å“åº”ä½“
+				@ResponseBodyæ ¹æ®Requestå¯¹è±¡headeréƒ¨åˆ†çš„Acceptå±æ€§ï¼Œé€ä¸€æŒ‰acceptä¸­çš„ç±»å‹ï¼Œå»éå†æ‰¾åˆ°èƒ½å¤„ç†çš„HttpMessageConverter
+				@ResponseBodyæ³¨è§£ä¸@RequestBodyæ³¨è§£ç±»ä¼¼ã€‚@ResponseBodyæ³¨è§£å¯è¢«åº”ç”¨äºæ–¹æ³•ä¸Šï¼Œ
+				æ ‡å¿—è¯¥æ–¹æ³•çš„è¿”å›å€¼åº”è¯¥è¢«ç›´æ¥å†™å›åˆ°HTTPå“åº”ä½“ä¸­å»,Springä½¿ç”¨äº†ä¸€ä¸ªHttpMessageConverteræ¥å°†è¿”å›å¯¹è±¡è½¬æ¢åˆ°å“åº”ä½“
+				(ex:å°†è¿”å›å¯¹è±¡å†…å®¹è½¬æ¢ä¸ºjsonï¼Œè¦ç”¨jackson2.jaråº“çš„MappingJackson2HttpMessageConverter)
 			
-		Ê¹ÓÃ@RestController×¢½â´´½¨REST¿ØÖÆÆ÷
+		ä½¿ç”¨@RestControlleræ³¨è§£åˆ›å»ºRESTæ§åˆ¶å™¨
 			@RestController=@Controller+@ResponseBody
 
-		Ê¹ÓÃHTTPÊµÌåResponseEntity£¬HttpEntity~=ResponseBody,RequestBody+´æÈ¡ÇëÇóÍ·ºÍÏìÓ¦Í·
-			Ê¹ÓÃÁËHttpMessageConverter£¬µ±·µ»ØµÄÊÇResponseEntityÊ±£¬Spring»á×Ô¶¯ÓÃhttpMessageConverter°ÑResponseEntityµÄÀàÈİ×ª»»Îªjson
-			SpringÊ¹ÓÃÁËHttpMessageConverterÀ´¶ÔÇëÇóÁ÷ºÍÏìÓ¦Á÷½øĞĞ×ª»»¡£
-			HttpEntityÓë@RequestBodyºÍ@ResponseBodyºÜÏàËÆ¡£³ıÁËÄÜ»ñµÃÇëÇóÌåºÍÏìÓ¦ÌåÖĞµÄÄÚÈİÖ®Íâ£¬
-			HttpEntity£¨ÒÔ¼°×¨ÃÅ¸ºÔğ´¦ÀíÏìÓ¦µÄResponseEntity×ÓÀà£©»¹¿ÉÒÔ´æÈ¡ÇëÇóÍ·ºÍÏìÓ¦Í·
-			=@responseBody+ÉèÖÃÏìÓ¦Í·
+		ä½¿ç”¨HTTPå®ä½“ResponseEntityï¼ŒHttpEntity~=ResponseBody,RequestBody+å­˜å–è¯·æ±‚å¤´å’Œå“åº”å¤´
+			ä½¿ç”¨äº†HttpMessageConverterï¼Œå½“è¿”å›çš„æ˜¯ResponseEntityæ—¶ï¼ŒSpringä¼šè‡ªåŠ¨ç”¨httpMessageConverteræŠŠResponseEntityçš„ç±»å®¹è½¬æ¢ä¸ºjson
+			Springä½¿ç”¨äº†HttpMessageConverteræ¥å¯¹è¯·æ±‚æµå’Œå“åº”æµè¿›è¡Œè½¬æ¢ã€‚
+			HttpEntityä¸@RequestBodyå’Œ@ResponseBodyå¾ˆç›¸ä¼¼ã€‚é™¤äº†èƒ½è·å¾—è¯·æ±‚ä½“å’Œå“åº”ä½“ä¸­çš„å†…å®¹ä¹‹å¤–ï¼Œ
+			HttpEntityï¼ˆä»¥åŠä¸“é—¨è´Ÿè´£å¤„ç†å“åº”çš„ResponseEntityå­ç±»ï¼‰è¿˜å¯ä»¥å­˜å–è¯·æ±‚å¤´å’Œå“åº”å¤´
+			=@responseBody+è®¾ç½®å“åº”å¤´
 
 		@ModelAttribute
-			ÓÃÔÚ·½·¨²ÎÊıÉÏ:
-				°ÑModelÖĞµÄ¶ÔÏóÊı¾İ°ó¶¨µ½²ÎÊıÉÏ 
-			ÓÃÔÚ·½·¨·µ»ØÖµ:
-				Ê¹@RequestMapping ·½·¨·µ»ØÖµ×÷ÎªÄ£ĞÍÊı¾İ£¬×Ô¶¯½«¸Ã·µ»ØÖµ¼ÓÈëµ½ModelMapÖĞ£¬¹©ÊÓÍ¼·ÃÎÊ
+			ç”¨åœ¨æ–¹æ³•å‚æ•°ä¸Š:
+				æŠŠModelä¸­çš„å¯¹è±¡æ•°æ®ç»‘å®šåˆ°å‚æ•°ä¸Š 
+			ç”¨åœ¨æ–¹æ³•è¿”å›å€¼:
+				ä½¿@RequestMapping æ–¹æ³•è¿”å›å€¼ä½œä¸ºæ¨¡å‹æ•°æ®ï¼Œè‡ªåŠ¨å°†è¯¥è¿”å›å€¼åŠ å…¥åˆ°ModelMapä¸­ï¼Œä¾›è§†å›¾è®¿é—®
 				
-				Ê¹ÓÃ@ModelAttribute×¢½âµÄ·½·¨»áÔÚÃ¿Ò»¸ö@RequestMapping±ê×¢µÄ·½·¨Ç°Ö´ĞĞ£¬
-				controllerÀïµÄ·½·¨ÊµĞĞÊ±»áÓÃÇëÇóÖĞµÄ²ÎÊı°ó¶¨µ½·½·¨²ÎÊıÖĞ
+				ä½¿ç”¨@ModelAttributeæ³¨è§£çš„æ–¹æ³•ä¼šåœ¨æ¯ä¸€ä¸ª@RequestMappingæ ‡æ³¨çš„æ–¹æ³•å‰æ‰§è¡Œï¼Œ
+				controlleré‡Œçš„æ–¹æ³•å®è¡Œæ—¶ä¼šç”¨è¯·æ±‚ä¸­çš„å‚æ•°ç»‘å®šåˆ°æ–¹æ³•å‚æ•°ä¸­
 
-				ÓÃ·¨¼¼ÇÉ:
-				±©Â¶±íµ¥ÒıÓÃ¶ÔÏóÎªÄ£ĞÍÊı¾İ£º·ÅÔÚ´¦ÀíÆ÷µÄÒ»°ã·½·¨£¨·Ç¹¦ÄÜ´¦Àí·½·¨£©ÉÏÊ±£¬ÊÇÎª±íµ¥×¼±¸ÒªÕ¹Ê¾µÄ±íµ¥ÒıÓÃ¶ÔÏó
-			Óë@SessionAttributes("currentUser"£©ÅäºÏ
-			Íù Session ÖĞ´æ´¢»òÕß´Ó Session ÖĞÈ¡³öÖ¸¶¨ÊôĞÔÃûµÄ¾ßÌå¶ÔÏó
+				ç”¨æ³•æŠ€å·§:
+				æš´éœ²è¡¨å•å¼•ç”¨å¯¹è±¡ä¸ºæ¨¡å‹æ•°æ®ï¼šæ”¾åœ¨å¤„ç†å™¨çš„ä¸€èˆ¬æ–¹æ³•ï¼ˆéåŠŸèƒ½å¤„ç†æ–¹æ³•ï¼‰ä¸Šæ—¶ï¼Œæ˜¯ä¸ºè¡¨å•å‡†å¤‡è¦å±•ç¤ºçš„è¡¨å•å¼•ç”¨å¯¹è±¡
+			ä¸@SessionAttributes("currentUser"ï¼‰é…åˆ
+			å¾€ Session ä¸­å­˜å‚¨æˆ–è€…ä» Session ä¸­å–å‡ºæŒ‡å®šå±æ€§åçš„å…·ä½“å¯¹è±¡
 			
-			0.£¡Ê¹ÓÃ@ModelAttribute×¢½âµÄ·½·¨»áÔÚÃ¿Ò»¸ö@RequestMapping±ê×¢µÄ·½·¨Ç°Ö´ĞĞ£¬			
-			1.ModelÀà£¬£¨²»Í¨¹ı@ModelAttributeÌí¼Ó£©Ä¬ÈÏÔÚ¿ØÖÆÆ÷·µ»ØµÄÊÓÍ¼Ãû¶ÔÓ¦µÄÊÓÍ¼ÉÏÓĞĞ§£¬
-			¡¤Í¬Ò»¿ØÖÆÆ÷Àà²»Í¬·½·¨¼äModel²»¹²Ïí£¬ModelÀë¿ª¿ØÖÆÆ÷´¦Àí·½·¨ºó¾ÍÖ»ÄÜÔÚÊÓÍ¼ÖĞÏÔÊ¾Êı¾İ
-			2.Í¨¹ıÔÚ·½·¨ÉÏ@ModelAttribute£¬½«·µ»ØÖµ×÷Ä£ĞÍÊı¾İÌí¼Óµ½Ä£ĞÍÉÏ£¬
-			¡¤µ±Êä³öÊÓÍ¼Ê±£¬@ModelAttributeµÄmodel¸´ÖÆµ½Model
+			0.ï¼ä½¿ç”¨@ModelAttributeæ³¨è§£çš„æ–¹æ³•ä¼šåœ¨æ¯ä¸€ä¸ª@RequestMappingæ ‡æ³¨çš„æ–¹æ³•å‰æ‰§è¡Œï¼Œ			
+			1.Modelç±»ï¼Œï¼ˆä¸é€šè¿‡@ModelAttributeæ·»åŠ ï¼‰é»˜è®¤åœ¨æ§åˆ¶å™¨è¿”å›çš„è§†å›¾åå¯¹åº”çš„è§†å›¾ä¸Šæœ‰æ•ˆï¼Œ
+			Â·åŒä¸€æ§åˆ¶å™¨ç±»ä¸åŒæ–¹æ³•é—´Modelä¸å…±äº«ï¼ŒModelç¦»å¼€æ§åˆ¶å™¨å¤„ç†æ–¹æ³•åå°±åªèƒ½åœ¨è§†å›¾ä¸­æ˜¾ç¤ºæ•°æ®
+			2.é€šè¿‡åœ¨æ–¹æ³•ä¸Š@ModelAttributeï¼Œå°†è¿”å›å€¼ä½œæ¨¡å‹æ•°æ®æ·»åŠ åˆ°æ¨¡å‹ä¸Šï¼Œ
+			Â·å½“è¾“å‡ºè§†å›¾æ—¶ï¼Œ@ModelAttributeçš„modelå¤åˆ¶åˆ°Model
 
-			3.Àë¿ª¿ØÖÆÆ÷ºó£¬modelÒª²»äÖÈ¾µ½ÊÓÍ¼ÏÔÊ¾£¬Òª²»ÏûÊ§
+			3.ç¦»å¼€æ§åˆ¶å™¨åï¼Œmodelè¦ä¸æ¸²æŸ“åˆ°è§†å›¾æ˜¾ç¤ºï¼Œè¦ä¸æ¶ˆå¤±
 
-		@SessionAttributes£¨¡°name¡±£©
-			ÓÃÓÚ¿ØÖÆÆ÷Àà¼¶ÉÏ
-			²ÎÊıÖ¸¶¨´æÖüÔÚsessionÉÏµÄÄ£ĞÍÊı¾İµÄÃû³Æ
-			°ÑÖ¸¶¨Ä£ĞÍÊı¾İÃûÌí¼Óµ½Ò»¸ösessionÖĞ
+		@SessionAttributesï¼ˆâ€œnameâ€ï¼‰
+			ç”¨äºæ§åˆ¶å™¨ç±»çº§ä¸Š
+			å‚æ•°æŒ‡å®šå­˜è´®åœ¨sessionä¸Šçš„æ¨¡å‹æ•°æ®çš„åç§°
+			æŠŠæŒ‡å®šæ¨¡å‹æ•°æ®åæ·»åŠ åˆ°ä¸€ä¸ªsessionä¸­
 			
-		»ùÓÚServlet3µÄÒì²½ÇëÇó´¦Àí
-			¿ØÖÆÆ÷¿ÉÒÔ·µ»ØDeferredResult»òCallable¶ÔÏóÀ´Òì²½µØ¼ÆËãÆä·µ»ØÖµ
-			Òì²½ÇëÇó´¦ÀíµÄÏà¹ØÅäÖÃ:
-				ÔÚweb.xmlµÄservletÔªËØÏÂÌí¼Ó×Ó±êÇ© ÔÚ·şÎñÆ÷¿ªÆôÒì²½Ö§³Ö
-					<async-supported>true</async-supported>ÉèÖÃÎªtrue
-					Filter¶¼±ØĞëÅäÖÃÎªÖ§³ÖASYNCÀàĞÍµÄÇëÇó·ÖÅÉ
-				0»òÓÃAbstractAnnotationConfigDispatcherServletInitializerÀ´¼ò»¯ÅäÖÃ
-			1.¿ØÖÆÆ÷·½·¨¿ÉÒÔ·µ»ØÒ»¸öCallable¶ÔÏó£¬½øĞĞÒì²½´¦Àí
-			1.ÁíÒ»¸öÑ¡Ôñ£¬ÊÇÈÃ¿ØÖÆÆ÷·½·¨·µ»ØÒ»¸öDeferredResultµÄÊµÀı
-			Çø±ğ:callcableÓÉÖ»ÄÜÓÉtaskExecutor´¦Àí
-			   DeferredResult¿ÉÓÉÈÎºÎÏß³Ì´¦Àí
+		åŸºäºServlet3çš„å¼‚æ­¥è¯·æ±‚å¤„ç†
+			æ§åˆ¶å™¨å¯ä»¥è¿”å›DeferredResultæˆ–Callableå¯¹è±¡æ¥å¼‚æ­¥åœ°è®¡ç®—å…¶è¿”å›å€¼
+			å¼‚æ­¥è¯·æ±‚å¤„ç†çš„ç›¸å…³é…ç½®:
+				åœ¨web.xmlçš„servletå…ƒç´ ä¸‹æ·»åŠ å­æ ‡ç­¾ åœ¨æœåŠ¡å™¨å¼€å¯å¼‚æ­¥æ”¯æŒ
+					<async-supported>true</async-supported>è®¾ç½®ä¸ºtrue
+					Filteréƒ½å¿…é¡»é…ç½®ä¸ºæ”¯æŒASYNCç±»å‹çš„è¯·æ±‚åˆ†æ´¾
+				0æˆ–ç”¨AbstractAnnotationConfigDispatcherServletInitializeræ¥ç®€åŒ–é…ç½®
+			1.æ§åˆ¶å™¨æ–¹æ³•å¯ä»¥è¿”å›ä¸€ä¸ªCallableå¯¹è±¡ï¼Œè¿›è¡Œå¼‚æ­¥å¤„ç†
+			1.å¦ä¸€ä¸ªé€‰æ‹©ï¼Œæ˜¯è®©æ§åˆ¶å™¨æ–¹æ³•è¿”å›ä¸€ä¸ªDeferredResultçš„å®ä¾‹
+			åŒºåˆ«:callcableç”±åªèƒ½ç”±taskExecutorå¤„ç†
+			   DeferredResultå¯ç”±ä»»ä½•çº¿ç¨‹å¤„ç†
 			
-			CallableµÄÒì²½ÇëÇóÁ÷³Ì:(ÓÉTaskExecutorÏß³Ì´¦Àí)
-				1.¿ØÖÆÆ÷·½·¨·µ»áCallable¶ÔÏó
-			!	2.½øĞĞÒì²½´¦Àí£¬²¢°Ñ¸ÃCallable¶ÔÏóÌá½»¸øÁíÒ»¸ö¶ÀÁ¢Ïß³ÌµÄÖ´ĞĞÆ÷TaskExecutor´¦Àí
-				3. DispatcherServletºÍËùÓĞ¹ıÂËÆ÷¶¼ÍË³öServletÈİÆ÷Ïß³Ì£¬µ«ÏìÓ¦¶ÔÏóÎ´·µ»Ø¸ø¿Í»§
-				4. Callable¶ÔÏó´¦ÀíÍê±Ï·µ»Ø½á¹û£¬´ËÊ±Spring MVC»áÖØĞÂ°ÑÇëÇó·ÖÅÉ»ØServletÈİÆ÷£¬»Ö¸´´¦Àí
-				5. DispatcherServletÔÙ´Î±»µ÷ÓÃ£¬»Ö¸´¶ÔCallableÒì²½´¦ÀíËù·µ»Ø½á¹ûµÄ´¦Àí
+			Callableçš„å¼‚æ­¥è¯·æ±‚æµç¨‹:(ç”±TaskExecutorçº¿ç¨‹å¤„ç†)
+				1.æ§åˆ¶å™¨æ–¹æ³•è¿”ä¼šCallableå¯¹è±¡
+			!	2.è¿›è¡Œå¼‚æ­¥å¤„ç†ï¼Œå¹¶æŠŠè¯¥Callableå¯¹è±¡æäº¤ç»™å¦ä¸€ä¸ªç‹¬ç«‹çº¿ç¨‹çš„æ‰§è¡Œå™¨TaskExecutorå¤„ç†
+				3. DispatcherServletå’Œæ‰€æœ‰è¿‡æ»¤å™¨éƒ½é€€å‡ºServletå®¹å™¨çº¿ç¨‹ï¼Œä½†å“åº”å¯¹è±¡æœªè¿”å›ç»™å®¢æˆ·
+				4. Callableå¯¹è±¡å¤„ç†å®Œæ¯•è¿”å›ç»“æœï¼Œæ­¤æ—¶Spring MVCä¼šé‡æ–°æŠŠè¯·æ±‚åˆ†æ´¾å›Servletå®¹å™¨ï¼Œæ¢å¤å¤„ç†
+				5. DispatcherServletå†æ¬¡è¢«è°ƒç”¨ï¼Œæ¢å¤å¯¹Callableå¼‚æ­¥å¤„ç†æ‰€è¿”å›ç»“æœçš„å¤„ç†
 			
-			DeferredResultÒì²½ÇëÇóÁ÷³Ì:(¿ÉÓÉÈÎºÎÏß³Ì´¦Àí)
-				1.¿ØÖÆÆ÷ÏÈ·µ»ØÒ»¸öDeferredResult¶ÔÏó£¬²¢°ÑËü´æÈ¡ÔÚÄÚ´æ£¨¶ÓÁĞ»òÁĞ±íµÈ£©ÖĞÒÔ±ã´æÈ¡
-			!	2. Spring MVC¿ªÊ¼½øĞĞÒì²½´¦Àí
-				3. DispatcherServletºÍËùÓĞ¹ıÂËÆ÷¶¼ÍË³öServletÈİÆ÷Ïß³Ì£¬µ«´ËÊ±·½·¨µÄÏìÓ¦¶ÔÏóÈÔÎ´·µ»Ø
-				4.ÓÉ´¦Àí¸ÃÇëÇóµÄÏß³Ì¶Ô DeferredResult½øĞĞÉèÖµ£¬È»ºóSpring MVC»áÖØĞÂ°ÑÇëÇó·ÖÅÉ»ØServletÈİÆ÷£¬»Ö¸´´¦Àí
-				5. DispatcherServletÔÙ´Î±»µ÷ÓÃ£¬»Ö¸´¶Ô¸ÃÒì²½·µ»Ø½á¹ûµÄ´¦Àí
+			DeferredResultå¼‚æ­¥è¯·æ±‚æµç¨‹:(å¯ç”±ä»»ä½•çº¿ç¨‹å¤„ç†)
+				1.æ§åˆ¶å™¨å…ˆè¿”å›ä¸€ä¸ªDeferredResultå¯¹è±¡ï¼Œå¹¶æŠŠå®ƒå­˜å–åœ¨å†…å­˜ï¼ˆé˜Ÿåˆ—æˆ–åˆ—è¡¨ç­‰ï¼‰ä¸­ä»¥ä¾¿å­˜å–
+			!	2. Spring MVCå¼€å§‹è¿›è¡Œå¼‚æ­¥å¤„ç†
+				3. DispatcherServletå’Œæ‰€æœ‰è¿‡æ»¤å™¨éƒ½é€€å‡ºServletå®¹å™¨çº¿ç¨‹ï¼Œä½†æ­¤æ—¶æ–¹æ³•çš„å“åº”å¯¹è±¡ä»æœªè¿”å›
+				4.ç”±å¤„ç†è¯¥è¯·æ±‚çš„çº¿ç¨‹å¯¹ DeferredResultè¿›è¡Œè®¾å€¼ï¼Œç„¶åSpring MVCä¼šé‡æ–°æŠŠè¯·æ±‚åˆ†æ´¾å›Servletå®¹å™¨ï¼Œæ¢å¤å¤„ç†
+				5. DispatcherServletå†æ¬¡è¢«è°ƒç”¨ï¼Œæ¢å¤å¯¹è¯¥å¼‚æ­¥è¿”å›ç»“æœçš„å¤„ç†
 				
-	Spring MVC ´¦ÀíÆ÷Ó³Éä(HandlerMapping)
-		 <mvc:annotation-driven/>//×÷ÓÃÊÇ´¦ÀíÆ÷Ó³Éä
-		 //×÷ÓÃÓÚ@Controller,Ëü»á×Ô¶¯×¢²áDefaultAnnotationHandlerMappingÓëAnnotationMethodHandlerAdapter
-		 //Ä¬ÈÏÅäÖÃÁËRequestMappingHandlerAdapter,²¢ÎªËûÅäÖÃÁËÒ»¸öÄ¬ÈÏµÄHttpMessageConverter
-		 //ResourceHttpRequestHandlerÕâÊÇSpringMvcµÄÄ¬ÈÏ¿ØÖÆÆ÷£¬´¦Àí¾²Ì¬×ÊÔ´
+	Spring MVC å¤„ç†å™¨æ˜ å°„(HandlerMapping)
+		 <mvc:annotation-driven/>//ä½œç”¨æ˜¯å¤„ç†å™¨æ˜ å°„
+		 //ä½œç”¨äº@Controller,å®ƒä¼šè‡ªåŠ¨æ³¨å†ŒDefaultAnnotationHandlerMappingä¸AnnotationMethodHandlerAdapter
+		 //é»˜è®¤é…ç½®äº†RequestMappingHandlerAdapter,å¹¶ä¸ºä»–é…ç½®äº†ä¸€ä¸ªé»˜è®¤çš„HttpMessageConverter
+		 //ResourceHttpRequestHandlerè¿™æ˜¯SpringMvcçš„é»˜è®¤æ§åˆ¶å™¨ï¼Œå¤„ç†é™æ€èµ„æº
 		 RequestMappingHandlerAdapter
-			µ÷ÓÃ¾ßÌåµÄ·½·¨¶ÔÓÃ»§·¢À´µÄÇëÇóÀ´½øĞĞ´¦Àí
-		 ÅäÖÃÁËRequestMappingHandlerMapping		//ÓÃÀ´Ó³Éä¿ØÖÆÆ÷
-			before£ºÉÏ¸ö°æ±¾Òª¶¨ÒåÒ»¸ö»ò¶à¸öHandlerMapping <bean>ÒÔ½«½øÈëÈİÆ÷µÄwebÇëÇóÓ³Éäµ½ºÏÊÊµÄ´¦ÀíÆ÷·½·¨
-			now£º¶¨ÒåRequestMappingHandlerMappingÀàµÄbean ×Ô¶¯²éÕÒ@RequestMappingµÄ@Controller¿ØÖÆÆ÷bean
+			è°ƒç”¨å…·ä½“çš„æ–¹æ³•å¯¹ç”¨æˆ·å‘æ¥çš„è¯·æ±‚æ¥è¿›è¡Œå¤„ç†
+		 é…ç½®äº†RequestMappingHandlerMapping		//ç”¨æ¥æ˜ å°„æ§åˆ¶å™¨
+			beforeï¼šä¸Šä¸ªç‰ˆæœ¬è¦å®šä¹‰ä¸€ä¸ªæˆ–å¤šä¸ªHandlerMapping <bean>ä»¥å°†è¿›å…¥å®¹å™¨çš„webè¯·æ±‚æ˜ å°„åˆ°åˆé€‚çš„å¤„ç†å™¨æ–¹æ³•
+			nowï¼šå®šä¹‰RequestMappingHandlerMappingç±»çš„bean è‡ªåŠ¨æŸ¥æ‰¾@RequestMappingçš„@Controlleræ§åˆ¶å™¨bean
 			
-			¶¨ÒåÒ»¸ö´¦ÀíÆ÷Ó³ÉäµÄ·½·¨ ²¢ ÅäÖÃÀ¹½ØÆ÷
+			å®šä¹‰ä¸€ä¸ªå¤„ç†å™¨æ˜ å°„çš„æ–¹æ³• å¹¶ é…ç½®æ‹¦æˆªå™¨
 			<bean id="handlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
 				<property name="interceptors">
 					<bean class="example.MyInterceptor"/>
 				</property>
 			</bean>
 			
-		Spring MVC Ê¹ÓÃHandlerInterceptorÀ¹½ØÇëÇó£¬ÔÚµ÷ÓÃMappingHandlerAdapterÇ°ºóÀ¹½ØÇëÇó
-		 HandlerInterceptor½Ó¿Ú
-		 »ò
-		 ¼Ì³ĞHandlerInterceptorAdapter¼ò»¯À¹½ØÆ÷µÄÅäÖÃ
-			¿ØÖÆÆ÷·½·¨´¦ÀíµÄÇëÇó¶¼»á±»ÅäÖÃµÄÀ¹½ØÆ÷ÏÈÀ¹½Øµ½
-			ÊµÏÖHandlerInterceptor½Ó¿ÚµÄÀà×öÀ¹½ØÆ÷À¹½Ø´¦ÀíÇëÇó£¬¶ÔHttpServletRequest, HttpServletResponse´¦ÀíÀ¹½Ø
-				°üº¬3¸ö·½·¨:
-					preHandle()  	ÔÚ´¦ÀíÆ÷Ç°Ö´ĞĞ
-					postHandle() 	ÔÚ´¦ÀíÆ÷ºóÖ´ĞĞ
-					afterCompletion()	ÔÚÕû¸öÇëÇóÍê³ÉºóÖ´ĞĞ
-			ÔÚ´¦ÀíÆ÷Ó³ÉäÀïÅäÖÃinterceptorsÊôĞÔ£¬Ê¹ÓÃÀ¹½ØÆ÷s¿ÉÒÔ¶¨Òå¶à¸öÀ¹½ØÆ÷
-				ÉÏÃæµÄÅäÖÃ
+		Spring MVC ä½¿ç”¨HandlerInterceptoræ‹¦æˆªè¯·æ±‚ï¼Œåœ¨è°ƒç”¨MappingHandlerAdapterå‰åæ‹¦æˆªè¯·æ±‚
+		 HandlerInterceptoræ¥å£
+		 æˆ–
+		 ç»§æ‰¿HandlerInterceptorAdapterç®€åŒ–æ‹¦æˆªå™¨çš„é…ç½®
+			æ§åˆ¶å™¨æ–¹æ³•å¤„ç†çš„è¯·æ±‚éƒ½ä¼šè¢«é…ç½®çš„æ‹¦æˆªå™¨å…ˆæ‹¦æˆªåˆ°
+			å®ç°HandlerInterceptoræ¥å£çš„ç±»åšæ‹¦æˆªå™¨æ‹¦æˆªå¤„ç†è¯·æ±‚ï¼Œå¯¹HttpServletRequest, HttpServletResponseå¤„ç†æ‹¦æˆª
+				åŒ…å«3ä¸ªæ–¹æ³•:
+					preHandle()  	åœ¨å¤„ç†å™¨å‰æ‰§è¡Œ
+					postHandle() 	åœ¨å¤„ç†å™¨åæ‰§è¡Œ
+					afterCompletion()	åœ¨æ•´ä¸ªè¯·æ±‚å®Œæˆåæ‰§è¡Œ
+			åœ¨å¤„ç†å™¨æ˜ å°„é‡Œé…ç½®interceptorså±æ€§ï¼Œä½¿ç”¨æ‹¦æˆªå™¨så¯ä»¥å®šä¹‰å¤šä¸ªæ‹¦æˆªå™¨
+				ä¸Šé¢çš„é…ç½®
 			<bean class="handlerMapping">
 				<property name="interceptors"
 					<list>
 						<bean class="example.MyInterceptor"/>
 						<ref name="localinterceptor"/>
 		
-		²¿ÊğÀ¹½ØÆ÷
-			ÔÚxmlÅäÖÃÎÄ¼şÖĞ
-				<mvc:interceptors >		//mvcÀ¹½ØÆ÷
-					<!-- Èç¹û²»¶¨Òå mvc:mapping path ½«À¹½ØËùÓĞµÄURLÇëÇó -->	
+		éƒ¨ç½²æ‹¦æˆªå™¨
+			åœ¨xmlé…ç½®æ–‡ä»¶ä¸­
+				<mvc:interceptors >		//mvcæ‹¦æˆªå™¨
+					<!-- å¦‚æœä¸å®šä¹‰ mvc:mapping path å°†æ‹¦æˆªæ‰€æœ‰çš„URLè¯·æ±‚ -->	
 					<mvc:mapping path="/user/**" />  
-					<bean class="introceptor.Minterceptor">	//¾ßÌåÀ¹½ØÆ÷
+					<bean class="introceptor.Minterceptor">	//å…·ä½“æ‹¦æˆªå™¨
 					</bean>
 				</mvc:interceptors>
 		
-			Ê¹ÓÃ@ResponseBody»òResponseEntityµÄ·½·¨Ê±
-			HttpMessageConverter»áÔÚÀ¹½ØÆ÷µÄpostHandle·½·¨±»µ÷Ö®Ç°¾Í°ÑĞÅÏ¢Ğ´»ØÏìÓ¦ÖĞ¡£ÕâÑùÀ¹½ØÆ÷¾ÍÎŞ·¨ÔÙ¸Ä±äÏìÓ¦ÁË
-			ÈôÒªpostHandlerÆğ×÷ÓÃ£¬
-			ÇëÈÃÄãµÄÓ¦ÓÃÊµÏÖResponseBodyAdvice½Ó¿Ú£¬²¢½«Æä¶¨ÒåÎªÒ»¸ö@ControllerAdvice bean»òÖ±½ÓÔÚRequestMappingHandlerMappingÖĞÅäÖÃ¡£
+			ä½¿ç”¨@ResponseBodyæˆ–ResponseEntityçš„æ–¹æ³•æ—¶
+			HttpMessageConverterä¼šåœ¨æ‹¦æˆªå™¨çš„postHandleæ–¹æ³•è¢«è°ƒä¹‹å‰å°±æŠŠä¿¡æ¯å†™å›å“åº”ä¸­ã€‚è¿™æ ·æ‹¦æˆªå™¨å°±æ— æ³•å†æ”¹å˜å“åº”äº†
+			è‹¥è¦postHandlerèµ·ä½œç”¨ï¼Œ
+			è¯·è®©ä½ çš„åº”ç”¨å®ç°ResponseBodyAdviceæ¥å£ï¼Œå¹¶å°†å…¶å®šä¹‰ä¸ºä¸€ä¸ª@ControllerAdvice beanæˆ–ç›´æ¥åœ¨RequestMappingHandlerMappingä¸­é…ç½®ã€‚
 	
-	Spring MVC ÊÓÍ¼½âÎö(ViewResolver)
-		½âÎöÊÓÍ¼Ãû£¬¸ø·Ö·¢Æ÷äÖÈ¾
-		»ù´¡:Ê¹ÓÃViewResolver½Ó¿Ú½âÎöÊÓÍ¼
-		SpringÓĞ·Ç³£¶àÄÚÖÃµÄÊÓÍ¼½âÎöÆ÷:
-			ÆäÖĞ£ºUrlBasedViewResolver
-					ViewResolver½Ó¿ÚµÄÒ»¸ö¼òµ¥ÊµÏÖ¡£ËüÖ±½ÓÊ¹ÓÃURLÀ´½âÎöµ½Âß¼­ÊÓÍ¼Ãû
+	Spring MVC è§†å›¾è§£æ(ViewResolver)
+		è§£æè§†å›¾åï¼Œç»™åˆ†å‘å™¨æ¸²æŸ“
+		åŸºç¡€:ä½¿ç”¨ViewResolveræ¥å£è§£æè§†å›¾
+		Springæœ‰éå¸¸å¤šå†…ç½®çš„è§†å›¾è§£æå™¨:
+			å…¶ä¸­ï¼šUrlBasedViewResolver
+					ViewResolveræ¥å£çš„ä¸€ä¸ªç®€å•å®ç°ã€‚å®ƒç›´æ¥ä½¿ç”¨URLæ¥è§£æåˆ°é€»è¾‘è§†å›¾å
 				InternalResourceViewResolver	
-					UrlBasedViewResolverµÄÒ»¸öºÃÓÃµÄ×ÓÀà¡£ËüÖ§³ÖÄÚ²¿×ÊÔ´ÊÓÍ¼£¨¾ßÌåÀ´Ëµ£¬ServletºÍJSP£©¡¢
-					ÒÔ¼°ÖîÈçJstlViewºÍTilesViewµÈÀàµÄ×ÓÀà
+					UrlBasedViewResolverçš„ä¸€ä¸ªå¥½ç”¨çš„å­ç±»ã€‚å®ƒæ”¯æŒå†…éƒ¨èµ„æºè§†å›¾ï¼ˆå…·ä½“æ¥è¯´ï¼ŒServletå’ŒJSPï¼‰ã€
+					ä»¥åŠè¯¸å¦‚JstlViewå’ŒTilesViewç­‰ç±»çš„å­ç±»
 				ResourceBundleViewResolver	
-					ÊÓÍ¼½âÎöÆ÷½Ó¿ÚViewResolverµÄÒ»¸öÊµÏÖ£¬²ÉÓÃbundle¸ùÂ·¾¶ËùÖ¸¶¨µÄResourceBundleÖĞµÄbean¶¨Òå×÷ÎªÅäÖÃ¡£
-					Ò»°ãbundle¶¼¶¨ÒåÔÚclasspathÂ·¾¶ÏÂµÄÒ»¸öÅäÖÃÎÄ¼şÖĞ¡£Ä¬ÈÏµÄÅäÖÃÎÄ¼şÃûÎªviews.properties¡£
+					è§†å›¾è§£æå™¨æ¥å£ViewResolverçš„ä¸€ä¸ªå®ç°ï¼Œé‡‡ç”¨bundleæ ¹è·¯å¾„æ‰€æŒ‡å®šçš„ResourceBundleä¸­çš„beanå®šä¹‰ä½œä¸ºé…ç½®ã€‚
+					ä¸€èˆ¬bundleéƒ½å®šä¹‰åœ¨classpathè·¯å¾„ä¸‹çš„ä¸€ä¸ªé…ç½®æ–‡ä»¶ä¸­ã€‚é»˜è®¤çš„é…ç½®æ–‡ä»¶åä¸ºviews.propertiesã€‚
 				xmlViewResolver
 					 <property name="location">
 						<value>/WEB-INF/spring-views.xml</value>
-					</property>Ö¸¶¨xmlViewResolverÈ¥/WEB-INF/spring-views.xmlÕÒµ½Òª·µ»Ø¸øDsipatcherServletµÄÊÓÍ¼bean
-				Èç¹ûĞèÒªÔÚÓ¦ÓÃÖĞÊ¹ÓÃ¶àÖÖ²»Í¬µÄÊÓÍ¼¼¼Êõ£¬¿ÉÒÔÊ¹ÓÃResourceBundleViewResolver
+					</property>æŒ‡å®šxmlViewResolverå»/WEB-INF/spring-views.xmlæ‰¾åˆ°è¦è¿”å›ç»™DsipatcherServletçš„è§†å›¾bean
+				å¦‚æœéœ€è¦åœ¨åº”ç”¨ä¸­ä½¿ç”¨å¤šç§ä¸åŒçš„è§†å›¾æŠ€æœ¯ï¼Œå¯ä»¥ä½¿ç”¨ResourceBundleViewResolver
 		
-		ÁíÍâ£ºorg.springframework.http.converter.json.MappingJacksonHttpMessageConverter
-			ÓÃÓÚ½âÎöjsonµÄÏûÏ¢×ª»»Æ÷£¬MessageConverterÓĞ¾Í²»ÓÃÊÓÍ¼½âÎöÁË
+		å¦å¤–ï¼šorg.springframework.http.converter.json.MappingJacksonHttpMessageConverter
+			ç”¨äºè§£æjsonçš„æ¶ˆæ¯è½¬æ¢å™¨ï¼ŒMessageConverteræœ‰å°±ä¸ç”¨è§†å›¾è§£æäº†
 		
-		ÍÆ¼öÓÃthymeleafÊÓÍ¼¼¼Êõ
-			ÒıÈëÒÀÀµ
+		æ¨èç”¨thymeleafè§†å›¾æŠ€æœ¯
+			å¼•å…¥ä¾èµ–
 				thymeleaf
 				thymeleaf-springX
-			ÅäÖÃ£º
-				ServletContextTemplateResolver¡· SpringTemplateEngine¡·ThymeleafViewResolver
-				@Bean//´´½¨ThymeleafÊÓÍ¼½âÎöÆ÷
+			é…ç½®ï¼š
+				ServletContextTemplateResolverã€‹ SpringTemplateEngineã€‹ThymeleafViewResolver
+				@Bean//åˆ›å»ºThymeleafè§†å›¾è§£æå™¨
 					public ViewResolver thymeleafRevolver(TemplateEngine eu){
 						ThymeleafViewResolver thv=new ThymeleafViewResolver();
 						thv.setOrder(0);
 						thv.setTemplateEngine(eu);
 						return thv;
 					}
-					@Bean//´´½¨ThymeleafÊÓÍ¼½âÎöÆ÷
+					@Bean//åˆ›å»ºThymeleafè§†å›¾è§£æå™¨
 					public TemplateEngine thymeleafEngine(ServletContextTemplateResolver tr){
 						TemplateEngine thv=new SpringTemplateEngine();
 						thv.setTemplateResolver(tr);
 						return thv;
 					}
-					@Bean//´´½¨ThymeleafÊÓÍ¼½âÎöÆ÷
+					@Bean//åˆ›å»ºThymeleafè§†å›¾è§£æå™¨
 					public ServletContextTemplateResolver templereso(ServletContext sc){
 						ServletContextTemplateResolver thv=new ServletContextTemplateResolver(sc);
 						thv.setPrefix("/thymeleafHtml/");
@@ -333,8 +333,8 @@ Spring MVC Content
 						return thv;
 					}
 		
-		Spring MVC ÊÓÍ¼Á´
-			SpringÖ§³ÖÍ¬Ê±Ê¹ÓÃ¶à¸öÊÓÍ¼½âÎöÆ÷£¬ÔÚËûÃÇµÄbeanÉèÖÃorderÊôĞÔÖ¸¶¨ËüÃÇµÄ´ÎĞò£¬1ÓÅÏÈ£¬orderÔ½´óÔ½ºó
+		Spring MVC è§†å›¾é“¾
+			Springæ”¯æŒåŒæ—¶ä½¿ç”¨å¤šä¸ªè§†å›¾è§£æå™¨ï¼Œåœ¨ä»–ä»¬çš„beanè®¾ç½®orderå±æ€§æŒ‡å®šå®ƒä»¬çš„æ¬¡åºï¼Œ1ä¼˜å…ˆï¼Œorderè¶Šå¤§è¶Šå
 				 <property name="order" value="1"/>
 			for viewResolver i in viewResolverS:
 				if i.view!=null:
@@ -342,237 +342,237 @@ Spring MVC Content
 				else:
 					continue
 			throw ServletException
-			Èç¹ûËùÓĞ½âÎöÆ÷¶¼²»ÄÜ·µ»ØÊÓÍ¼¾ÍÅ×³öÒì³£
-			Èç¹û²»°ÑInternalResourceViewResolver·ÅÖÃÔÚ½âÎöÆ÷Á´µÄ×îºó£¬½«¿ÉÄÜµ¼ÖÂ½âÎöÆ÷Á´ÎŞ·¨ÍêÈ«Ö´ĞĞ
-			 InternalResourceViewResolverÓÀÔ¶¶¼»á·µ»ØÒ»¸öÊÓÍ¼¡££¨¿ÉÄÜÊÇnull£©
+			å¦‚æœæ‰€æœ‰è§£æå™¨éƒ½ä¸èƒ½è¿”å›è§†å›¾å°±æŠ›å‡ºå¼‚å¸¸
+			å¦‚æœä¸æŠŠInternalResourceViewResolveræ”¾ç½®åœ¨è§£æå™¨é“¾çš„æœ€åï¼Œå°†å¯èƒ½å¯¼è‡´è§£æå™¨é“¾æ— æ³•å®Œå…¨æ‰§è¡Œ
+			 InternalResourceViewResolveræ°¸è¿œéƒ½ä¼šè¿”å›ä¸€ä¸ªè§†å›¾ã€‚ï¼ˆå¯èƒ½æ˜¯nullï¼‰
 		
-		Spring MVC ÊÓÍ¼ÖØ¶¨Ïò
-			ÖØ¶¨ÏòÊÓÍ¼ RedirectView
-				¿ØÖÆÆ÷·µ»ØÒ»¸öÖØ¶¨ÏòÊÓÍ¼RedirectView£¬Ê¹DispatcherServlet·ÅÆúÊ¹ÓÃÒ»°ãµÄÊÓÍ¼½âÎö»úÖÆ£¬
-				SpringÖØ¶¨ÏòÊÓÍ¼RedirectViewµ÷ÓÃHttpServletResponse.sendRedirect()ÊµÏÖÖØ¶¨Ïò
-			ÏòÖØ¶¨ÏòÄ¿±ê´«µİÊı¾İ
-				@RequestMappingÀïÉùÃ÷RedirectAttributesÀàĞÍµÄ·½·¨²ÎÊı£¬Ö¸¶¨±»´«µİµ½ÖØ¶¨ÏòµÄÊÓÍ¼µÄ²ÎÊı
-				Ä£ĞÍModelÖĞµÄËùÓĞÊôĞÔÄ¬ÈÏ¶¼»á¿¼ÂÇ×÷ÎªURIÄ£°å±äÁ¿±»Ìí¼Óµ½ÖØ¶¨ÏòURLÖĞ
-					@RequestMapping·½·¨¿ÉÒÔÉùÃ÷Ò»¸öRedirectAttributesÀàĞÍµÄ·½·¨²ÎÊı
-					(ÒªÔÚconfigÀàÖĞÆôÓÃ@EnableWebMvc»ò
-					ÔÚxmlÖĞÓÃ<mvc:annotation-driven> ÒªÒıÈëxmlnsºÍxsi)
-					Èç¹ûÖØ¶¨Ïò³É¹¦·¢Éú£¬ÄÇÃ´RedirectAttributes¶ÔÏóÖĞµÄÄÚÈİ¾Í»á±»Ê¹ÓÃµ½URIÄ£°æÉÏ£»
-					·ñÔòURIÄ£°æÊ¹ÓÃÄ£ĞÍmodelÖĞµÄÊı¾İ
+		Spring MVC è§†å›¾é‡å®šå‘
+			é‡å®šå‘è§†å›¾ RedirectView
+				æ§åˆ¶å™¨è¿”å›ä¸€ä¸ªé‡å®šå‘è§†å›¾RedirectViewï¼Œä½¿DispatcherServletæ”¾å¼ƒä½¿ç”¨ä¸€èˆ¬çš„è§†å›¾è§£ææœºåˆ¶ï¼Œ
+				Springé‡å®šå‘è§†å›¾RedirectViewè°ƒç”¨HttpServletResponse.sendRedirect()å®ç°é‡å®šå‘
+			å‘é‡å®šå‘ç›®æ ‡ä¼ é€’æ•°æ®
+				@RequestMappingé‡Œå£°æ˜RedirectAttributesç±»å‹çš„æ–¹æ³•å‚æ•°ï¼ŒæŒ‡å®šè¢«ä¼ é€’åˆ°é‡å®šå‘çš„è§†å›¾çš„å‚æ•°
+				æ¨¡å‹Modelä¸­çš„æ‰€æœ‰å±æ€§é»˜è®¤éƒ½ä¼šè€ƒè™‘ä½œä¸ºURIæ¨¡æ¿å˜é‡è¢«æ·»åŠ åˆ°é‡å®šå‘URLä¸­
+					@RequestMappingæ–¹æ³•å¯ä»¥å£°æ˜ä¸€ä¸ªRedirectAttributesç±»å‹çš„æ–¹æ³•å‚æ•°
+					(è¦åœ¨configç±»ä¸­å¯ç”¨@EnableWebMvcæˆ–
+					åœ¨xmlä¸­ç”¨<mvc:annotation-driven> è¦å¼•å…¥xmlnså’Œxsi)
+					å¦‚æœé‡å®šå‘æˆåŠŸå‘ç”Ÿï¼Œé‚£ä¹ˆRedirectAttributeså¯¹è±¡ä¸­çš„å†…å®¹å°±ä¼šè¢«ä½¿ç”¨åˆ°URIæ¨¡ç‰ˆä¸Šï¼›
+					å¦åˆ™URIæ¨¡ç‰ˆä½¿ç”¨æ¨¡å‹modelä¸­çš„æ•°æ®
 					
-			ÖØ¶¨ÏòÇ°×º¡ª¡ªredirect:ÖØ¶¨Ïò
-				ÒÔServletÉÏÏÂÎÄ×÷ÎªÏà¶ÔÂ·¾¶½øĞĞ²éÕÒÖØ¶¨ÏòÂ·¾¶
+			é‡å®šå‘å‰ç¼€â€”â€”redirect:é‡å®šå‘
+				ä»¥Servletä¸Šä¸‹æ–‡ä½œä¸ºç›¸å¯¹è·¯å¾„è¿›è¡ŒæŸ¥æ‰¾é‡å®šå‘è·¯å¾„
 				
-			ÖØ¶¨ÏòÇ°×º¡ª¡ªforward:×ª·¢
-				ÒÔServletÉÏÏÂÎÄ×÷ÎªÏà¶ÔÂ·¾¶½øĞĞ²éÕÒÖØ¶¨ÏòÂ·¾¶
-				µ«µ±ÄãÖ÷ÒªÊ¹ÓÃµÄÊÇÆäËûµÄÊÓÍ¼¼¼Êõ£¬¶øÓÖÏëÒªÇ¿ÖÆ°ÑÒ»¸ö×ÊÔ´×ª·¢¸øServlet/JSPÒıÇæ½øĞĞ´¦ÀíÊ±£¬Õâ¸öÇ°×º¾ÍºÜÓĞÓÃ
+			é‡å®šå‘å‰ç¼€â€”â€”forward:è½¬å‘
+				ä»¥Servletä¸Šä¸‹æ–‡ä½œä¸ºç›¸å¯¹è·¯å¾„è¿›è¡ŒæŸ¥æ‰¾é‡å®šå‘è·¯å¾„
+				ä½†å½“ä½ ä¸»è¦ä½¿ç”¨çš„æ˜¯å…¶ä»–çš„è§†å›¾æŠ€æœ¯ï¼Œè€Œåˆæƒ³è¦å¼ºåˆ¶æŠŠä¸€ä¸ªèµ„æºè½¬å‘ç»™Servlet/JSPå¼•æ“è¿›è¡Œå¤„ç†æ—¶ï¼Œè¿™ä¸ªå‰ç¼€å°±å¾ˆæœ‰ç”¨
 				
-		Spring MVC ÄÚÈİĞ­ÉÌ½âÎöÆ÷
-			ContentNegotiatingViewResolver£¬²»½âÎöÊÓÍ¼£¬¶øÊÇ°Ñ½âÎö¹¤×÷½»¸øÆäËûÊÓÍ¼½âÎöÆ÷
+		Spring MVC å†…å®¹åå•†è§£æå™¨
+			ContentNegotiatingViewResolverï¼Œä¸è§£æè§†å›¾ï¼Œè€Œæ˜¯æŠŠè§£æå·¥ä½œäº¤ç»™å…¶ä»–è§†å›¾è§£æå™¨
 			
-	Spring MVC Ìá¹©µØÇøĞÅÏ¢(LocaleResolver)
-		DispatcherServletÍ¨¹ıLocaleResolver¶ÔÏóÎªÄãÌá¹©ÁË×Ô¶¯Ê¹ÓÃÓÃ»§µÄµØÇøĞÅÏ¢À´½âÎöÏûÏ¢µÄÄÜÁ¦¡£
+	Spring MVC æä¾›åœ°åŒºä¿¡æ¯(LocaleResolver)
+		DispatcherServleté€šè¿‡LocaleResolverå¯¹è±¡ä¸ºä½ æä¾›äº†è‡ªåŠ¨ä½¿ç”¨ç”¨æˆ·çš„åœ°åŒºä¿¡æ¯æ¥è§£ææ¶ˆæ¯çš„èƒ½åŠ›ã€‚
 		
-		µØÇø½âÎöÆ÷LocaleResolver
-			LocaleResolver¶ÔÏóÀ´Íê³ÉµÄ½â¶ÁµØÇøĞÅÏ¢¡£
-			Ò»¸öÇëÇó½øÈë´¦ÀíÊ±£¬DispatcherServlet»á²éÕÒÒ»¸öµØÇø½âÎöÆ÷¡£Èç¹ûÕÒµ½£¬¾Í³¢ÊÔÊ¹ÓÃËüÀ´ÉèÖÃµØÇøÏà¹ØµÄĞÅÏ¢
-		AcceptÇëÇóÍ·½âÎöÆ÷
-			AcceptHeaderLocaleResolver½âÎöÆ÷»á¼ì²é¿Í»§¶Ë£¨±ÈÈç£¬ä¯ÀÀÆ÷£¬µÈ£©Ëù·¢ËÍµÄÇëÇóÖĞÊÇ·ñĞ¯´øaccept-languageÇëÇóÍ·¡£	
-		Cookie½âÎöÆ÷
-			CookieLocaleResolver½âÎö»á¼ì²é¿Í»§¶ËÊÇ·ñÓĞCookie£¬ÀïÃæ¿ÉÄÜ´æ·ÅÁËµØÇøLocale»òÊ±ÇøTimeZoneĞÅÏ¢
-		Session½âÎöÆ÷
-			SessionLocaleResolverÔÊĞíÄã´ÓsessionÖĞÈ¡µÃ¿ÉÄÜÓëÓÃ»§ÇëÇóÏà¹ØÁªµÄµØÇøLocaleºÍÊ±ÇøTimeZoneĞÅÏ¢¡£
-		µØÇø¸ü¸ÄÀ¹½ØÆ÷
+		åœ°åŒºè§£æå™¨LocaleResolver
+			LocaleResolverå¯¹è±¡æ¥å®Œæˆçš„è§£è¯»åœ°åŒºä¿¡æ¯ã€‚
+			ä¸€ä¸ªè¯·æ±‚è¿›å…¥å¤„ç†æ—¶ï¼ŒDispatcherServletä¼šæŸ¥æ‰¾ä¸€ä¸ªåœ°åŒºè§£æå™¨ã€‚å¦‚æœæ‰¾åˆ°ï¼Œå°±å°è¯•ä½¿ç”¨å®ƒæ¥è®¾ç½®åœ°åŒºç›¸å…³çš„ä¿¡æ¯
+		Acceptè¯·æ±‚å¤´è§£æå™¨
+			AcceptHeaderLocaleResolverè§£æå™¨ä¼šæ£€æŸ¥å®¢æˆ·ç«¯ï¼ˆæ¯”å¦‚ï¼Œæµè§ˆå™¨ï¼Œç­‰ï¼‰æ‰€å‘é€çš„è¯·æ±‚ä¸­æ˜¯å¦æºå¸¦accept-languageè¯·æ±‚å¤´ã€‚	
+		Cookieè§£æå™¨
+			CookieLocaleResolverè§£æä¼šæ£€æŸ¥å®¢æˆ·ç«¯æ˜¯å¦æœ‰Cookieï¼Œé‡Œé¢å¯èƒ½å­˜æ”¾äº†åœ°åŒºLocaleæˆ–æ—¶åŒºTimeZoneä¿¡æ¯
+		Sessionè§£æå™¨
+			SessionLocaleResolverå…è®¸ä½ ä»sessionä¸­å–å¾—å¯èƒ½ä¸ç”¨æˆ·è¯·æ±‚ç›¸å…³è”çš„åœ°åŒºLocaleå’Œæ—¶åŒºTimeZoneä¿¡æ¯ã€‚
+		åœ°åŒºæ›´æ”¹æ‹¦æˆªå™¨
 			LocaleChangeInterceptor
 			
-	Spring MVC Ö÷Ìâ¸ÅÀÀ
-		Spring Web MVC¿ò¼ÜÌá¹©µÄÖ÷ÌâÀ´ÎªÕûÕ¾µÄÓ¦ÓÃÉèÖÃÆ¤·ô/Ö÷Ìâ£¬Õâ¿ÉÒÔÌá¸ßÓÃ»§ÌåÑé¡£
-		Ö÷Ìâ ÊÇÖ¸Ò»ÏµÁĞ¾²Ì¬×ÊÔ´µÄ¼¯ºÏ£¬²¢ÇÒÖ÷ÒªÊÇÑùÊ½±íºÍÍ¼Æ¬£¬ËüÃÇ¾ö¶¨ÁËÄãµÄÓ¦ÓÃµÄÊÓ¾õ·ç¸ñ¡£
+	Spring MVC ä¸»é¢˜æ¦‚è§ˆ
+		Spring Web MVCæ¡†æ¶æä¾›çš„ä¸»é¢˜æ¥ä¸ºæ•´ç«™çš„åº”ç”¨è®¾ç½®çš®è‚¤/ä¸»é¢˜ï¼Œè¿™å¯ä»¥æé«˜ç”¨æˆ·ä½“éªŒã€‚
+		ä¸»é¢˜ æ˜¯æŒ‡ä¸€ç³»åˆ—é™æ€èµ„æºçš„é›†åˆï¼Œå¹¶ä¸”ä¸»è¦æ˜¯æ ·å¼è¡¨å’Œå›¾ç‰‡ï¼Œå®ƒä»¬å†³å®šäº†ä½ çš„åº”ç”¨çš„è§†è§‰é£æ ¼ã€‚
 		
-	Spring MVC ÎÄ¼şÉÏ´«(MultipartResolver)
+	Spring MVC æ–‡ä»¶ä¸Šä¼ (MultipartResolver)
 		MultipartFile file
-		1Ê¹ÓÃMultipartResolverÓëCommons FileUpload´«ÊäÎÄ¼ş
-			Í¨ÓÃMultipart½âÎöÆ÷CommonsMultipartResolver£¨MultipartRevolverµÄÒ»¸öÊµÏÖ£©
-			Ê¹ÓÃJakarta Commons FileUpload½âÎömultipartÇëÇó£»
-				ÀàÂ·¾¶ÏÂÒªÓĞJakarta Commons FileUpload
+		1ä½¿ç”¨MultipartResolverä¸Commons FileUploadä¼ è¾“æ–‡ä»¶
+			é€šç”¨Multipartè§£æå™¨CommonsMultipartResolverï¼ˆMultipartRevolverçš„ä¸€ä¸ªå®ç°ï¼‰
+			ä½¿ç”¨Jakarta Commons FileUploadè§£æmultipartè¯·æ±‚ï¼›
+				ç±»è·¯å¾„ä¸‹è¦æœ‰Jakarta Commons FileUpload
 				<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-					<!-- Ö§³ÖµÄÆäÖĞÒ»¸öÊôĞÔ£¬Ö§³ÖµÄ×î´óÎÄ¼ş´óĞ¡£¬ÒÔ×Ö½ÚÎªµ¥Î» -->
+					<!-- æ”¯æŒçš„å…¶ä¸­ä¸€ä¸ªå±æ€§ï¼Œæ”¯æŒçš„æœ€å¤§æ–‡ä»¶å¤§å°ï¼Œä»¥å­—èŠ‚ä¸ºå•ä½ -->
 					<property name="maxUploadSize" value="100000"/>
 				</bean>
-				Á÷³Ì:
-					DespatcherServlet¼ì²âÇëÇóÈôÎªMultipartÔò°Ñ¸ÃÇëÇó½»¸øMultipartRevolver½âÎö
-						CommonsMultipartRevolver°ÑÇëÇó°ü×°ÎªMultipartHttpServletRequest¶ÔÏó
-		2´¦ÀíServlet 3.0ÏÂµÄMultipartResolver£¬StandardServletMultipartResolver
-			ÒªÊ¹ÓÃ»ùÓÚServlet 3.0µÄ¶àÂ·´«Êä×ª»»¹¦ÄÜ£¬
-			Äã±ØĞëÔÚweb.xmlÖĞÎªDispatcherServletÌí¼ÓÒ»¸ömultipart-configÔªËØ
+				æµç¨‹:
+					DespatcherServletæ£€æµ‹è¯·æ±‚è‹¥ä¸ºMultipartåˆ™æŠŠè¯¥è¯·æ±‚äº¤ç»™MultipartRevolverè§£æ
+						CommonsMultipartRevolveræŠŠè¯·æ±‚åŒ…è£…ä¸ºMultipartHttpServletRequestå¯¹è±¡
+		2å¤„ç†Servlet 3.0ä¸‹çš„MultipartResolverï¼ŒStandardServletMultipartResolver
+			è¦ä½¿ç”¨åŸºäºServlet 3.0çš„å¤šè·¯ä¼ è¾“è½¬æ¢åŠŸèƒ½ï¼Œ
+			ä½ å¿…é¡»åœ¨web.xmlä¸­ä¸ºDispatcherServletæ·»åŠ ä¸€ä¸ªmultipart-configå…ƒç´ 
 				<multipart-config>
-					<!--ÉÏ´«µ½/tmp/upload Ä¿Â¼-->
+					<!--ä¸Šä¼ åˆ°/tmp/upload ç›®å½•-->
 				<location>/tmp/upload</location>
-					<!--ÎÄ¼ş´óĞ¡Îª2M-->
+					<!--æ–‡ä»¶å¤§å°ä¸º2M-->
 				<max-file-size>2097152</max-file-size>
-					<!--Õû¸öÇëÇó²»³¬¹ı4M-->
+					<!--æ•´ä¸ªè¯·æ±‚ä¸è¶…è¿‡4M-->
 				<max-request-size>4194304</max-request-size>
-					<!--ËùÓĞÎÄ¼ş¶¼ÒªĞ´Èë´ÅÅÌ-->
+					<!--æ‰€æœ‰æ–‡ä»¶éƒ½è¦å†™å…¥ç£ç›˜-->
 				<file-size-threshold>0</file-size-threshold>
 				</multipart-config>
-			»ò
-			ÔÚAbstractAnnotationConfigDispatcherServletInitializer
-				ÏÂÖØĞ´customizeRegistration()
+			æˆ–
+			åœ¨AbstractAnnotationConfigDispatcherServletInitializer
+				ä¸‹é‡å†™customizeRegistration()
 				
 				
-					ÒÀÀµÓÚServlet 3.0¶ÔmultipartÇëÇóµÄÖ§³Ö£¨Ê¼ÓÚSpring 3.1£©
+					ä¾èµ–äºServlet 3.0å¯¹multipartè¯·æ±‚çš„æ”¯æŒï¼ˆå§‹äºSpring 3.1ï¼‰
 	
-		Spring MVC ´¦Àí¿Í»§¶Ë·¢ÆğµÄÎÄ¼şÉÏ´«ÇëÇó
-			³¡¾°:httpÏûÏ¢ÌåÖĞ¼ÈÓĞform-dataµÄÏûÏ¢£¬ÓÖÓĞÏñjsonÕâÑùµÄmeta-dataÊı¾İ£¬
-			   ÏûÏ¢ÌåÖĞÓĞ¶à²¿·ÖÊı¾İ
-			ÈôÏûÏ¢ÌåÖĞÖ»ÓĞform-dataÔòÔÚ¿ØÖÆÆ÷²ÎÊıÖĞÌí¼Ó@RequestParam£¨¡°name¡±£©¼´¿ÉÈ¡µÃMultipartÊı¾İ
-			µ«ÊÇÈç¹ûÏûÏ¢ÌåÖĞ»¹ÓĞjson¶ÔÏóÊı¾İ@RequestParam String metadataÖ»»á°ÑËû½âÎöÎªÆÕÍ¨Í¬×Ö·û´®£¬²»»áÓÃ×ª»»Æ÷°Ñjson×ª»»
+		Spring MVC å¤„ç†å®¢æˆ·ç«¯å‘èµ·çš„æ–‡ä»¶ä¸Šä¼ è¯·æ±‚
+			åœºæ™¯:httpæ¶ˆæ¯ä½“ä¸­æ—¢æœ‰form-dataçš„æ¶ˆæ¯ï¼Œåˆæœ‰åƒjsonè¿™æ ·çš„meta-dataæ•°æ®ï¼Œ
+			   æ¶ˆæ¯ä½“ä¸­æœ‰å¤šéƒ¨åˆ†æ•°æ®
+			è‹¥æ¶ˆæ¯ä½“ä¸­åªæœ‰form-dataåˆ™åœ¨æ§åˆ¶å™¨å‚æ•°ä¸­æ·»åŠ @RequestParamï¼ˆâ€œnameâ€ï¼‰å³å¯å–å¾—Multipartæ•°æ®
+			ä½†æ˜¯å¦‚æœæ¶ˆæ¯ä½“ä¸­è¿˜æœ‰jsonå¯¹è±¡æ•°æ®@RequestParam String metadataåªä¼šæŠŠä»–è§£æä¸ºæ™®é€šåŒå­—ç¬¦ä¸²ï¼Œä¸ä¼šç”¨è½¬æ¢å™¨æŠŠjsonè½¬æ¢
 			
-			@RequestPart("name") ÓÃÓÚ¿ØÖÆÆ÷·½·¨²ÎÊıÖĞ
-				ÇëÇóµÄÇëÇóÌå×ª»»³ÉÒ»¸ö¶ÔÏó£¬×ª»»Ê±¿¼ÂÇ¶àÂ·ÇëÇóÖĞ²»Í¬µÄÄÚÈİÀàĞÍ²ÎÊı
-				ÈônameµÄÄÇ²¿·ÖÊı¾İÊÇMultipart/form-dataÔò°ÑÕâ²¿·Öµ±×÷MultipartFile´¦Àí
-				ÈônameµÄÊı¾İÊÇmeta-data£¨Èçjson£©£¬Ôò°ÑËûµ±×÷@RequestBody´¦Àí£¬
-					ÈôContentType=¡°ApplicationContext/json¡±,¾ÍMappingJackson2HttpMessageConverter×ª»»³É¶ÔÏó
+			@RequestPart("name") ç”¨äºæ§åˆ¶å™¨æ–¹æ³•å‚æ•°ä¸­
+				è¯·æ±‚çš„è¯·æ±‚ä½“è½¬æ¢æˆä¸€ä¸ªå¯¹è±¡ï¼Œè½¬æ¢æ—¶è€ƒè™‘å¤šè·¯è¯·æ±‚ä¸­ä¸åŒçš„å†…å®¹ç±»å‹å‚æ•°
+				è‹¥nameçš„é‚£éƒ¨åˆ†æ•°æ®æ˜¯Multipart/form-dataåˆ™æŠŠè¿™éƒ¨åˆ†å½“ä½œMultipartFileå¤„ç†
+				è‹¥nameçš„æ•°æ®æ˜¯meta-dataï¼ˆå¦‚jsonï¼‰ï¼Œåˆ™æŠŠä»–å½“ä½œ@RequestBodyå¤„ç†ï¼Œ
+					è‹¥ContentType=â€œApplicationContext/jsonâ€,å°±MappingJackson2HttpMessageConverterè½¬æ¢æˆå¯¹è±¡
 					
-	Spring MVC Òì³£´¦ÀíHandlerExceptionResolver,ResponseStatusExceptionResolver
-		springµÄ´¦ÀíÆ÷Òì³£½âÎöÆ÷HandlerExceptionResolver½Ó¿Ú£¬¸ºÔğ´¦Àí¿ØÖÆÆ÷Àï·¢ÉúµÄÒì³£
-		ËüÖ»ÊÇÌá¹©ÁËresolveException(Exception, Hanlder)·½·¨µÄÒ»¸öÊµÏÖ¶øÒÑ£¬·½·¨»á·µ»ØÒ»¸öModelAndView
+	Spring MVC å¼‚å¸¸å¤„ç†HandlerExceptionResolver,ResponseStatusExceptionResolver
+		springçš„å¤„ç†å™¨å¼‚å¸¸è§£æå™¨HandlerExceptionResolveræ¥å£ï¼Œè´Ÿè´£å¤„ç†æ§åˆ¶å™¨é‡Œå‘ç”Ÿçš„å¼‚å¸¸
+		å®ƒåªæ˜¯æä¾›äº†resolveException(Exception, Hanlder)æ–¹æ³•çš„ä¸€ä¸ªå®ç°è€Œå·²ï¼Œæ–¹æ³•ä¼šè¿”å›ä¸€ä¸ªModelAndView
 		
-		²Ù×÷:
-			Ê¹ÓÃSimpleMappingExceptionResolver //ÓëServlet APIÌá¹©µÄÒì³£Ó³ÉäÌØĞÔÊÇ¹¦ÄÜµÈ¼Û
-			»ò ÔÚ¿ØÖÆÆ÷µÄÒì³£´¦Àí·½·¨ÉÏ×¢½â@ExceptionHandler //½ö½ö´¦Àí¸Ã´¦ÀíÆ÷ÀïµÄÒì³£
-				Ö±½ÓÔÚ¿ØÖÆÀàµÄÄ³¸ö·½·¨ÉÏÓÃ@ExceptionHandler£¬Ê¹µÃÕâ¸ö·½·¨´¦Àí¸Ã¿ØÖÆÆ÷·¢ÉúµÄ´íÎó
-			»ò ÔÚ@ControllerAdviceÀàÖĞµÄ·½·¨@ExceptionHandler£¬//¿ÉÒÔ´¦Àí¶à¸ö´¦ÀíÆ÷µÄÒì³£
-				@ControllerAdvice¶¨ÒåÒ»¸ö×¨ÃÅ´¦Àí¿ØÖÆÆ÷ÊÂ¼şµÄ¿ØÖÆÆ÷Àà£¬
-				ÔÚ¸Ã¿ØÖÆÆ÷·½·¨ÉÏ@ExceptionHandler·½·¨´¦ÀíÌØ¶¨µÄ¿ØÖÆÆ÷´íÎó
-			Èô@ExceptionHandler·½·¨Ö»·µ»Ø´íÎóÂë²»·µ»ØÄÚÈİ£¬ÔòÓÉServletÈİÆ÷äÖÈ¾ÔÚweb.xmlÏÂÖ¸¶¨µÄ´íÎóÒ³Ãæ
-		Ä¬ÈÏ´¦ÀíÆ÷Òì³£½âÎöÆ÷DefaultHandlerExceptionResolver»á½«Spring MVCÅ×³öµÄÒì³£×ª»»³É¶ÔÓ¦µÄ´íÎó×´Ì¬Âë¡£
-			DefaultHandlerExceptionResolverÔÚÆôÓÃmvc£¨@EnableWebMvc/<mvc:annotation-dirven>£©Ê±Ä¬ÈÏÒÑ¾­±»×¢²áÁË
+		æ“ä½œ:
+			ä½¿ç”¨SimpleMappingExceptionResolver //ä¸Servlet APIæä¾›çš„å¼‚å¸¸æ˜ å°„ç‰¹æ€§æ˜¯åŠŸèƒ½ç­‰ä»·
+			æˆ– åœ¨æ§åˆ¶å™¨çš„å¼‚å¸¸å¤„ç†æ–¹æ³•ä¸Šæ³¨è§£@ExceptionHandler //ä»…ä»…å¤„ç†è¯¥å¤„ç†å™¨é‡Œçš„å¼‚å¸¸
+				ç›´æ¥åœ¨æ§åˆ¶ç±»çš„æŸä¸ªæ–¹æ³•ä¸Šç”¨@ExceptionHandlerï¼Œä½¿å¾—è¿™ä¸ªæ–¹æ³•å¤„ç†è¯¥æ§åˆ¶å™¨å‘ç”Ÿçš„é”™è¯¯
+			æˆ– åœ¨@ControllerAdviceç±»ä¸­çš„æ–¹æ³•@ExceptionHandlerï¼Œ//å¯ä»¥å¤„ç†å¤šä¸ªå¤„ç†å™¨çš„å¼‚å¸¸
+				@ControllerAdviceå®šä¹‰ä¸€ä¸ªä¸“é—¨å¤„ç†æ§åˆ¶å™¨äº‹ä»¶çš„æ§åˆ¶å™¨ç±»ï¼Œ
+				åœ¨è¯¥æ§åˆ¶å™¨æ–¹æ³•ä¸Š@ExceptionHandleræ–¹æ³•å¤„ç†ç‰¹å®šçš„æ§åˆ¶å™¨é”™è¯¯
+			è‹¥@ExceptionHandleræ–¹æ³•åªè¿”å›é”™è¯¯ç ä¸è¿”å›å†…å®¹ï¼Œåˆ™ç”±Servletå®¹å™¨æ¸²æŸ“åœ¨web.xmlä¸‹æŒ‡å®šçš„é”™è¯¯é¡µé¢
+		é»˜è®¤å¤„ç†å™¨å¼‚å¸¸è§£æå™¨DefaultHandlerExceptionResolverä¼šå°†Spring MVCæŠ›å‡ºçš„å¼‚å¸¸è½¬æ¢æˆå¯¹åº”çš„é”™è¯¯çŠ¶æ€ç ã€‚
+			DefaultHandlerExceptionResolveråœ¨å¯ç”¨mvcï¼ˆ@EnableWebMvc/<mvc:annotation-dirven>ï¼‰æ—¶é»˜è®¤å·²ç»è¢«æ³¨å†Œäº†
 		
-		Spring MVC Ê¹ÓÃ@ResponseStatus×¢½âÒµÎñÒì³£
-			ÒµÎñÒì³£¿ÉÒÔÊ¹ÓÃ@ResponseStatusÀ´×¢½â£¬ÓÉResponseStatusExceptionResolver½âÎö
-			DispatcherServletÄ¬ÈÏ×¢²áÒ»¸öResponseStatusExceptionResolver
+		Spring MVC ä½¿ç”¨@ResponseStatusæ³¨è§£ä¸šåŠ¡å¼‚å¸¸
+			ä¸šåŠ¡å¼‚å¸¸å¯ä»¥ä½¿ç”¨@ResponseStatusæ¥æ³¨è§£ï¼Œç”±ResponseStatusExceptionResolverè§£æ
+			DispatcherServleté»˜è®¤æ³¨å†Œä¸€ä¸ªResponseStatusExceptionResolver
 			
-		Spring MVC ¶ÔServletÄ¬ÈÏÈİÆ÷´íÎóÒ³ÃæµÄ¶¨ÖÆ»¯
-			web.xmlÔÚ<servlet>±êÇ©ÏÂµÄ<error-page><location>ÏÂ¶¨Òå´íÎóÒ³Ãæ
-			µ±ÏìÓ¦µÄ×´Ì¬Âë±»ÉèÖÃÎª´íÎó×´Ì¬Âë£¬²¢ÇÒÏìÓ¦ÌåÖĞÃ»ÓĞÄÚÈİÊ±£¬ServletÈİÆ÷Í¨³£»áäÖÈ¾Ò»¸öHTML´íÎóÒ³
+		Spring MVC å¯¹Servleté»˜è®¤å®¹å™¨é”™è¯¯é¡µé¢çš„å®šåˆ¶åŒ–
+			web.xmlåœ¨<servlet>æ ‡ç­¾ä¸‹çš„<error-page><location>ä¸‹å®šä¹‰é”™è¯¯é¡µé¢
+			å½“å“åº”çš„çŠ¶æ€ç è¢«è®¾ç½®ä¸ºé”™è¯¯çŠ¶æ€ç ï¼Œå¹¶ä¸”å“åº”ä½“ä¸­æ²¡æœ‰å†…å®¹æ—¶ï¼ŒServletå®¹å™¨é€šå¸¸ä¼šæ¸²æŸ“ä¸€ä¸ªHTMLé”™è¯¯é¡µ
 				<error-page>
 					<location>/error</location>
 				</error-page>
 				
-	Spring MVC ¶Ô"Ô¼¶¨ÓÅÓÚÅäÖÃ"µÄÖ§³Ö
-		ÔÚspring mvcÖĞµÄÃüÃû°´ÕÕ Ô¼¶¨ µÄÃüÃû¹æÔòÈ¥ÃüÃû£¬Ôò¿ÉÒÔ´ó´ó¼õÉÙÅäÖÃ£¬´ïµ½¿ìËÙ¹¹½¨Ó¦ÓÃµÄÄ¿µÄ
-		Ô¼¶¨ÓÅÓÚÅäÖÃ ÔÚM V C Èı¸ö²ãÃæÉÏµÄ¶¼µÃµ½Spring MVCµÄÖ§³Ö
+	Spring MVC å¯¹"çº¦å®šä¼˜äºé…ç½®"çš„æ”¯æŒ
+		åœ¨spring mvcä¸­çš„å‘½åæŒ‰ç…§ çº¦å®š çš„å‘½åè§„åˆ™å»å‘½åï¼Œåˆ™å¯ä»¥å¤§å¤§å‡å°‘é…ç½®ï¼Œè¾¾åˆ°å¿«é€Ÿæ„å»ºåº”ç”¨çš„ç›®çš„
+		çº¦å®šä¼˜äºé…ç½® åœ¨M V C ä¸‰ä¸ªå±‚é¢ä¸Šçš„éƒ½å¾—åˆ°Spring MVCçš„æ”¯æŒ
 		
-		C Spring MVC ¿ØÖÆÆ÷ÀàÃû-´¦ÀíÆ÷Ó³Éä  
-			£¡£¡£¡ÒªÉùÃ÷ControllerClassNameHandlerMappingµÄbean
-			²¢implements Controller
+		C Spring MVC æ§åˆ¶å™¨ç±»å-å¤„ç†å™¨æ˜ å°„  
+			ï¼ï¼ï¼è¦å£°æ˜ControllerClassNameHandlerMappingçš„bean
+			å¹¶implements Controller
 			
-			ControllerClassNameHandlerMapping ´¦ÀíÆ÷Ó³ÉäÊÇHandlerMappingµÄ×ÓÀà
-			×÷ÓÃÊÇÒÔÀàÃûÀ´»ñÈ¡Controller£¬ÀàÃûÔ¼¶¨Îª**xxxController**£¬xxxÊÇ¾ßÌåµÄ¿ØÖÆÆ÷Ãû
-			ÀàµÄÃüÃû·ûºÏÍÕ·åÃüÃû·¨
-			¿ÉÊ¡È¥@RequestMappingµÄÅäÖÃ
+			ControllerClassNameHandlerMapping å¤„ç†å™¨æ˜ å°„æ˜¯HandlerMappingçš„å­ç±»
+			ä½œç”¨æ˜¯ä»¥ç±»åæ¥è·å–Controllerï¼Œç±»åçº¦å®šä¸º**xxxController**ï¼Œxxxæ˜¯å…·ä½“çš„æ§åˆ¶å™¨å
+			ç±»çš„å‘½åç¬¦åˆé©¼å³°å‘½åæ³•
+			å¯çœå»@RequestMappingçš„é…ç½®
 			ex:
-				WelcomeController½«Ó³Éäµ½/welcome*ÇëÇóURL
-				HomeController ½«Ó³Éäµ½/home*ÇëÇóURL
-				IndexController ½«Ó³Éäµ½/index*ÇëÇóURL
+				WelcomeControllerå°†æ˜ å°„åˆ°/welcome*è¯·æ±‚URL
+				HomeController å°†æ˜ å°„åˆ°/home*è¯·æ±‚URL
+				IndexController å°†æ˜ å°„åˆ°/index*è¯·æ±‚URL
 				
-			ÆÕÍ¨µÄSimpleUrlHandlerMapping
-				¶¨ÒåÎ¬»¤Ò»¸öurl-ControllerÓ³Éä±í£¬°ÑurlÓ³Éäµ½controllerÉÏ£¬
-			Ô¼¶¨µÄControllerClassNameHandlerMapping
-				²»ĞëÎ¬»¤url-ControllerÓ³Éä±í£¬¼õÈ¥·±ËöµÄÓ³Éä±íÎ¬»¤¹¤×÷
-				Ö±½Ó¸ù¾İurlºÍControllerÃû×ÖÍê³ÉÓ³Éä
+			æ™®é€šçš„SimpleUrlHandlerMapping
+				å®šä¹‰ç»´æŠ¤ä¸€ä¸ªurl-Controlleræ˜ å°„è¡¨ï¼ŒæŠŠurlæ˜ å°„åˆ°controllerä¸Šï¼Œ
+			çº¦å®šçš„ControllerClassNameHandlerMapping
+				ä¸é¡»ç»´æŠ¤url-Controlleræ˜ å°„è¡¨ï¼Œå‡å»ç¹ççš„æ˜ å°„è¡¨ç»´æŠ¤å·¥ä½œ
+				ç›´æ¥æ ¹æ®urlå’ŒControlleråå­—å®Œæˆæ˜ å°„
 				
-		M Spring MVC Ä£ĞÍModelMap
-			ModelMapÀàÆäÊµ¾ÍÊÇÒ»¸öºÀ»ª°æµÄ Map£¬ËüÊÇMapµÄÒ»¸öÊµÏÖ
-			ÏòModelMapÌí¼ÓmodelÊ±£¬²»ÓÃÏÔÊ½Ö¸¶¨Ãû³Æ£¬½«ÒÔ¶ÔÏóÀàÃûµÄĞ¡Ğ´×ÖÄ¸×÷ÎªmodelµÄÃû×Ö
-			ModelAndViewÀàÀïÓÃModelMap´æ´¢modelµÄ
+		M Spring MVC æ¨¡å‹ModelMap
+			ModelMapç±»å…¶å®å°±æ˜¯ä¸€ä¸ªè±ªåç‰ˆçš„ Mapï¼Œå®ƒæ˜¯Mapçš„ä¸€ä¸ªå®ç°
+			å‘ModelMapæ·»åŠ modelæ—¶ï¼Œä¸ç”¨æ˜¾å¼æŒ‡å®šåç§°ï¼Œå°†ä»¥å¯¹è±¡ç±»åçš„å°å†™å­—æ¯ä½œä¸ºmodelçš„åå­—
+			ModelAndViewç±»é‡Œç”¨ModelMapå­˜å‚¨modelçš„
 			
-			Ìí¼Ó¼¯ºÏmodel	
-				Ô¼¶¨¼üÃûÎªÍ³Ò»ÔÚÀàÃûºó¼Ó¡°List¡±
-					x.y.User[]ÆäÉú³ÉµÄ¼üÃûÊÇuserList
-					java.util.ArrayList<User>,ÎªÆäÉú³ÉµÄ¼üÃûÊÇuserList
-					java.util.HashSet<User>,ÎªÆäÉú³ÉµÄ¼üÃûÊÇuserList
+			æ·»åŠ é›†åˆmodel	
+				çº¦å®šé”®åä¸ºç»Ÿä¸€åœ¨ç±»åååŠ â€œListâ€
+					x.y.User[]å…¶ç”Ÿæˆçš„é”®åæ˜¯userList
+					java.util.ArrayList<User>,ä¸ºå…¶ç”Ÿæˆçš„é”®åæ˜¯userList
+					java.util.HashSet<User>,ä¸ºå…¶ç”Ÿæˆçš„é”®åæ˜¯userList
 					
-		V Spring MVC ÊÓÍ¼-ÇëÇóÓëÊÓÍ¼ÃûµÄÓ³Éä
-			DefaultRequestToViewNameTranslatorÎªÎÒÃÇ¸ù¾İÔ¼¶¨Éú³ÉÊÓÍ¼Ãû£¬ÒªÉùÃ÷ÎªBean
-			Spring Web MVCµÄDispatcherServlet»áÎªÄãÊµÀı»¯ÕâÑùÒ»¸öÄ¬ÈÏµÄ¶ÔÏó
-			²»Ö¸¶¨viewnameÊ±£¬½«»áÒ»urlÃû×÷ÎªÊÓÍ¼Ãû
+		V Spring MVC è§†å›¾-è¯·æ±‚ä¸è§†å›¾åçš„æ˜ å°„
+			DefaultRequestToViewNameTranslatorä¸ºæˆ‘ä»¬æ ¹æ®çº¦å®šç”Ÿæˆè§†å›¾åï¼Œè¦å£°æ˜ä¸ºBean
+			Spring Web MVCçš„DispatcherServletä¼šä¸ºä½ å®ä¾‹åŒ–è¿™æ ·ä¸€ä¸ªé»˜è®¤çš„å¯¹è±¡
+			ä¸æŒ‡å®šviewnameæ—¶ï¼Œå°†ä¼šä¸€urlåä½œä¸ºè§†å›¾å
 			
-	Spring MVC Ö§³ÖHTTP»º´æ (Cache-Control)
-		HTTP»º´æ²ßÂÔ,¾ö¶¨ºÎÊ±»º´æ×ÊÔ´£¬»º´æÊ±¼ä£¬ÓĞÀûÓÚÌáÉıÓÃ»§ÌåÑé£¬¼Ó¿ì¼ÓÔØËÙ¶È£¬½ÚÊ¡´ø¿í×ÊÔ´
-		Http»º´æÏìÓ¦Í· ÓÉ·şÎñÆ÷Éè¶¨
+	Spring MVC æ”¯æŒHTTPç¼“å­˜ (Cache-Control)
+		HTTPç¼“å­˜ç­–ç•¥,å†³å®šä½•æ—¶ç¼“å­˜èµ„æºï¼Œç¼“å­˜æ—¶é—´ï¼Œæœ‰åˆ©äºæå‡ç”¨æˆ·ä½“éªŒï¼ŒåŠ å¿«åŠ è½½é€Ÿåº¦ï¼ŒèŠ‚çœå¸¦å®½èµ„æº
+		Httpç¼“å­˜å“åº”å¤´ ç”±æœåŠ¡å™¨è®¾å®š
 			Cache-Control 
-				°ïÖúË½ÓĞ»º´æ£¨±ÈÈçä¯ÀÀÆ÷¶Ë»º´æ£©ºÍ¹«¹²»º´æ£¨±ÈÈç´úÀí¶Ë»º´æ£©
+				å¸®åŠ©ç§æœ‰ç¼“å­˜ï¼ˆæ¯”å¦‚æµè§ˆå™¨ç«¯ç¼“å­˜ï¼‰å’Œå…¬å…±ç¼“å­˜ï¼ˆæ¯”å¦‚ä»£ç†ç«¯ç¼“å­˜ï¼‰
 			Last-Modified
 				
 			ETag
-				±êÊ¶¸ø¶¨µÄURLÏÂµÄÄÚÈİÓĞÎŞ±ä»¯
-					¿Í»§¶Ë¾Í¿ÉÒÔÔÚºóĞøµÄGETÇëÇóÖĞÊ¹ÓÃÕâ¸öETagÍ·±íÊ¾£¬Ò»°ãÊÇ½«Ëü·ÅÔÚIf-None-MatchÇëÇóÍ·ÖĞ¡£
-					´ËÊ±ÈôÄÚÈİÃ»ÓĞ±ä»¯£¬·şÎñÆ÷¶Ë»áÖ±½Ó·µ»Ø304: ÄÚÈİÎ´¸ü¸Ä¡£
+				æ ‡è¯†ç»™å®šçš„URLä¸‹çš„å†…å®¹æœ‰æ— å˜åŒ–
+					å®¢æˆ·ç«¯å°±å¯ä»¥åœ¨åç»­çš„GETè¯·æ±‚ä¸­ä½¿ç”¨è¿™ä¸ªETagå¤´è¡¨ç¤ºï¼Œä¸€èˆ¬æ˜¯å°†å®ƒæ”¾åœ¨If-None-Matchè¯·æ±‚å¤´ä¸­ã€‚
+					æ­¤æ—¶è‹¥å†…å®¹æ²¡æœ‰å˜åŒ–ï¼ŒæœåŠ¡å™¨ç«¯ä¼šç›´æ¥è¿”å›304: å†…å®¹æœªæ›´æ”¹ã€‚
 					
-		1.Spring MVCÔÚ¿ØÖÆÆ÷ÖĞÉèÖÃcache
-			Èô¿ØÖÆÆ÷·µ»ØResponseEntity
-			¿ÉÔÚResponseEntityÉÏÅäÖÃcache »òÖ±½ÓÔÚhttpservletResponseÖĞÉèÖÃÍ·
+		1.Spring MVCåœ¨æ§åˆ¶å™¨ä¸­è®¾ç½®cache
+			è‹¥æ§åˆ¶å™¨è¿”å›ResponseEntity
+			å¯åœ¨ResponseEntityä¸Šé…ç½®cache æˆ–ç›´æ¥åœ¨httpservletResponseä¸­è®¾ç½®å¤´
 				ResponseEntity.
-					ok().//ÏìÓ¦×´Ì¬
-					cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES)).//ÉèÖÃ»º´æÊ±¼ä
-					lastModified(1000).//ÉèÖÃlastModifiedÍ·
-					eTag("123456").//ÉèÖÃeTag±êÖ¾Í·£¬ÓÃÓÚ¾ö¶¨Ğè²»ĞèÒª¸üĞÂ»º´æ
-					body(db);//·µ»Øµ½ÏìÓ¦ÌåÖĞµÄmodel
+					ok().//å“åº”çŠ¶æ€
+					cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES)).//è®¾ç½®ç¼“å­˜æ—¶é—´
+					lastModified(1000).//è®¾ç½®lastModifiedå¤´
+					eTag("123456").//è®¾ç½®eTagæ ‡å¿—å¤´ï¼Œç”¨äºå†³å®šéœ€ä¸éœ€è¦æ›´æ–°ç¼“å­˜
+					body(db);//è¿”å›åˆ°å“åº”ä½“ä¸­çš„model
 			
-		2.SPring mvcÍ¨¹ı¿ØÖÆÆ÷µÄWebRequest ²ÎÊı¼ì²â¿Í»§¶ËµÄ»º´æÊÇ·ñÒÑ¸ü¸Ä
+		2.SPring mvcé€šè¿‡æ§åˆ¶å™¨çš„WebRequest å‚æ•°æ£€æµ‹å®¢æˆ·ç«¯çš„ç¼“å­˜æ˜¯å¦å·²æ›´æ”¹
 			request.checkNotModified( lastModified )
-				lastModified´«Èë×îºó¸ü¸ÄÊ±¼ä£¬ÓërequestÍ·µÄIf-Modified-Since±È½Ï
-				//false--²»ÓÃ¸ü¸Ä  true--ĞèÒª¸ü¸Ä
-			»ò
+				lastModifiedä¼ å…¥æœ€åæ›´æ”¹æ—¶é—´ï¼Œä¸requestå¤´çš„If-Modified-Sinceæ¯”è¾ƒ
+				//false--ä¸ç”¨æ›´æ”¹  true--éœ€è¦æ›´æ”¹
+			æˆ–
 			request.checkNotModified( eTag )
-				·½·¨»á½«´«ÈëµÄ²ÎÊıÖµÓëÇëÇóÍ·'ETag'µÄÖµ½øĞĞ±È½Ï
-				//false--²»ÓÃ¸ü¸Ä  true--ĞèÒª¸ü¸Ä
-			»ò
+				æ–¹æ³•ä¼šå°†ä¼ å…¥çš„å‚æ•°å€¼ä¸è¯·æ±‚å¤´'ETag'çš„å€¼è¿›è¡Œæ¯”è¾ƒ
+				//false--ä¸ç”¨æ›´æ”¹  true--éœ€è¦æ›´æ”¹
+			æˆ–
 			request.checkNotModified(eTag, lastModified)
-				Í¬Ê±±È½ÏlastMdifiedÊ±¼äÓëETag±êÖ¾
-				//false--²»ÓÃ¸ü¸Ä  true--ĞèÒª¸ü¸Ä
+				åŒæ—¶æ¯”è¾ƒlastMdifiedæ—¶é—´ä¸ETagæ ‡å¿—
+				//false--ä¸ç”¨æ›´æ”¹  true--éœ€è¦æ›´æ”¹
 				
-			Èô×ÊÔ´Î´ĞŞ¸Ä·µ»ØÒ»¸ö304ÏìÓ¦×´Ì¬ÂëHTTP 304 Not Modified£¨×ÊÔ´Î´ĞŞ¸Ä£©
+			è‹¥èµ„æºæœªä¿®æ”¹è¿”å›ä¸€ä¸ª304å“åº”çŠ¶æ€ç HTTP 304 Not Modifiedï¼ˆèµ„æºæœªä¿®æ”¹ï¼‰
 					
-		3.Spring mvc¶Ô¾²Ì¬×ÊÔ´ÉèÖÃ»º´æ
+		3.Spring mvcå¯¹é™æ€èµ„æºè®¾ç½®ç¼“å­˜
 			xml:
 				<mvc:resources mapping="/resources/**" location="/public-resources/">
 					<mvc:cache-control max-age="3600" cache-public="true"/>
 				</mvc:resources>
-			JavaConfigÀà:
-				¼Ì³ĞWebMvcConfigurerAdapter
-				ÖØĞ´addResourceHandlers(ResourceHandlerRegistry registry)
+			JavaConfigç±»:
+				ç»§æ‰¿WebMvcConfigurerAdapter
+				é‡å†™addResourceHandlers(ResourceHandlerRegistry registry)
 					registry.addResourceHandler("/resources/**")
 					.addResourceLocations("/public-resources/")
 					.setCacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic());
 					
-		webÈİÆ÷ ´´½¨ÈõETag¶ÔÏó(Ö»½ÚÊ¡´ø¿í£¬²»Ê¡¼ÆËã×ÊÔ´)
-		ËüÊÇ´¿Servlet¼¼ÊõÊµÏÖµÄ¹ıÂËÆ÷£¬Òò´Ë£¬Ëü¿ÉÒÔÓëÈÎºÎweb¿ò¼ÜÎŞ·ì¼¯³É
-		Ö»ÒªÔÚweb.xmlÏÂÅäÖÃ¹ıÂËÆ÷
-			ShallowEtagHeaderFilter»º´æJSPÒ³ÃæÄÚÈİ
-			½«»º´æÄÚÈİÉú³ÉMD5µÄHash×÷ÎªETag
-			°ÑETagĞ´ÈëResponseÍ·µÄETagÖĞ
+		webå®¹å™¨ åˆ›å»ºå¼±ETagå¯¹è±¡(åªèŠ‚çœå¸¦å®½ï¼Œä¸çœè®¡ç®—èµ„æº)
+		å®ƒæ˜¯çº¯ServletæŠ€æœ¯å®ç°çš„è¿‡æ»¤å™¨ï¼Œå› æ­¤ï¼Œå®ƒå¯ä»¥ä¸ä»»ä½•webæ¡†æ¶æ— ç¼é›†æˆ
+		åªè¦åœ¨web.xmlä¸‹é…ç½®è¿‡æ»¤å™¨
+			ShallowEtagHeaderFilterç¼“å­˜JSPé¡µé¢å†…å®¹
+			å°†ç¼“å­˜å†…å®¹ç”ŸæˆMD5çš„Hashä½œä¸ºETag
+			æŠŠETagå†™å…¥Responseå¤´çš„ETagä¸­
 			
-			ÏÂ´ÎÇëÇóÍ·If-None-MatchĞ´ÈëETag
-			ShallowEtagHeaderFilter¼ì²âIf-None-MatchµÄetag1
-			°ÑjspÊÓÍ¼äÖÈ¾µÃµ½etag2
-			±È½Ïetag2=etag1?304(Î´ĞŞ¸Ä):200
+			ä¸‹æ¬¡è¯·æ±‚å¤´If-None-Matchå†™å…¥ETag
+			ShallowEtagHeaderFilteræ£€æµ‹If-None-Matchçš„etag1
+			æŠŠjspè§†å›¾æ¸²æŸ“å¾—åˆ°etag2
+			æ¯”è¾ƒetag2=etag1?304(æœªä¿®æ”¹):200
 			
-Spring MVC ÓÃJavaConfig ³õÊ¼»¯ServletÈİÆ÷ ServletInitializer
-	Servlet 3.0ÒÔÉÏµÄ»·¾³ÏÂ£¬Äã¿ÉÒÔÍ¨¹ı±à³ÌµÄ·½Ê½À´ÅäÖÃServletÈİÆ÷ÁË
-	WebApplicationInitializer <--- --- --- AbstractDispatcherServletInitializer		»ùÓÚservlet3.0µÄServletInitializer
-		¼Ì³ĞAbstractDispatcherServletInitializer(ADSI)Ê¹DispatcherServletÅäÖÃ±äµÃ¸ü¼òµ¥£¬
-			1.ÄãÖ»ĞèÒª¸²Ğ´ÏàÓ¦µÄ·½·¨
-			2.ÔÚÆäÖĞÌá¹©servletÓ³Éä
+Spring MVC ç”¨JavaConfig åˆå§‹åŒ–Servletå®¹å™¨ ServletInitializer
+	Servlet 3.0ä»¥ä¸Šçš„ç¯å¢ƒä¸‹ï¼Œä½ å¯ä»¥é€šè¿‡ç¼–ç¨‹çš„æ–¹å¼æ¥é…ç½®Servletå®¹å™¨äº†
+	WebApplicationInitializer <--- --- --- AbstractDispatcherServletInitializer		åŸºäºservlet3.0çš„ServletInitializer
+		ç»§æ‰¿AbstractDispatcherServletInitializer(ADSI)ä½¿DispatcherServleté…ç½®å˜å¾—æ›´ç®€å•ï¼Œ
+			1.ä½ åªéœ€è¦è¦†å†™ç›¸åº”çš„æ–¹æ³•
+			2.åœ¨å…¶ä¸­æä¾›servletæ˜ å°„
 				getServletMappings()
-			3.Ö¸¶¨DispatcherServletËùĞèÅäÖÃ(javaconfig/xml)µÄÎ»ÖÃ
+			3.æŒ‡å®šDispatcherServletæ‰€éœ€é…ç½®(javaconfig/xml)çš„ä½ç½®
 				JavaConfig:)
-					getServletConfigClasses()	//webÓ¦ÓÃÉÏÏÂÎÄ
-					getRootConfigClasses()		//web¸ùÉÏÏÂÎÄ
+					getServletConfigClasses()	//webåº”ç”¨ä¸Šä¸‹æ–‡
+					getRootConfigClasses()		//webæ ¹ä¸Šä¸‹æ–‡
 				xml:)
 					createServletApplicationContext()
-			4.ADSIÍ¬ÑùÒ²Ìá¹©ÁË±ã½İµÄ·½Ê½À´Ìí¼Ó¹ıÂËÆ÷Filter
+			4.ADSIåŒæ ·ä¹Ÿæä¾›äº†ä¾¿æ·çš„æ–¹å¼æ¥æ·»åŠ è¿‡æ»¤å™¨Filter
 				getServletFilters()
 		===========
 		xml web.xml
@@ -586,92 +586,92 @@ Spring MVC ÓÃJavaConfig ³õÊ¼»¯ServletÈİÆ÷ ServletInitializer
 				<param-value>/WEB-INF/springDispatcherServlet-servlet.xml</param-value>
 			</context-param>
 			
-Spring MVC ÆôÓÃMVC Java±à³ÌÅäÖÃ£¨@EnableWebMvc£©»òMVCÃüÃû¿Õ¼ä£¨<mvc:annotaiton-dirven>£©
-	ÆôÓÃMVC:
+Spring MVC å¯ç”¨MVC Javaç¼–ç¨‹é…ç½®ï¼ˆ@EnableWebMvcï¼‰æˆ–MVCå‘½åç©ºé—´ï¼ˆ<mvc:annotaiton-dirven>ï¼‰
+	å¯ç”¨MVC:
 		@Configuration
 		@EnableWebMvc
 		public class WebConfig(){}
 		=======
 		<mvc:annotation-driven/>
-	Ä¬ÈÏ×¢²áµÄ×é¼ş:
-		1RequestMappingHandlerMapping	//Ó³Éä¿ØÖÆÆ÷
-		2RequestMappingHandlerAdapter	//µ÷ÓÃ¿ØÖÆÆ÷
-		3ExceptionHandlerExceptionResolver//½âÎö¿ØÖÆÆ÷Òì³£
-		4Ö§³Ö¶ÔÊ¹ÓÃÁË@RequestMapping¡¢@ExceptionHandler¼°ÆäËû×¢½âµÄ¿ØÖÆÆ÷·½·¨µÄÇëÇó´¦Àí¡£
-	Ä¬ÈÏÆôÓÃÁËÒÔÏÂµÄÌØĞÔ
-		5@NumberFormat¶ÔÊı×Ö×Ö¶Î½øĞĞ¸ñÊ½»¯£¬ÀàĞÍ×ª»»ÓÉConversionServiceÊµÏÖ
-		6@DateTimeFormat×¢½â¶ÔDate¡¢Calendar¡¢Long¼°Joda TimeÀàĞÍµÄ×Ö¶Î½øĞĞ¸ñÊ½»¯
-		7@Valid×¢½â¶Ô@ControllerÊäÈë½øĞĞÑéÖ¤£¬ÔÚclasspathÂ·¾¶ÏÂ±ÈÈçÌá¹©·ûºÏJSR-303¹æ·¶µÄÑéÖ¤Æ÷
-		8Ìá¹©HTTPÏûÏ¢×ª»»HttpMessageConverterµÄÖ§³Ö£¬×ª»»@ResponseBodyºÍ@RequestBody
-			ÓÉmvc:annotation-driven×¢²á¿ÉÓÃµÄHTTPÏûÏ¢×ª»»Æ÷
-			MappingJackson2HttpMessageConverter£º´Ó£¨µ½£©JSONµÄ×ª»»
-				¡ª¡ª¸Ã×ª»»Æ÷ÔÚclasspathÏÂÓĞJackson 2ÒÀÀµÊ±±»×¢²á
-			MappingJackson2XmlHttpMessageConverter£º´Ó£¨µ½£©XMLµÄ×ª»»
-				¡ª¡ª¸Ã×ª»»Æ÷ÔÚclasspathÏÂÓĞJackson 2 XMLÀ©Õ¹Ê±±»×¢²á
-			Jaxb2RootElementHttpMessageConverter£ºJava¶ÔÏó<-->XMLÖ®¼äµÄ»¥Ïà×ª»»
-				¡ª¡ª¸Ã×ª»»Æ÷ÔÚclasspathÏÂÓĞJAXB2ÒÀÀµ²¢ÇÒÃ»ÓĞJackson 2 XMLÀ©Õ¹Ê±±»×¢²á
+	é»˜è®¤æ³¨å†Œçš„ç»„ä»¶:
+		1RequestMappingHandlerMapping	//æ˜ å°„æ§åˆ¶å™¨
+		2RequestMappingHandlerAdapter	//è°ƒç”¨æ§åˆ¶å™¨
+		3ExceptionHandlerExceptionResolver//è§£ææ§åˆ¶å™¨å¼‚å¸¸
+		4æ”¯æŒå¯¹ä½¿ç”¨äº†@RequestMappingã€@ExceptionHandleråŠå…¶ä»–æ³¨è§£çš„æ§åˆ¶å™¨æ–¹æ³•çš„è¯·æ±‚å¤„ç†ã€‚
+	é»˜è®¤å¯ç”¨äº†ä»¥ä¸‹çš„ç‰¹æ€§
+		5@NumberFormatå¯¹æ•°å­—å­—æ®µè¿›è¡Œæ ¼å¼åŒ–ï¼Œç±»å‹è½¬æ¢ç”±ConversionServiceå®ç°
+		6@DateTimeFormatæ³¨è§£å¯¹Dateã€Calendarã€LongåŠJoda Timeç±»å‹çš„å­—æ®µè¿›è¡Œæ ¼å¼åŒ–
+		7@Validæ³¨è§£å¯¹@Controllerè¾“å…¥è¿›è¡ŒéªŒè¯ï¼Œåœ¨classpathè·¯å¾„ä¸‹æ¯”å¦‚æä¾›ç¬¦åˆJSR-303è§„èŒƒçš„éªŒè¯å™¨
+		8æä¾›HTTPæ¶ˆæ¯è½¬æ¢HttpMessageConverterçš„æ”¯æŒï¼Œè½¬æ¢@ResponseBodyå’Œ@RequestBody
+			ç”±mvc:annotation-drivenæ³¨å†Œå¯ç”¨çš„HTTPæ¶ˆæ¯è½¬æ¢å™¨
+			MappingJackson2HttpMessageConverterï¼šä»ï¼ˆåˆ°ï¼‰JSONçš„è½¬æ¢
+				â€”â€”è¯¥è½¬æ¢å™¨åœ¨classpathä¸‹æœ‰Jackson 2ä¾èµ–æ—¶è¢«æ³¨å†Œ
+			MappingJackson2XmlHttpMessageConverterï¼šä»ï¼ˆåˆ°ï¼‰XMLçš„è½¬æ¢
+				â€”â€”è¯¥è½¬æ¢å™¨åœ¨classpathä¸‹æœ‰Jackson 2 XMLæ‰©å±•æ—¶è¢«æ³¨å†Œ
+			Jaxb2RootElementHttpMessageConverterï¼šJavaå¯¹è±¡<-->XMLä¹‹é—´çš„äº’ç›¸è½¬æ¢
+				â€”â€”è¯¥è½¬æ¢å™¨åœ¨classpathä¸‹æœ‰JAXB2ä¾èµ–å¹¶ä¸”æ²¡æœ‰Jackson 2 XMLæ‰©å±•æ—¶è¢«æ³¨å†Œ
 				
-	Spring MVC Ä¬ÈÏÅäÖÃµÄ¶¨ÖÆ»¯
+	Spring MVC é»˜è®¤é…ç½®çš„å®šåˆ¶åŒ–
 		javaconfig:
-			ÊµÏÖWebMvcConfigurer½Ó¿Ú
-				»ò
-			¼Ì³ĞWebMvcConfigurerSupportÀà²¢¸²Ğ´ÄãĞèÒª¶¨ÖÆµÄ·½·¨£¨hot£©
-		XMLÃüÃû¿Õ¼äÏÂ:
-			Èç¹ûÄãÏë¶ÔÄ¬ÈÏÅäÖÃ½øĞĞ¶¨ÖÆ£¬
-			ÔÚ<mvc:annotation-driven/>ÔªËØÏÂÅäÖÃÖ§³ÖµÄÊôĞÔºÍ×ÓÔªËØ¡£
+			å®ç°WebMvcConfigureræ¥å£
+				æˆ–
+			ç»§æ‰¿WebMvcConfigurerSupportç±»å¹¶è¦†å†™ä½ éœ€è¦å®šåˆ¶çš„æ–¹æ³•ï¼ˆhotï¼‰
+		XMLå‘½åç©ºé—´ä¸‹:
+			å¦‚æœä½ æƒ³å¯¹é»˜è®¤é…ç½®è¿›è¡Œå®šåˆ¶ï¼Œ
+			åœ¨<mvc:annotation-driven/>å…ƒç´ ä¸‹é…ç½®æ”¯æŒçš„å±æ€§å’Œå­å…ƒç´ ã€‚
 		
-		Spring MVC ×ª»»Óë¸ñÊ½»¯
+		Spring MVC è½¬æ¢ä¸æ ¼å¼åŒ–
 			javaconfig:
-				¼Ì³ĞWebMvcConfigurationSupport
-				ÖØĞ´addFormatters(FormatterRegistry registry)
+				ç»§æ‰¿WebMvcConfigurationSupport
+				é‡å†™addFormatters(FormatterRegistry registry)
 			xml:
-				ÔÚ<mvc:annotation-driven>ÏÂ
-				Ö»ĞèÒªÌá¹©Ò»¸ö×ª»»·şÎñidÎªConversionServiceµÄbean
+				åœ¨<mvc:annotation-driven>ä¸‹
+				åªéœ€è¦æä¾›ä¸€ä¸ªè½¬æ¢æœåŠ¡idä¸ºConversionServiceçš„bean
 				
-			×ª»»Æ÷¸ºÔğhttpmessageµ½java¶ÔÏó¼äµÄÏà»¥×ª»»£¨@ResponseBody¡¢@RequestBody£©
-			¸ñÊ½Æ÷¸ºÔğ¶Ô@DateTimeFormat£¬@NumberFormatµÄ×Ö¶Î¸ñÊ½»¯
-			×ª»»Æ÷&¸ñÊ½Æ÷¶¼Í¨¹ıFormatterRegistryÌí¼Ó
-			×ª»» xml Ìí¼ÓÒÀÀµ
+			è½¬æ¢å™¨è´Ÿè´£httpmessageåˆ°javaå¯¹è±¡é—´çš„ç›¸äº’è½¬æ¢ï¼ˆ@ResponseBodyã€@RequestBodyï¼‰
+			æ ¼å¼å™¨è´Ÿè´£å¯¹@DateTimeFormatï¼Œ@NumberFormatçš„å­—æ®µæ ¼å¼åŒ–
+			è½¬æ¢å™¨&æ ¼å¼å™¨éƒ½é€šè¿‡FormatterRegistryæ·»åŠ 
+			è½¬æ¢ xml æ·»åŠ ä¾èµ–
 				jackson-dataformat-xml
 			
-		Spring MVC ÑéÖ¤Ö§³Ö
+		Spring MVC éªŒè¯æ”¯æŒ
 			JavaConfig:
-				ÔÚSpring MVCÖĞ£¬Äã¿ÉÒÔÅäÖÃÒ»¸öÈ«¾ÖµÄValidatorÊµÀı
-					¼Ì³ĞWebMvcConfigurationSupport
-					ÖØĞ´getValidator(),·µ»ØÒ»¸öÑéÖ¤Æ÷
-				»ò
-				ÔÚ¿ØÖÆÆ÷ÄÚµÄ@InitBinder·½·¨ÖĞÓÃ×÷¾Ö²¿µÄValidator
+				åœ¨Spring MVCä¸­ï¼Œä½ å¯ä»¥é…ç½®ä¸€ä¸ªå…¨å±€çš„Validatorå®ä¾‹
+					ç»§æ‰¿WebMvcConfigurationSupport
+					é‡å†™getValidator(),è¿”å›ä¸€ä¸ªéªŒè¯å™¨
+				æˆ–
+				åœ¨æ§åˆ¶å™¨å†…çš„@InitBinderæ–¹æ³•ä¸­ç”¨ä½œå±€éƒ¨çš„Validator
 					
 			xml:
 				<mvc:annotation-driven validator="ValidatorId" >
 				
-			springÍ¨¹ıLocalValidatorFactoryBeanÑéÖ¤Æ÷ÀàÖ§³ÖJSR-303/JSR-349µÄBeanÑéÖ¤
-			JSR-303ÊÇÒ»¸öÊı¾İÑéÖ¤µÄ¹æ·¶£¬µ«ÊÇspring²¢Ã»ÓĞ¶ÔÆä½øĞĞÊµÏÖ£¬
-			Hibernate ValidatorÊÇÊµÏÖÁËÕâÒ»¹æ·¶µÄ£¬Í¨¹ı´ËÕâ¸öÊµÏÖÀ´½²SpringMVC¶ÔJSR-303µÄÖ§³Ö
-			Ê¹ÓÃApache BVal :: BVal JSR ? 1.1.1
-			Òª¼ÓÈëÒÀÀµ
-			javax.validation.validation-api¿â//jsr303Ğ­Òé
-			ºÍjsr303-validation¿â		//jsrÑéÖ¤Æ÷µÄÊµÏÖ
-			±ØĞèÒªÓĞjsr303·ñÔò²»¿ÉÑéÖ¤
-			ÅäÖÃÑéÖ¤Æ÷ºó¼´¿É¶Ô@ValidºÍ@ValidatedµÄ¿ØÖÆÆ÷ÊäÈë²ÎÊı½øĞĞÑéÖ¤
+			springé€šè¿‡LocalValidatorFactoryBeanéªŒè¯å™¨ç±»æ”¯æŒJSR-303/JSR-349çš„BeanéªŒè¯
+			JSR-303æ˜¯ä¸€ä¸ªæ•°æ®éªŒè¯çš„è§„èŒƒï¼Œä½†æ˜¯springå¹¶æ²¡æœ‰å¯¹å…¶è¿›è¡Œå®ç°ï¼Œ
+			Hibernate Validatoræ˜¯å®ç°äº†è¿™ä¸€è§„èŒƒçš„ï¼Œé€šè¿‡æ­¤è¿™ä¸ªå®ç°æ¥è®²SpringMVCå¯¹JSR-303çš„æ”¯æŒ
+			ä½¿ç”¨Apache BVal :: BVal JSR ? 1.1.1
+			è¦åŠ å…¥ä¾èµ–
+			javax.validation.validation-apiåº“//jsr303åè®®
+			å’Œjsr303-validationåº“		//jsréªŒè¯å™¨çš„å®ç°
+			å¿…éœ€è¦æœ‰jsr303å¦åˆ™ä¸å¯éªŒè¯
+			é…ç½®éªŒè¯å™¨åå³å¯å¯¹@Validå’Œ@Validatedçš„æ§åˆ¶å™¨è¾“å…¥å‚æ•°è¿›è¡ŒéªŒè¯
 		
-		Spring MVC À¹½ØÆ÷ÅäÖÃ
+		Spring MVC æ‹¦æˆªå™¨é…ç½®
 			JavaConfig:
-				¼Ì³ĞWebMvcConfigurationSupport
-				ÖØĞ´addInterceptors(InterceptorRegistry registr)
+				ç»§æ‰¿WebMvcConfigurationSupport
+				é‡å†™addInterceptors(InterceptorRegistry registr)
 			xml:
-				Ê¹ÓÃ
+				ä½¿ç”¨
 				<mvc:interceptors>
 				
-		 Spring MVC ÄÚÈİĞ­ÉÌ 
-			ifÍ¨¹ıÇëÇóµÄurlµÄÍØÕ¹Ãû.json/.xxxxÈ·¶¨Òª·µ»ØÊ²Ã´ÄÚÈİ
-			else²»ÄÜÍ¨¹ıÍØÕ¹ÃûÈ·¶¨·µ»ØÄÚÈİµÄÔòÍ¨¹ıÇëÇóÍ·µÄAccept¾ö¶¨Òª·µ»ØµÄÄÚÈİÀàĞÍ
-			ÅäÖÃ·µ»ØÄÚÈİĞ­ÉÌ£¬Ê¹·µ»ØÕıÈ·ÀàĞÍµÄÄÚÈİ
+		 Spring MVC å†…å®¹åå•† 
+			ifé€šè¿‡è¯·æ±‚çš„urlçš„æ‹“å±•å.json/.xxxxç¡®å®šè¦è¿”å›ä»€ä¹ˆå†…å®¹
+			elseä¸èƒ½é€šè¿‡æ‹“å±•åç¡®å®šè¿”å›å†…å®¹çš„åˆ™é€šè¿‡è¯·æ±‚å¤´çš„Acceptå†³å®šè¦è¿”å›çš„å†…å®¹ç±»å‹
+			é…ç½®è¿”å›å†…å®¹åå•†ï¼Œä½¿è¿”å›æ­£ç¡®ç±»å‹çš„å†…å®¹
 			JavaConfig:
-				¼Ì³ĞWebMvcConfigurationSupport
-				ÖØĞ´configureContentNegotiation(ContentNegotiationConfigurer configurer) 
+				ç»§æ‰¿WebMvcConfigurationSupport
+				é‡å†™configureContentNegotiation(ContentNegotiationConfigurer configurer) 
 					configurer.mediaType("json", MediaType.APPLICATION_JSON)
-					ÅäÖÃ¶ÔÓ¦·µ»ØÊ²Ã´ÄÚÈİ	
+					é…ç½®å¯¹åº”è¿”å›ä»€ä¹ˆå†…å®¹	
 			xml:
 				<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager"/>
 				<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
@@ -683,9 +683,9 @@ Spring MVC ÆôÓÃMVC Java±à³ÌÅäÖÃ£¨@EnableWebMvc£©»òMVCÃüÃû¿Õ¼ä£¨<mvc:annotaiton-d
 					</property>
 				</bean>
 				
-		Spring MVC ×Ô¶¨ÒåÏûÏ¢×ª»»Æ÷
+		Spring MVC è‡ªå®šä¹‰æ¶ˆæ¯è½¬æ¢å™¨
 			JavaConfig:
-				¸²Ğ´configureMessageConverters()
+				è¦†å†™configureMessageConverters()
 			xml:
 				<mvc:annotation-driven>
 					<mvc:message-converters>
@@ -694,42 +694,42 @@ Spring MVC ÆôÓÃMVC Java±à³ÌÅäÖÃ£¨@EnableWebMvc£©»òMVCÃüÃû¿Õ¼ä£¨<mvc:annotaiton-d
 					</mvc:message-converters>
 				</mvc:annotation-driven>
 				
-		Spring MVC ÊÓÍ¼¿ØÖÆÆ÷
+		Spring MVC è§†å›¾æ§åˆ¶å™¨
 			JavaConfig:	
-				¼Ì³ĞWebMvcConfigurationSupport
-				ÖØĞ´addViewControllers(ViewControllerRegistry registry)
+				ç»§æ‰¿WebMvcConfigurationSupport
+				é‡å†™addViewControllers(ViewControllerRegistry registry)
 						registry.addViewController("/").setViewName("home");
 			xml:
 				<mvc:view-controller path="/re" view-name="jsp/index"/>
 				
-			½«ËùÓĞ"/"ÇëÇó Ö±½Ó×ª·¢ ¸øÃû×ÖÎª"home"µÄÊÓÍ¼
+			å°†æ‰€æœ‰"/"è¯·æ±‚ ç›´æ¥è½¬å‘ ç»™åå­—ä¸º"home"çš„è§†å›¾
 			
-		Spring MVC ÊÓÍ¼½âÎöÆ÷
-			£¡£¡£¡¶¼ÒªÓĞÉùÃ÷ViewResolver bean
+		Spring MVC è§†å›¾è§£æå™¨
+			ï¼ï¼ï¼éƒ½è¦æœ‰å£°æ˜ViewResolver bean
 			JavaConfig:	
-				¼Ì³ĞWebMvcConfigurationSupport
-				ÖØĞ´configureViewResolvers(ViewResolverRegistry registry)
+				ç»§æ‰¿WebMvcConfigurationSupport
+				é‡å†™configureViewResolvers(ViewResolverRegistry registry)
 					registry.enableContentNegotiation(new MappingJackson2JsonView());
-					//ÎªÄÚÈİĞ­ÉÌÅäÖÃ½âÎöÆ÷
+					//ä¸ºå†…å®¹åå•†é…ç½®è§£æå™¨
 			xml:
 				<mvc:view-resolvers>
 					<mvc:content-negotiation>
-						<mvc:default-views>	//ÉèÖÃÄ¬ÈÏViewµÄbean
+						<mvc:default-views>	//è®¾ç½®é»˜è®¤Viewçš„bean
 							<bean >
 		
-		Spring MVC »Øµ½Ä¬ÈÏµÄServletÀ´½øĞĞ¾²Ì¬×ÊÔ´·şÎñ£¬ÓÃwebÈİÆ÷µÄÄ¬ÈÏservlet
+		Spring MVC å›åˆ°é»˜è®¤çš„Servletæ¥è¿›è¡Œé™æ€èµ„æºæœåŠ¡ï¼Œç”¨webå®¹å™¨çš„é»˜è®¤servlet
 			javaconfig
-				¼Ì³ĞWebMvcConfigurationSupport
-				Èç¹ûÒªÍêÈ«¶¨ÖÆ×Ô¼ºµÄConverter
-					ÖØĞ´configureDefaultServletHandling()
-				Èç¹ûÖ»ÏëÔö¼ÓConverter
-					¸²Ğ´extendMessageConverters()
-			xml£º
+				ç»§æ‰¿WebMvcConfigurationSupport
+				å¦‚æœè¦å®Œå…¨å®šåˆ¶è‡ªå·±çš„Converter
+					é‡å†™configureDefaultServletHandling()
+				å¦‚æœåªæƒ³å¢åŠ Converter
+					è¦†å†™extendMessageConverters()
+			xmlï¼š
 				<mvc:default-servlet-handler/>
 				
-			ÔÊĞíÄ¬ÈÏµÄServlet´¦Àí±»DispatcherServletÀ¹½ØµÄurl×ÊÔ´(¾²Ì¬×ÊÔ´)
-			ÈôWebÓ¦ÓÃ·şÎñÆ÷µÄÄ¬ÈÏServlet²»ÊÇdefaultÔò
-				<mvc:default-servlet-handler default-servlet-name="mydefault" />	Ö¸¶¨webµÄÄ¬ÈÏservlet
-			»òÓÃ
+			å…è®¸é»˜è®¤çš„Servletå¤„ç†è¢«DispatcherServletæ‹¦æˆªçš„urlèµ„æº(é™æ€èµ„æº)
+			è‹¥Webåº”ç”¨æœåŠ¡å™¨çš„é»˜è®¤Servletä¸æ˜¯defaultåˆ™
+				<mvc:default-servlet-handler default-servlet-name="mydefault" />	æŒ‡å®šwebçš„é»˜è®¤servlet
+			æˆ–ç”¨
 				<mvc:resources location="/js/**" mapping="/resources/**"/>
-				´¦Àí¾²Ì¬×ÊÔ´
+				å¤„ç†é™æ€èµ„æº

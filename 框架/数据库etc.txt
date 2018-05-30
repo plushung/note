@@ -1,259 +1,259 @@
-DDL £¨Data Definition Language Êı¾İ¶¨ÒåÓïÑÔ£©
-	create table ´´½¨±í     
-	alter table  ĞŞ¸Ä±í   
-	drop table É¾³ı±í   
-	truncate table É¾³ı±íÖĞËùÓĞĞĞ     
-	create index ´´½¨Ë÷Òı   
-	drop index  É¾³ıË÷Òı
-	µ±DDLÓï¾äÖ´ĞĞÍê³ÉÊ±£¬DDLÓï¾ä»á±»×Ô¶¯Ìá½»£¬²»ÄÜ»Ø¹ö¡£
-DML £¨Data Manipulation Language Êı¾İ²Ù×÷ÓïÑÔ£©
-	insert ½«¼ÇÂ¼²åÈëµ½Êı¾İ¿â 
-	update ĞŞ¸ÄÊı¾İ¿âµÄ¼ÇÂ¼ 
-	delete É¾³ıÊı¾İ¿âµÄ¼ÇÂ¼
+DDL ï¼ˆData Definition Language æ•°æ®å®šä¹‰è¯­è¨€ï¼‰
+	create table åˆ›å»ºè¡¨     
+	alter table  ä¿®æ”¹è¡¨   
+	drop table åˆ é™¤è¡¨   
+	truncate table åˆ é™¤è¡¨ä¸­æ‰€æœ‰è¡Œ     
+	create index åˆ›å»ºç´¢å¼•   
+	drop index  åˆ é™¤ç´¢å¼•
+	å½“DDLè¯­å¥æ‰§è¡Œå®Œæˆæ—¶ï¼ŒDDLè¯­å¥ä¼šè¢«è‡ªåŠ¨æäº¤ï¼Œä¸èƒ½å›æ»šã€‚
+DML ï¼ˆData Manipulation Language æ•°æ®æ“ä½œè¯­è¨€ï¼‰
+	insert å°†è®°å½•æ’å…¥åˆ°æ•°æ®åº“ 
+	update ä¿®æ”¹æ•°æ®åº“çš„è®°å½• 
+	delete åˆ é™¤æ•°æ®åº“çš„è®°å½•
 
-¹ÜÀí
-	Ôö¼ÓÓÃ»§
-		use mysql£»		//mysql´æ´¢ÏµÍ³¸÷ÖÖĞÅÏ¢µÄÊı¾İ¿âÎªmysql
+ç®¡ç†
+	å¢åŠ ç”¨æˆ·
+		use mysqlï¼›		//mysqlå­˜å‚¨ç³»ç»Ÿå„ç§ä¿¡æ¯çš„æ•°æ®åº“ä¸ºmysql
 		insert into user (host,user,authentication_string) values('localhost','username',password('password'));
 		insert into user (host,user,authentication_string) values('localhost','username',password('password'));
-		flush privileges;		//Ë¢ĞÂ
-			password£¨£©º¯ÊıÓÃÓÚ¼ÓÃÜÃÜÂë
+		flush privileges;		//åˆ·æ–°
+			passwordï¼ˆï¼‰å‡½æ•°ç”¨äºåŠ å¯†å¯†ç 
 			
 		create user 'username@localhost' identified by 'password'
-	É¾³ıÓÃ»§
+	åˆ é™¤ç”¨æˆ·
 		drop user 'username@localhost'
-	ÊÚÈ¨
+	æˆæƒ
 		grant 
-			select£¬update£¨column £© 
+			selectï¼Œupdateï¼ˆcolumn ï¼‰ 
 		On datebaseName.tableName 
 		To 'user'@'localhost'
-		with grant option //½«×Ô¼ºµÄÈ¨ÏŞÊÚÓèÓÃ»§
+		with grant option //å°†è‡ªå·±çš„æƒé™æˆäºˆç”¨æˆ·
 		
-	³·ÏúÊÚÈ¨		
-		revoke select£¬update On datebaseName.tableName FROM 'user'@'localhost'
-		»ò
-		revoke all privileges,grant option	//»ØÊÕËùÓĞÈ¨ÏŞ¼°
-£¡£¡£¡£¡£¡
-	ÁĞÃûÒ»¶¨ÒªÓÃ£¨£©À¨ÆğÀ´
+	æ’¤é”€æˆæƒ		
+		revoke selectï¼Œupdate On datebaseName.tableName FROM 'user'@'localhost'
+		æˆ–
+		revoke all privileges,grant option	//å›æ”¶æ‰€æœ‰æƒé™åŠ
+ï¼ï¼ï¼ï¼ï¼
+	åˆ—åä¸€å®šè¦ç”¨ï¼ˆï¼‰æ‹¬èµ·æ¥
 	
-Ìæ»»²éÑ¯½á¹ûµÄÊı¾İ
+æ›¿æ¢æŸ¥è¯¢ç»“æœçš„æ•°æ®
 	select 
 		case
 			when score < 50 then 'fail'
-			when score >50 and score <90 then ¡®pass¡¯
-			else ¡®good'
+			when score >50 and score <90 then â€˜passâ€™
+			else â€˜good'
 		end as 'rank' from student
 
 	
-²åÈëÊı¾İ
-	Ö±½Ó²åÈë
-		insert into table_name £¨column1£¬cloumn2£©values(,,,) 
-	ÓÃselectµÄÊı¾İ²åÈë
+æ’å…¥æ•°æ®
+	ç›´æ¥æ’å…¥
+		insert into table_name ï¼ˆcolumn1ï¼Œcloumn2ï¼‰values(,,,) 
+	ç”¨selectçš„æ•°æ®æ’å…¥
 		insert into table_name select .. from table_name
 		
-¸üĞÂ
+æ›´æ–°
 	UPDATE table_name
 	SET column1 = value1, column2 = value2, ...
 	WHERE condition;
 		
-Ö¸¶¨·µ»Ø¼ÇÂ¼µÄÌõÊı
-	SQL Server / MS Access Óï·¨	TOP n [percent]
-		·µ»Ø Ç°numberÌõ¼ÇÂ¼/·µ»ØÇ°number%Ìõ ¼ÇÂ¼
+æŒ‡å®šè¿”å›è®°å½•çš„æ¡æ•°
+	SQL Server / MS Access è¯­æ³•	TOP n [percent]
+		è¿”å› å‰numberæ¡è®°å½•/è¿”å›å‰number%æ¡ è®°å½•
 			select top number [percent] * from table_name 
 	mysql
-		·µ»ØnÌõ¼ÇÂ¼	.......limit n
+		è¿”å›næ¡è®°å½•	.......limit n
 			select * from human limit 10;
 	oracle
-		·µ»ØnÌõ¼ÇÂ¼	....... rownum<=n
+		è¿”å›næ¡è®°å½•	....... rownum<=n
 			rownum <=n
 		
-like / not likeÓï¾ä
-	%: 0¸ö»ò¶à¸ö×Ö·û
-	_:  ÈÎÒâµ¥¸ö×Ö·û
+like / not likeè¯­å¥
+	%: 0ä¸ªæˆ–å¤šä¸ªå­—ç¬¦
+	_:  ä»»æ„å•ä¸ªå­—ç¬¦
 	
-Í¨¹ıÕıÔò±í´ïÊ½Æ¥Åä //½ö½ömysql¿ÉÒÔ
-	where name regexp '^ggs' 		//Ñ¡ÔñnameÒÔ¡®ggs¡¯¿ªÍ·µÄĞĞ	
+é€šè¿‡æ­£åˆ™è¡¨è¾¾å¼åŒ¹é… //ä»…ä»…mysqlå¯ä»¥
+	where name regexp '^ggs' 		//é€‰æ‹©nameä»¥â€˜ggsâ€™å¼€å¤´çš„è¡Œ	
 
 In / not in
-	ÔÚwhere Ê±column´Ó Ö¸¶¨µÄ¶à¸öÖµÀïÑ¡
-		in £¨¡®value¡¯£¬¡®value2¡¯£©
-		»ò
-		in £¨select ¡£¡££©
+	åœ¨where æ—¶columnä» æŒ‡å®šçš„å¤šä¸ªå€¼é‡Œé€‰
+		in ï¼ˆâ€˜valueâ€™ï¼Œâ€˜value2â€™ï¼‰
+		æˆ–
+		in ï¼ˆselect ã€‚ã€‚ï¼‰
 		
-alias Ãû±ğÃû
+alias ååˆ«å
 	column as name 
 		
-Ñ¡Ôñ²»Í¬
-	ÔÚcolumnÇ°¼Ó distinct 
+é€‰æ‹©ä¸åŒ
+	åœ¨columnå‰åŠ  distinct 
 		
-ÅÅĞò
-	order by column desc|asc£¬column1 desc|asc //¿ÉÖ¸¶¨¶àÁĞÅÅĞò
+æ’åº
+	order by column desc|ascï¼Œcolumn1 desc|asc //å¯æŒ‡å®šå¤šåˆ—æ’åº
 		
 
 		
-Á¬½á²éÑ¯
-	Inner join table_name on == 		//Á½¸ö±íµÄÏà½»²¿·Ö
-		µÈÖµ²éÑ¯,×ó±ß±íµÄ¼ÇÂ¼ÊıÄ¿ÓëÓĞ±ß±í¼ÇÂ¼µÄÊıÄ¿ÏàÍ¬,»ùÓÚÕâĞ©±íÖ®¼äµÄ¹²Í¬×Ö¶Î
-	left outer join table_name on ==		//×ó±íµÄÈ«²¿¼°Á½±íµÄÏà½»²¿·Ö
-		LEFT JOIN »á¶ÁÈ¡×ó±ßÊı¾İ±íµÄÈ«²¿Êı¾İ£¬¼´±ãÓÒ±ß±íÎŞ¶ÔÓ¦Êı¾İ¡£
-	right outer join table_name on ==	//ÓÒ±íµÄÈ«²¿¼°Á½±íµÄÏà½»²¿·Ö
-		RIGHT JOIN »á¶ÁÈ¡ÓÒ±ßÊı¾İ±íµÄÈ«²¿Êı¾İ£¬¼´±ã×ó±ß±ß±íÎŞ¶ÔÓ¦Êı¾İ¡£
-	full join 						//Á½¸ö±íµÄµÑ¿¨¶û»ı
+è¿ç»“æŸ¥è¯¢
+	Inner join table_name on == 		//ä¸¤ä¸ªè¡¨çš„ç›¸äº¤éƒ¨åˆ†
+		ç­‰å€¼æŸ¥è¯¢,å·¦è¾¹è¡¨çš„è®°å½•æ•°ç›®ä¸æœ‰è¾¹è¡¨è®°å½•çš„æ•°ç›®ç›¸åŒ,åŸºäºè¿™äº›è¡¨ä¹‹é—´çš„å…±åŒå­—æ®µ
+	left outer join table_name on ==		//å·¦è¡¨çš„å…¨éƒ¨åŠä¸¤è¡¨çš„ç›¸äº¤éƒ¨åˆ†
+		LEFT JOIN ä¼šè¯»å–å·¦è¾¹æ•°æ®è¡¨çš„å…¨éƒ¨æ•°æ®ï¼Œå³ä¾¿å³è¾¹è¡¨æ— å¯¹åº”æ•°æ®ã€‚
+	right outer join table_name on ==	//å³è¡¨çš„å…¨éƒ¨åŠä¸¤è¡¨çš„ç›¸äº¤éƒ¨åˆ†
+		RIGHT JOIN ä¼šè¯»å–å³è¾¹æ•°æ®è¡¨çš„å…¨éƒ¨æ•°æ®ï¼Œå³ä¾¿å·¦è¾¹è¾¹è¡¨æ— å¯¹åº”æ•°æ®ã€‚
+	full join 						//ä¸¤ä¸ªè¡¨çš„ç¬›å¡å°”ç§¯
 		full join
 
-ÁªºÏunion²éÑ¯
+è”åˆunionæŸ¥è¯¢
 	select * from table_name
 	union 
 	select * from table_name1;
-	//Òª±£Ö¤unionµÄÁ½µÄselectÓĞÏàÍ¬ÁĞÊıÁĞÃû
+	//è¦ä¿è¯unionçš„ä¸¤çš„selectæœ‰ç›¸åŒåˆ—æ•°åˆ—å
 	
 		
-NULLÖµ´¦Àí
-	ÓÃis null / is not null ÅĞ¶ÏnullÖµ
+NULLå€¼å¤„ç†
+	ç”¨is null / is not null åˆ¤æ–­nullå€¼
 	
 	
-ĞŞ¸Ä±íÏî
-	É¾³ıÁĞ	drop
+ä¿®æ”¹è¡¨é¡¹
+	åˆ é™¤åˆ—	drop
 		alter table Table_name drop column_name;
-	Ôö¼ÓÁĞ	add
+	å¢åŠ åˆ—	add
 		alter table table_name add column_name char(10);
-	ĞŞ¸ÄÁĞÊôĞÔ	modify		//sqlserverÎªalter column_name
+	ä¿®æ”¹åˆ—å±æ€§	modify		//sqlserverä¸ºalter column_name
 		alter table table_name modify column_name int;
-	ĞŞ¸ÄÁĞÃû¼°ÊôĞÔ change
+	ä¿®æ”¹åˆ—ååŠå±æ€§ change
 		alter table table_name change column_name newname int;
-	Ö±½ÓĞŞ¸ÄÄ³ÁĞµÄÄ¬ÈÏÖµ alter
+	ç›´æ¥ä¿®æ”¹æŸåˆ—çš„é»˜è®¤å€¼ alter
 		ALTER TABLE testalter_tbl ALTER i SET DEFAULT 1000
-	ĞŞ¸Ä±íÃû 
+	ä¿®æ”¹è¡¨å 
 		alter table table_name RENAME TO new_table_name
 		
 		
 		
-ÊÓÍ¼		//ÊôÓÚÊı¾İ¿âµÄ	as  drop		
-	´´½¨ÊÓÍ¼		//Ñ¡ÔñÒ»Ğ©¼ÇÂ¼À´×÷ÎªasÊÓÍ¼
+è§†å›¾		//å±äºæ•°æ®åº“çš„	as  drop		
+	åˆ›å»ºè§†å›¾		//é€‰æ‹©ä¸€äº›è®°å½•æ¥ä½œä¸ºasè§†å›¾
 		create view 'viewname' as select * from human ...
-	¸üĞÂÊÓÍ¼
+	æ›´æ–°è§†å›¾
 		create or replace view view_name as select ......
-	É¾³ıÊÓÍ¼
-		drop view view_name£»
+	åˆ é™¤è§†å›¾
+		drop view view_nameï¼›
 
-Ë÷Òı		//ÊôÓÚ±íµÄ		on  alter
-	ÊÇÒ»ÖÖÊı¾İ½á¹¹£¬ÓÃB+treeÊµÏÖ£¬ÓÃÓÚ¿ìËÙ²éÕÒÄ³½Úµã£¬½ÚµãÉÏ´æ´¢×Å±íÖĞÄ³ÁĞÁĞÖµ£¬¸ù¾İ¸ÃÁĞÍ¨¹ıË÷Òı¿ìËÙ²éÕÒ¼ÇÂ¼
-	Ê¹ÓÃË÷Òı¼Ó¿ì¼ìË÷ËÙ¶È£¬µ«½µµÍÁËĞ´ÈëËÙ¶È
+ç´¢å¼•		//å±äºè¡¨çš„		on  alter
+	æ˜¯ä¸€ç§æ•°æ®ç»“æ„ï¼Œç”¨B+treeå®ç°ï¼Œç”¨äºå¿«é€ŸæŸ¥æ‰¾æŸèŠ‚ç‚¹ï¼ŒèŠ‚ç‚¹ä¸Šå­˜å‚¨ç€è¡¨ä¸­æŸåˆ—åˆ—å€¼ï¼Œæ ¹æ®è¯¥åˆ—é€šè¿‡ç´¢å¼•å¿«é€ŸæŸ¥æ‰¾è®°å½•
+	ä½¿ç”¨ç´¢å¼•åŠ å¿«æ£€ç´¢é€Ÿåº¦ï¼Œä½†é™ä½äº†å†™å…¥é€Ÿåº¦
 	
-	½¨Òé£º
-		Ö»ÔÚ²éÑ¯Æµ·±µÄÁĞÉÏ½¨Á¢Ë÷Òı£¬²»ÔÚÆµ·±ĞŞ¸ÄµÄÁĞÉÏ½¨Á¢Ë÷Òı
+	å»ºè®®ï¼š
+		åªåœ¨æŸ¥è¯¢é¢‘ç¹çš„åˆ—ä¸Šå»ºç«‹ç´¢å¼•ï¼Œä¸åœ¨é¢‘ç¹ä¿®æ”¹çš„åˆ—ä¸Šå»ºç«‹ç´¢å¼•
 		
-	´´½¨±íÊ±´´½¨Ë÷Òı
-		¼òµ¥Ë÷Òı	//ÔÚ Ä³¸ö±íµÄ Ä³ÁĞÉÏon´´½¨Ë÷Òı
+	åˆ›å»ºè¡¨æ—¶åˆ›å»ºç´¢å¼•
+		ç®€å•ç´¢å¼•	//åœ¨ æŸä¸ªè¡¨çš„ æŸåˆ—ä¸Šonåˆ›å»ºç´¢å¼•
 			CREATE INDEX index_Name ON table_name (cloumn_name,..) 
-		Î¨Ò»Ë÷Òı	
+		å”¯ä¸€ç´¢å¼•	
 			Create unique index index_Name on table_name (cloumn_name,..) 
 		
-	´´½¨±íºóĞŞ¸ÄË÷Òı	
+	åˆ›å»ºè¡¨åä¿®æ”¹ç´¢å¼•	
 		ALTER TABLE tbl_name ADD INDEX index_name (column_list)
 	
-	É¾³ıË÷Òı
+	åˆ é™¤ç´¢å¼•
 		alter table table_name DROP INDEX index_name;
-		»ò
+		æˆ–
 		drop index `name` on `table_name`
 
-DATEº¯Êı
-	·µ»Øµ±Ç°Ê±¼äÈÕÆÚ
+DATEå‡½æ•°
+	è¿”å›å½“å‰æ—¶é—´æ—¥æœŸ
 		sqlserver : getdate()
 		mysql  :	now()		
-			mysql£ºµ±Ç°ÈÕÆÚ£ºcurdate()
-				 µ±Ç°Ê±¼ä£ºcrutime()
-	ÔÚÈÕÆÚÖĞ¼ÓÊ±¼ä¼ä¸ô
+			mysqlï¼šå½“å‰æ—¥æœŸï¼šcurdate()
+				 å½“å‰æ—¶é—´ï¼šcrutime()
+	åœ¨æ—¥æœŸä¸­åŠ æ—¶é—´é—´éš”
 		sqlserver : date_add()
 		mysql  : dateadd()
 	
-ÁÙÊ±±í
-	ÁÙÊ±±íÖ»ÔÚµ±Ç°ÊÂÎñÓĞĞ§
-	´´½¨
-		create temporary table table_name£¨¡£¡££©
+ä¸´æ—¶è¡¨
+	ä¸´æ—¶è¡¨åªåœ¨å½“å‰äº‹åŠ¡æœ‰æ•ˆ
+	åˆ›å»º
+		create temporary table table_nameï¼ˆã€‚ã€‚ï¼‰
 
-¸´ÖÆ±í
+å¤åˆ¶è¡¨
 	create table table_name as select * from table_name1;
 		
-Êı¾İ¿âµÄÔªÊı¾İ
-	ÔªÊı¾İ:ÃèÊöÊı¾İ¿âµÄĞÅÏ¢
+æ•°æ®åº“çš„å…ƒæ•°æ®
+	å…ƒæ•°æ®:æè¿°æ•°æ®åº“çš„ä¿¡æ¯
 	
-	»ñÈ¡±í½á¹¹
+	è·å–è¡¨ç»“æ„
 		show create table table_name \g
 	
-	Êı¾İ¿âÓë±íµÄÔªÊı¾İ
-		show tables£»	²éÑ¯µ±Ç°Êı¾İ¿âµÄ±í
-		show databases£» ²éÑ¯ÓĞÄÄĞ©Êı¾İ¿â
+	æ•°æ®åº“ä¸è¡¨çš„å…ƒæ•°æ®
+		show tablesï¼›	æŸ¥è¯¢å½“å‰æ•°æ®åº“çš„è¡¨
+		show databasesï¼› æŸ¥è¯¢æœ‰å“ªäº›æ•°æ®åº“
 		
-	»ñÈ¡·şÎñÆ÷ÔªÊı¾İ
-		SELECT VERSION( )	·şÎñÆ÷°æ±¾ĞÅÏ¢
-		SELECT DATABASE( )	µ±Ç°Êı¾İ¿âÃû (»òÕß·µ»Ø¿Õ)
-		SELECT USER( )	µ±Ç°ÓÃ»§Ãû
-		SHOW STATUS	·şÎñÆ÷×´Ì¬
-		SHOW VARIABLES	·şÎñÆ÷ÅäÖÃ±äÁ¿
+	è·å–æœåŠ¡å™¨å…ƒæ•°æ®
+		SELECT VERSION( )	æœåŠ¡å™¨ç‰ˆæœ¬ä¿¡æ¯
+		SELECT DATABASE( )	å½“å‰æ•°æ®åº“å (æˆ–è€…è¿”å›ç©º)
+		SELECT USER( )	å½“å‰ç”¨æˆ·å
+		SHOW STATUS	æœåŠ¡å™¨çŠ¶æ€
+		SHOW VARIABLES	æœåŠ¡å™¨é…ç½®å˜é‡
 		
-×Ô¶¯Ôö³¤ĞòÁĞ
-	´´½¨±íÊ±ÔÚÁĞÊôĞÔÉÏÌí¼ÓÊôĞÔAUTO_INCREMENT
-	»ò
-	ÔÚÌí¼ÓÁĞÊ±ÁĞÊôĞÔÉÏÌí¼ÓÊôĞÔAUTO_INCREMENT
-		¿ÉÖ¸¶¨³õÊ¼ĞòÁĞ AUTO_INCREMENT=100
+è‡ªåŠ¨å¢é•¿åºåˆ—
+	åˆ›å»ºè¡¨æ—¶åœ¨åˆ—å±æ€§ä¸Šæ·»åŠ å±æ€§AUTO_INCREMENT
+	æˆ–
+	åœ¨æ·»åŠ åˆ—æ—¶åˆ—å±æ€§ä¸Šæ·»åŠ å±æ€§AUTO_INCREMENT
+		å¯æŒ‡å®šåˆå§‹åºåˆ— AUTO_INCREMENT=100
 		
-	//sqlserver Îª identity(1,1)
+	//sqlserver ä¸º identity(1,1)
 
-Ô¼Êø
-	Ö÷¼üÔ¼Êø
-		ÁĞ¼¶Ô¼Êø
-			¶¨ÒåÁĞÊ± Ìí¼Ó PrimaryKey
-		±í¼¶Ô¼Êø
-			´´½¨±íÊ± Ö¸¶¨ PrimaryKey£¨column_name,......£©
+çº¦æŸ
+	ä¸»é”®çº¦æŸ
+		åˆ—çº§çº¦æŸ
+			å®šä¹‰åˆ—æ—¶ æ·»åŠ  PrimaryKey
+		è¡¨çº§çº¦æŸ
+			åˆ›å»ºè¡¨æ—¶ æŒ‡å®š PrimaryKeyï¼ˆcolumn_name,......ï¼‰
 			
-		constraint ÎªÔ¼ÊøÃüÃû
+		constraint ä¸ºçº¦æŸå‘½å
 		
-		É¾³ıÔ¼Êø
+		åˆ é™¤çº¦æŸ
 			alter table table_name drop primary key
 	
-	Î¨Ò»Ô¼Êø
-		ÁĞ¼¶
+	å”¯ä¸€çº¦æŸ
+		åˆ—çº§
 			unique
-		±í¼¶
-			unique £¨column_name,...£©
+		è¡¨çº§
+			unique ï¼ˆcolumn_name,...ï¼‰
 	
-	Íâ¼üÔ¼Êø
-		ÁĞ¼¶Ô¼Êø
+	å¤–é”®çº¦æŸ
+		åˆ—çº§çº¦æŸ
 			foreign key reference table_name(column)
-		±í¼¶Ô¼Êø
-			foreign key£¨column£© reference table_name(column)
+		è¡¨çº§çº¦æŸ
+			foreign keyï¼ˆcolumnï¼‰ reference table_name(column)
 				on update|on delete  cascade|set null|on action|restrict
-				//ÎªÍâ¼ü¶¨Òå¼¶Áª¶¯×÷
-					restrict:ÈôÍâ¼ü¸¸±í³¢ÊÔÉ¾³ı»ò¸üĞÂÊ±£¬¾Ü¾ø¸¸±íµÄÉ¾³ı»ò¸üĞÂ
-					cascade£º´Ó±íËæ¸¸±íµÄÉ¾³ı»ò¸üĞÂ¶øÉ¾³ı»ò¸üĞÂ´Ó±í
-					set null:¸¸±í¸üĞÂ»òÉ¾³ıÊ±£¬´Ó±í¶ÔÓ¦ĞĞµÄÍâ¼üÉèÖÃÎªnull
-					set default£ºÍâ¼üÉèÖÃÎªÄ¬ÈÏÖµ
-		constraint ÎªÔ¼ÊøÃüÃû
+				//ä¸ºå¤–é”®å®šä¹‰çº§è”åŠ¨ä½œ
+					restrict:è‹¥å¤–é”®çˆ¶è¡¨å°è¯•åˆ é™¤æˆ–æ›´æ–°æ—¶ï¼Œæ‹’ç»çˆ¶è¡¨çš„åˆ é™¤æˆ–æ›´æ–°
+					cascadeï¼šä»è¡¨éšçˆ¶è¡¨çš„åˆ é™¤æˆ–æ›´æ–°è€Œåˆ é™¤æˆ–æ›´æ–°ä»è¡¨
+					set null:çˆ¶è¡¨æ›´æ–°æˆ–åˆ é™¤æ—¶ï¼Œä»è¡¨å¯¹åº”è¡Œçš„å¤–é”®è®¾ç½®ä¸ºnull
+					set defaultï¼šå¤–é”®è®¾ç½®ä¸ºé»˜è®¤å€¼
+		constraint ä¸ºçº¦æŸå‘½å
 		
 		
 		
-		É¾³ıÔ¼Êø
-			alter table table_name drop foreign key ¡®¡¯keyname¡®¡¯
+		åˆ é™¤çº¦æŸ
+			alter table table_name drop foreign key â€˜â€™keynameâ€˜â€™
 			
-	·Ç¿ÕÔ¼Êø
+	éç©ºçº¦æŸ
 		not null
 		
-	checkÔ¼Êø
-		CHECK (P_Id>0)	//Ö¸¶¨Ä³ÁĞµÄ·¶Î§
+	checkçº¦æŸ
+		CHECK (P_Id>0)	//æŒ‡å®šæŸåˆ—çš„èŒƒå›´
 	
-Ìí¼ÓÔ¼Êø
+æ·»åŠ çº¦æŸ
 	alter table table_name add 
-		CONSTRAINT ¡®name¡¯ primary key(,,)
+		CONSTRAINT â€˜nameâ€™ primary key(,,)
 	alter table table_name add 
-		CONSTRAINT ¡°name¡± foreign key(,,) reference 
-É¾³ıÔ¼Êø
-	alter table table_name drop primary key `dd`		//É¾³ıÔ¼Êø
-	alter table table_name drop index `indexname`;		//É¾³ıË÷Òı
-		//ÔÚÔ¼ÊøÉÏÌí¼ÓµÄË÷ÒıÒ»°ãËæÔ¼ÊøµÄÉ¾³ı¶øÉ¾³ı
+		CONSTRAINT â€œnameâ€ foreign key(,,) reference 
+åˆ é™¤çº¦æŸ
+	alter table table_name drop primary key `dd`		//åˆ é™¤çº¦æŸ
+	alter table table_name drop index `indexname`;		//åˆ é™¤ç´¢å¼•
+		//åœ¨çº¦æŸä¸Šæ·»åŠ çš„ç´¢å¼•ä¸€èˆ¬éšçº¦æŸçš„åˆ é™¤è€Œåˆ é™¤
 	
-´¥·¢Æ÷
-	´´½¨
+è§¦å‘å™¨
+	åˆ›å»º
 		delimiter $
 		CREATE TRIGGER `9grid`.`tb_comments_BEFORE_INSERT` BEFORE INSERT 
 		ON `tb_comments` FOR EACH ROW
@@ -261,57 +261,57 @@ DATEº¯Êı
 			...;
 		END $
 		delimiter ;
-		²»ÓÃbegin-end¿ÉÒÔÖ»´¥·¢Ò»ÌõÓï¾ä
-		¹Ø¼ü×Ö
-			NEW:´ú±íĞÂµÄÒ»ĞĞ£¬ÓÃ·¨id=NEW.id
-			OLD:´ú±í¾ÉµÄ¼ÇÂ¼
-	ÒÆ³ı
+		ä¸ç”¨begin-endå¯ä»¥åªè§¦å‘ä¸€æ¡è¯­å¥
+		å…³é”®å­—
+			NEW:ä»£è¡¨æ–°çš„ä¸€è¡Œï¼Œç”¨æ³•id=NEW.id
+			OLD:ä»£è¡¨æ—§çš„è®°å½•
+	ç§»é™¤
 		drop trigger `trrger_name`;
 		
 delimiter $$
-	ÔÚÊ¹ÓÃbegin-end¹ı³ÌÌåÊ½ÁÙÊ±¸Ä±ä½áÊø·û²»ÓÃ;·ÀÖ¹¹ı³ÌÌåÖĞµÄÓï¾ä½áÊø·û(;)Óë¹ı³ÌÌå½áÊø·û·¢Éú³åÍ»end$$
-	¼´Ê¹ÓÃ$$×ö¹ı³ÌÌåµÄ½áÊø·û£¬À´¶¨Òå¹ı³ÌÌå
+	åœ¨ä½¿ç”¨begin-endè¿‡ç¨‹ä½“å¼ä¸´æ—¶æ”¹å˜ç»“æŸç¬¦ä¸ç”¨;é˜²æ­¢è¿‡ç¨‹ä½“ä¸­çš„è¯­å¥ç»“æŸç¬¦(;)ä¸è¿‡ç¨‹ä½“ç»“æŸç¬¦å‘ç”Ÿå†²çªend$$
+	å³ä½¿ç”¨$$åšè¿‡ç¨‹ä½“çš„ç»“æŸç¬¦ï¼Œæ¥å®šä¹‰è¿‡ç¨‹ä½“
 
-±äÁ¿
-	ÓÃ»§±äÁ¿
-		set @var="jj"	//¶¨ÒåÓÃ»§±äÁ¿²¢¸³Öµ£¬¿ÉÒÔÔÚsqlÓï¾äÖĞ@varÊ¹ÓÃ±äÁ¿Öµ
+å˜é‡
+	ç”¨æˆ·å˜é‡
+		set @var="jj"	//å®šä¹‰ç”¨æˆ·å˜é‡å¹¶èµ‹å€¼ï¼Œå¯ä»¥åœ¨sqlè¯­å¥ä¸­@varä½¿ç”¨å˜é‡å€¼
 		set @st=(select * from usertable)
-		ÔÚsqlÓï¾äÖĞ¸ø±äÁ¿¸³Öµ :=
+		åœ¨sqlè¯­å¥ä¸­ç»™å˜é‡èµ‹å€¼ :=
 			select @var:=555+@var ;
 			
-	ÏµÍ³±äÁ¿
+	ç³»ç»Ÿå˜é‡
 		@@version
-		@@Ç°×ºµÄ±äÁ¿ÊÇMYsqlÏµÍ³ÖĞ¶¨ÒåµÄ±äÁ¿
+		@@å‰ç¼€çš„å˜é‡æ˜¯MYsqlç³»ç»Ÿä¸­å®šä¹‰çš„å˜é‡
 		
 
 	
-´æ´¢¹ı³Ì
-	1.´æ´¢¹ı³ÌÖ»ÔÚ´´ÔìÊ±½øĞĞ±àÒë£¬ÒÔºóÃ¿´ÎÖ´ĞĞ´æ´¢¹ı³Ì¶¼²»ĞèÔÙÖØĞÂ±àÒë£¬
-	¶øÒ»°ãSQLÓï¾äÃ¿Ö´ĞĞÒ»´Î¾Í±àÒëÒ»´Î,ËùÒÔÊ¹ÓÃ´æ´¢¹ı³Ì¿ÉÌá¸ßÊı¾İ¿âÖ´ĞĞËÙ¶È£¬Ğ§ÂÊÒª±ÈT-SQLÓï¾ä¸ß¡£
+å­˜å‚¨è¿‡ç¨‹
+	1.å­˜å‚¨è¿‡ç¨‹åªåœ¨åˆ›é€ æ—¶è¿›è¡Œç¼–è¯‘ï¼Œä»¥åæ¯æ¬¡æ‰§è¡Œå­˜å‚¨è¿‡ç¨‹éƒ½ä¸éœ€å†é‡æ–°ç¼–è¯‘ï¼Œ
+	è€Œä¸€èˆ¬SQLè¯­å¥æ¯æ‰§è¡Œä¸€æ¬¡å°±ç¼–è¯‘ä¸€æ¬¡,æ‰€ä»¥ä½¿ç”¨å­˜å‚¨è¿‡ç¨‹å¯æé«˜æ•°æ®åº“æ‰§è¡Œé€Ÿåº¦ï¼Œæ•ˆç‡è¦æ¯”T-SQLè¯­å¥é«˜ã€‚
 	
-	mysql´æ´¢¹ı³Ì
-		½ç¶¨·û delimiter$$
-		´´½¨	CREATE PROCEDURE database.myproc(IN in varchar£¬OUT out int)
-			ÊäÈë IN inparam int
-			Êä³ö OUT outparam int
-		¾Ö²¿±äÁ¿
+	mysqlå­˜å‚¨è¿‡ç¨‹
+		ç•Œå®šç¬¦ delimiter$$
+		åˆ›å»º	CREATE PROCEDURE database.myproc(IN in varcharï¼ŒOUT out int)
+			è¾“å…¥ IN inparam int
+			è¾“å‡º OUT outparam int
+		å±€éƒ¨å˜é‡
 			declare var int [default 100]
 			set var = 0
-		¹ı³ÌÌå	begin ...... end	¿ÉÇ¶Ì×
-			Ìõ¼ş if .... then ....[elseif ...then] else ..... end if
-			Ñ­»·Óï¾ä 
+		è¿‡ç¨‹ä½“	begin ...... end	å¯åµŒå¥—
+			æ¡ä»¶ if .... then ....[elseif ...then] else ..... end if
+			å¾ªç¯è¯­å¥ 
 				while ...do ... 
-				end while£»
+				end whileï¼›
 				
 				repeat ... until .... 
 				end repeat;
 				
 				lable:loop
 					...
-					leave lable		//ÍË³ölableµÄloopÑ­»·
+					leave lable		//é€€å‡ºlableçš„loopå¾ªç¯
 					...
 					end loop lable
-			Ñ¡ÔñÓï¾ä 
+			é€‰æ‹©è¯­å¥ 
 				case exception 
 					when ... then ... 
 					when ... then... 
@@ -319,24 +319,24 @@ delimiter $$
 				end case;	//case--switch when--case else--default 
 			dml
 			ddl
-			declare		//¾Ö²¿±äÁ¿ÉùÃ÷
+			declare		//å±€éƒ¨å˜é‡å£°æ˜
 		
-	½«²éÑ¯½á¹û¸³Öµ¸ø±äÁ¿
-		select count£¨gg£© into var		//²úÉúµÄselect²»»áÊä³ö£¬Ö»»á¸³Öµ¸øvar
+	å°†æŸ¥è¯¢ç»“æœèµ‹å€¼ç»™å˜é‡
+		select countï¼ˆggï¼‰ into var		//äº§ç”Ÿçš„selectä¸ä¼šè¾“å‡ºï¼Œåªä¼šèµ‹å€¼ç»™var
 	
 	
-	DELIMITER $$			//ÓÃ$$×÷½ç¶¨·û
-	CREATE PROCEDURE  ¹ı³ÌÃû([[IN|OUT|INOUT] ²ÎÊıÃû Êı¾İÀàĞÍ[,[IN|OUT|INOUT] ²ÎÊıÃû Êı¾İÀàĞÍ¡­]]) [ÌØĞÔ ...] ¹ı³ÌÌå
-	  CREATE PROCEDURE myproc(OUT out int)		//´´½¨´æ´¢¹ı³Ì
+	DELIMITER $$			//ç”¨$$ä½œç•Œå®šç¬¦
+	CREATE PROCEDURE  è¿‡ç¨‹å([[IN|OUT|INOUT] å‚æ•°å æ•°æ®ç±»å‹[,[IN|OUT|INOUT] å‚æ•°å æ•°æ®ç±»å‹â€¦]]) [ç‰¹æ€§ ...] è¿‡ç¨‹ä½“
+	  CREATE PROCEDURE myproc(OUT out int)		//åˆ›å»ºå­˜å‚¨è¿‡ç¨‹
 		BEGIN							
 		  SELECT COUNT(*) INTO s FROM students;
 		END
 		$$
 	DELIMITER ;
 	
-´æ´¢º¯Êı
-	´æ´¢º¯Êı¿ÉÒ»ÓÃÔÚsqlÓï¾äÖĞ,Ö»ÄÜÓĞÒ»¸ö·µ»Ø£¬²»ÄÜÓĞ¶àµÄselect·µ»Ø
-	¶¨ÒåÒªÓĞreturn type
+å­˜å‚¨å‡½æ•°
+	å­˜å‚¨å‡½æ•°å¯ä¸€ç”¨åœ¨sqlè¯­å¥ä¸­,åªèƒ½æœ‰ä¸€ä¸ªè¿”å›ï¼Œä¸èƒ½æœ‰å¤šçš„selectè¿”å›
+	å®šä¹‰è¦æœ‰return type
 	delimiter$$
 		create function functionname(param,param1) return varchar(10)
 		begin

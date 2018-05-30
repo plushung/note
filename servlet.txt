@@ -1,26 +1,26 @@
-Java Servlet Í¨³£Çé¿öÏÂÓëÊ¹ÓÃ CGI£¨Common Gateway Interface£¬¹«¹²Íø¹Ø½Ó¿Ú£©ÊµÏÖµÄ³ÌĞò¿ÉÒÔ´ïµ½ÒìÇúÍ¬¹¤µÄĞ§¹û¡£
+Java Servlet é€šå¸¸æƒ…å†µä¸‹ä¸ä½¿ç”¨ CGIï¼ˆCommon Gateway Interfaceï¼Œå…¬å…±ç½‘å…³æ¥å£ï¼‰å®ç°çš„ç¨‹åºå¯ä»¥è¾¾åˆ°å¼‚æ›²åŒå·¥çš„æ•ˆæœã€‚
 
-×é¼ş£ºÓĞÌØ¶¨¹¦ÄÜ£¬¿ÉÔÚÈİÆ÷ÖĞ²¿ÊğÔËĞĞµÄÈí¼şÄ£¿é
+ç»„ä»¶ï¼šæœ‰ç‰¹å®šåŠŸèƒ½ï¼Œå¯åœ¨å®¹å™¨ä¸­éƒ¨ç½²è¿è¡Œçš„è½¯ä»¶æ¨¡å—
 
-ÈİÆ÷£ºÎª×é¼şÌá¹©ÔËĞĞ»·¾³£¬¹ÜÀí×é¼şµÄÉúÃüÖÜÆÚ£¨init£¬server£¬destory£©£¬
-³£ÓÃÈİÆ÷ÓĞweb£¨tomcat£©¡¢EJB£¨WebSphere£¬WebLogic£©
+å®¹å™¨ï¼šä¸ºç»„ä»¶æä¾›è¿è¡Œç¯å¢ƒï¼Œç®¡ç†ç»„ä»¶çš„ç”Ÿå‘½å‘¨æœŸï¼ˆinitï¼Œserverï¼Œdestoryï¼‰ï¼Œ
+å¸¸ç”¨å®¹å™¨æœ‰webï¼ˆtomcatï¼‰ã€EJBï¼ˆWebSphereï¼ŒWebLogicï¼‰
 
-ÈİÆ÷+×é¼şµÄÓÅÊÆ£º
-ÈİÆ÷¸ºÔğ´óÁ¿µÄ»ù´¡·şÎñ£¨ÈçÁ´½ÓÊı¾İ¿â£¬¶àÏß³Ì£¬´«µİ²ÎÊı¡£¡£¡££©£¬
-¶ø×é¼şÖ»¸ºÔğÒµÎñÂß¼­£¬·Ö¹¤ºÏ×÷¡£
+å®¹å™¨+ç»„ä»¶çš„ä¼˜åŠ¿ï¼š
+å®¹å™¨è´Ÿè´£å¤§é‡çš„åŸºç¡€æœåŠ¡ï¼ˆå¦‚é“¾æ¥æ•°æ®åº“ï¼Œå¤šçº¿ç¨‹ï¼Œä¼ é€’å‚æ•°ã€‚ã€‚ã€‚ï¼‰ï¼Œ
+è€Œç»„ä»¶åªè´Ÿè´£ä¸šåŠ¡é€»è¾‘ï¼Œåˆ†å·¥åˆä½œã€‚
 
 
-Servlet Ö´ĞĞÒÔÏÂÖ÷ÒªÈÎÎñ£º
-	1.¶ÁÈ¡¿Í»§¶Ë£¨ä¯ÀÀÆ÷£©·¢ËÍµÄ HTTP ÇëÇóÊı¾İ¡£request±¨ÎÄ
-	2.´¦ÀíÊı¾İ²¢Éú³É½á¹û¡£
-	3.·¢ËÍÊı¾İ£¨¼´ÎÄµµ£©µ½¿Í»§¶Ë£¨ä¯ÀÀÆ÷£©
+Servlet æ‰§è¡Œä»¥ä¸‹ä¸»è¦ä»»åŠ¡ï¼š
+	1.è¯»å–å®¢æˆ·ç«¯ï¼ˆæµè§ˆå™¨ï¼‰å‘é€çš„ HTTP è¯·æ±‚æ•°æ®ã€‚requestæŠ¥æ–‡
+	2.å¤„ç†æ•°æ®å¹¶ç”Ÿæˆç»“æœã€‚
+	3.å‘é€æ•°æ®ï¼ˆå³æ–‡æ¡£ï¼‰åˆ°å®¢æˆ·ç«¯ï¼ˆæµè§ˆå™¨ï¼‰
 
-ÉúÃüÖÜÆÚ£º
-	init()-¡·service()-¡·destory()-¡·±»JVM½øĞĞÀ¬»ø»ØÊÕ
+ç”Ÿå‘½å‘¨æœŸï¼š
+	init()-ã€‹service()-ã€‹destory()-ã€‹è¢«JVMè¿›è¡Œåƒåœ¾å›æ”¶
 
-init()Ö»Ö´ĞĞÒ»´Î£¬Ã¿´ÎÀ´Ò»¸öÏß³Ì·ÃÎÊ¸Ãservlet£¬¶¼ÓÃÍ¬Ò»¸öservletÈ¥´¦Àí£¬ÖØ¸´Ö´ĞĞservice£¨£©¡£
+init()åªæ‰§è¡Œä¸€æ¬¡ï¼Œæ¯æ¬¡æ¥ä¸€ä¸ªçº¿ç¨‹è®¿é—®è¯¥servletï¼Œéƒ½ç”¨åŒä¸€ä¸ªservletå»å¤„ç†ï¼Œé‡å¤æ‰§è¡Œserviceï¼ˆï¼‰ã€‚
 
-ÉèÖÃservlet:
+è®¾ç½®servlet:
 A:xml:<servlet>
 	<servlet-name>
 	<servlet-class>
@@ -32,96 +32,96 @@ A:xml:<servlet>
 annotation:@WebServlet(urlPatterns="",displayName="")
 
 
-"&" ÒıÓÃ
+"&" å¼•ç”¨
 
 filter:
-xml:&A servlet¸Ä³Éfilter
+xml:&A servletæ”¹æˆfilter
 	<filter-mapping>
-		<dispatcher>FORWARD</dispatcher>  //Ö¸¶¨ÇëÇóÀàĞÍ£ºforward£¬request£¬redirect£¬ASYNC£¬ERROR
-annotation£º@WebFilter(filterName="/CharsetFilter")
+		<dispatcher>FORWARD</dispatcher>  //æŒ‡å®šè¯·æ±‚ç±»å‹ï¼šforwardï¼Œrequestï¼Œredirectï¼ŒASYNCï¼ŒERROR
+annotationï¼š@WebFilter(filterName="/CharsetFilter")
 
-listener£º
-xml£º<listener>
+listenerï¼š
+xmlï¼š<listener>
 		<listener-class>
 	</listener>
-annotation£º@WebListener
+annotationï¼š@WebListener
 
 
 
-Òì³£´¦Àí
+å¼‚å¸¸å¤„ç†
 	<error-page>
-		<error-code>404</error-code>		//´¦ÀíµÄÒì³£Âë
-		<location>/ErrorHandler</location>	//´¦ÀíÒ³Ãæ
+		<error-code>404</error-code>		//å¤„ç†çš„å¼‚å¸¸ç 
+		<location>/ErrorHandler</location>	//å¤„ç†é¡µé¢
 	</error-page>
 
-cookies´¦Àí
-	ÉèÖÃcookies
-		servletÍ¨¹ıresponseµÄSet-CookieÍ·¸øä¯ÀÀÆ÷ÉèÖÃCookies£¬²»Í¬ÄÚÈİÓÃ£»·Ö¿ª
-			ÄÚÈİ
-				expires=Friday, 04-Feb-07 22:03:38 GMT;	//¸Ãcookies¹ıÆÚÊ±¼ä
-				name=xyz							//¸Ãcookies´æ´¢µÄÏûÏ¢£¬key/values
-				path=/							//±íÊ¾µ±ä¯ÀÀÆ÷·ÃÎÊ¸ÃÂ·¾¶Ê±¾Í°ÑÕâ¸öcookies·¢ËÍ¸ø·şÎñÆ÷
-				domain=w3cschool.cn					//¸ÃcookiesµÄÓòÃû
+cookieså¤„ç†
+	è®¾ç½®cookies
+		servleté€šè¿‡responseçš„Set-Cookieå¤´ç»™æµè§ˆå™¨è®¾ç½®Cookiesï¼Œä¸åŒå†…å®¹ç”¨ï¼›åˆ†å¼€
+			å†…å®¹
+				expires=Friday, 04-Feb-07 22:03:38 GMT;	//è¯¥cookiesè¿‡æœŸæ—¶é—´
+				name=xyz							//è¯¥cookieså­˜å‚¨çš„æ¶ˆæ¯ï¼Œkey/values
+				path=/							//è¡¨ç¤ºå½“æµè§ˆå™¨è®¿é—®è¯¥è·¯å¾„æ—¶å°±æŠŠè¿™ä¸ªcookieså‘é€ç»™æœåŠ¡å™¨
+				domain=w3cschool.cn					//è¯¥cookiesçš„åŸŸå
 		
-		new cookies£¨¡®key¡¯£¬¡®values¡¯£© //cookies¶ÔÏó
+		new cookiesï¼ˆâ€˜keyâ€™ï¼Œâ€˜valuesâ€™ï¼‰ //cookieså¯¹è±¡
 		
-		·½·¨
-			setMaxAge(int expiry)			//¹ıÆÚÊ±¼ä	²»ÉèÖÃÔò¸ÃcookiesÖ»ÔÚµ±Ç°sessionÓĞĞ§
-			setValue(String newValue)		//cookies´æ´¢µÄÖµ
-			setPath(String uri)			//ÓÃÓÚ¸ÃÂ·¾¶
-			setDomain(String pattern)		//ÓÃÓÚ¸ÃÓòÃû
-			setSecure(boolean flag)		//ÊÇ·ñÔÚssl¼ÓÃÜµÄ½ÓÉÏ·¢ËÍ
+		æ–¹æ³•
+			setMaxAge(int expiry)			//è¿‡æœŸæ—¶é—´	ä¸è®¾ç½®åˆ™è¯¥cookiesåªåœ¨å½“å‰sessionæœ‰æ•ˆ
+			setValue(String newValue)		//cookieså­˜å‚¨çš„å€¼
+			setPath(String uri)			//ç”¨äºè¯¥è·¯å¾„
+			setDomain(String pattern)		//ç”¨äºè¯¥åŸŸå
+			setSecure(boolean flag)		//æ˜¯å¦åœ¨sslåŠ å¯†çš„æ¥ä¸Šå‘é€
 		
-		response.addCookie(cookie);		//°ÑcookiesÌí¼Óµ½ÏìÓ¦	¿ÉÍ¬Ê±Ìí¼Ó¶à¸öcookies
+		response.addCookie(cookie);		//æŠŠcookiesæ·»åŠ åˆ°å“åº”	å¯åŒæ—¶æ·»åŠ å¤šä¸ªcookies
 		
-	¶ÁÈ¡cookies
-		Èôä¯ÀÀÆ÷ÔÙ´Î·ÃÎÊ/
-			°Ñ±£´æÔÚcookiesµÄÏûÏ¢name=xyz·¢»Ø¸ø·şÎñÆ÷£¬·şÎñÆ÷¿ÉÍ¨¹ıcookiesµÄÈ¡µÃ¸ÃÏûÏ¢
+	è¯»å–cookies
+		è‹¥æµè§ˆå™¨å†æ¬¡è®¿é—®/
+			æŠŠä¿å­˜åœ¨cookiesçš„æ¶ˆæ¯name=xyzå‘å›ç»™æœåŠ¡å™¨ï¼ŒæœåŠ¡å™¨å¯é€šè¿‡cookiesçš„å–å¾—è¯¥æ¶ˆæ¯
 			
 		request
-		·½·¨	
-			request.getCookies()		//»ñÈ¡ä¯ÀÀÆ÷µÄcookies¶ÔÏóÊı×é
-			cookies.getName() 		//·ÃÎÊÃ¿¸ö cookie ¹ØÁªµÄkey
-			cookies.getValue() 		//·ÃÎÊÃ¿¸ö cookie ¹ØÁªµÄvalue
+		æ–¹æ³•	
+			request.getCookies()		//è·å–æµè§ˆå™¨çš„cookieså¯¹è±¡æ•°ç»„
+			cookies.getName() 		//è®¿é—®æ¯ä¸ª cookie å…³è”çš„key
+			cookies.getValue() 		//è®¿é—®æ¯ä¸ª cookie å…³è”çš„value
 			
-	É¾³ıcookies
-		½«´Óä¯ÀÀÆ÷¶ÁÈ¡µÄcookiesµÄmaxageÉèÖÃÎª0,ÔÙ·µ»Ø¸øä¯ÀÀÆ÷
-		·½·¨
+	åˆ é™¤cookies
+		å°†ä»æµè§ˆå™¨è¯»å–çš„cookiesçš„maxageè®¾ç½®ä¸º0,å†è¿”å›ç»™æµè§ˆå™¨
+		æ–¹æ³•
 			cookies.setMaxAge(0)
 			response.addCookies(cookies)
 			
-Session ¸ú×Ù
-	ä¯ÀÀÆ÷Ã¿¸öµ¥¶ÀµÄÁ¬½Ó£¬web·şÎñÆ÷»áĞÂ½¨Ò»¸öĞÂµÄ»á»°session
-	Î¬³Ö»á»°
-		ÈıÖÖ·½Ê½À´Î¬³Ö Web ¿Í»§¶ËºÍ Web ·şÎñÆ÷Ö®¼äµÄ session »á»°
+Session è·Ÿè¸ª
+	æµè§ˆå™¨æ¯ä¸ªå•ç‹¬çš„è¿æ¥ï¼ŒwebæœåŠ¡å™¨ä¼šæ–°å»ºä¸€ä¸ªæ–°çš„ä¼šè¯session
+	ç»´æŒä¼šè¯
+		ä¸‰ç§æ–¹å¼æ¥ç»´æŒ Web å®¢æˆ·ç«¯å’Œ Web æœåŠ¡å™¨ä¹‹é—´çš„ session ä¼šè¯
 			cookies
-				½«web·şÎñÆ÷·ÖÅäµÄsessionid´æ´¢µ½cookies£¬ÏÂ´Î·ÃÎÊÔÚÓÃ¸Ãsessionid
-			hidden±íµ¥×Ö¶Î
-				°Ñsessionid±£´æµ½hidden±íµ¥ÖĞ£¬Ëæ±íµ¥Ìá½»·¢ËÍ¸ø·şÎñÆ÷
-			URL ÖØĞ´
-				Ã¿¸ö URL Ä©Î²×·¼ÓÒ»Ğ©¶îÍâµÄÊı¾İÀ´±êÊ¶ session »á»°
+				å°†webæœåŠ¡å™¨åˆ†é…çš„sessionidå­˜å‚¨åˆ°cookiesï¼Œä¸‹æ¬¡è®¿é—®åœ¨ç”¨è¯¥sessionid
+			hiddenè¡¨å•å­—æ®µ
+				æŠŠsessionidä¿å­˜åˆ°hiddenè¡¨å•ä¸­ï¼Œéšè¡¨å•æäº¤å‘é€ç»™æœåŠ¡å™¨
+			URL é‡å†™
+				æ¯ä¸ª URL æœ«å°¾è¿½åŠ ä¸€äº›é¢å¤–çš„æ•°æ®æ¥æ ‡è¯† session ä¼šè¯
 				
-	»ñÈ¡µ±Ç°Á¬½ÓµÄsession
+	è·å–å½“å‰è¿æ¥çš„session
 		request.getSession()
 	
-	session·½·¨
-		getId()							//»ñÈ¡sessionid
-		setAttribute(String name, Object value) 		//ÏòsessionÌí¼Ó¶ÔÏó
-		getAttribute(String name)				//»ñÈ¡session´æ´¢µÄ¶ÔÏó
-		public boolean isNew()				//Èç¹û¿Í»§¶Ë»¹²»ÖªµÀ¸Ã session »á»°£¬»òÕßÈç¹û¿Í»§Ñ¡Ôñ²»²ÎÈë¸Ã session »á»°£¬Ôò¸Ã·½·¨·µ»Ø true
+	sessionæ–¹æ³•
+		getId()							//è·å–sessionid
+		setAttribute(String name, Object value) 		//å‘sessionæ·»åŠ å¯¹è±¡
+		getAttribute(String name)				//è·å–sessionå­˜å‚¨çš„å¯¹è±¡
+		public boolean isNew()				//å¦‚æœå®¢æˆ·ç«¯è¿˜ä¸çŸ¥é“è¯¥ session ä¼šè¯ï¼Œæˆ–è€…å¦‚æœå®¢æˆ·é€‰æ‹©ä¸å‚å…¥è¯¥ session ä¼šè¯ï¼Œåˆ™è¯¥æ–¹æ³•è¿”å› true
 		
-	É¾³ı Session »á»°Êı¾İ
-		removeAttribute(String name) 			//ÒÆ³ıÄ³¸ö¶ÔÏó
-		invalidate()							//É¾³ısession
-		ÔÚweb.xml
+	åˆ é™¤ Session ä¼šè¯æ•°æ®
+		removeAttribute(String name) 			//ç§»é™¤æŸä¸ªå¯¹è±¡
+		invalidate()							//åˆ é™¤session
+		åœ¨web.xml
 			<session-config>
 				<session-timeout>15</session-timeout>
 			  </session-config>
 			  
-Servlet ÍøÒ³ÖØ¶¨Ïò	
-	µ±ÎÄµµÒÆ¶¯µ½ĞÂµÄÎ»ÖÃ£¬ÎÒÃÇĞèÒªÏò¿Í»§¶Ë·¢ËÍÕâ¸öĞÂÎ»ÖÃÊ±£¬ÎÒÃÇĞèÒªÓÃµ½ÍøÒ³ÖØ¶¨Ïò¡£
-	µ±È»£¬Ò²¿ÉÄÜÊÇÎªÁË¸ºÔØ¾ùºâ£¬»òÕßÖ»ÊÇÎªÁË¼òµ¥µÄËæ»ú£¬ÕâĞ©Çé¿ö¶¼ÓĞ¿ÉÄÜÓÃµ½ÍøÒ³ÖØ¶¨Ïò¡£
-	response ¶ÔÏóµÄ sendRedirect()
+Servlet ç½‘é¡µé‡å®šå‘	
+	å½“æ–‡æ¡£ç§»åŠ¨åˆ°æ–°çš„ä½ç½®ï¼Œæˆ‘ä»¬éœ€è¦å‘å®¢æˆ·ç«¯å‘é€è¿™ä¸ªæ–°ä½ç½®æ—¶ï¼Œæˆ‘ä»¬éœ€è¦ç”¨åˆ°ç½‘é¡µé‡å®šå‘ã€‚
+	å½“ç„¶ï¼Œä¹Ÿå¯èƒ½æ˜¯ä¸ºäº†è´Ÿè½½å‡è¡¡ï¼Œæˆ–è€…åªæ˜¯ä¸ºäº†ç®€å•çš„éšæœºï¼Œè¿™äº›æƒ…å†µéƒ½æœ‰å¯èƒ½ç”¨åˆ°ç½‘é¡µé‡å®šå‘ã€‚
+	response å¯¹è±¡çš„ sendRedirect()
 	
-Servlet ×Ô¶¯Ë¢ĞÂÒ³Ãæ
+Servlet è‡ªåŠ¨åˆ·æ–°é¡µé¢
 	 response.setIntHeader("Refresh", 5);

@@ -1,27 +1,27 @@
-git Ô¶³Ì²Ö¿â
-1.ssh-keygen -t rsa -C "youremail@example.com"
-	²úÉússhÃÜÂë
-2.copy .ssh µÄ id_rsa.pub ÀïµÄkeyµ½githubµÄ SSH and GPG keys£¬È»ºóµã»÷ New SSH key °´Å¥
-3.ÔÚgithub ´´½¨²Ö¿â
+git è¿œç¨‹ä»“åº“
+	1.ssh-keygen -t rsa -C "youremail@example.com"
+		äº§ç”Ÿsshå¯†ç 
+	2.copy .ssh çš„ id_rsa.pub é‡Œçš„keyåˆ°githubçš„ SSH and GPG keysï¼Œç„¶åç‚¹å‡» New SSH key æŒ‰é’®
+	3.åœ¨github åˆ›å»ºä»“åº“
 
-4.ÔÚgit bash ÓÃ 
-$ git remote add origin git@github.com:tianqixin/test.git
-Ôö¼ÓÒ»¸öÁ´½Óµ½github¿â
-$ git push -u origin master
-°Ñ±¾µØÌá½»µÄÎÄ¼şpushµ½github²Ö¿â
+	4.åœ¨git bash ç”¨ 
+	$ git remote add origin git@github.com:tianqixin/test.git
+	å¢åŠ ä¸€ä¸ªé“¾æ¥åˆ°githubåº“
+	$ git push -u origin master
+	æŠŠæœ¬åœ°æäº¤çš„æ–‡ä»¶pushåˆ°githubä»“åº“
 
-ÍË»Øµ½Ä³¸ö°æ±¾
+é€€å›åˆ°æŸä¸ªç‰ˆæœ¬
 	git reset --hard 139dcfaa558e3276b30b6b2e5cbbb9c00bbdca96 
 
-Í¨¹ı±êÇ©ÍË»Ø°æ±¾
+é€šè¿‡æ ‡ç­¾é€€å›ç‰ˆæœ¬
 	git reset --hard tagname 
 
-ÌáÈ¡Ô¶³Ì²Ö¿â
+æå–è¿œç¨‹ä»“åº“
 
-Git ÓĞÁ½¸öÃüÁîÓÃÀ´ÌáÈ¡Ô¶³Ì²Ö¿âµÄ¸üĞÂ¡£
+	Git æœ‰ä¸¤ä¸ªå‘½ä»¤ç”¨æ¥æå–è¿œç¨‹ä»“åº“çš„æ›´æ–°ã€‚
 
-1¡¢´ÓÔ¶³Ì²Ö¿âÏÂÔØĞÂ·ÖÖ§ÓëÊı¾İ£ºgit fetch
+	1ã€ä»è¿œç¨‹ä»“åº“ä¸‹è½½æ–°åˆ†æ”¯ä¸æ•°æ®ï¼šgit fetch
 
-2¡¢´ÓÔ¶¶Ë²Ö¿âÌáÈ¡Êı¾İ²¢³¢ÊÔºÏ²¢µ½µ±Ç°·ÖÖ§£ºgit merge
-	 git merge origin/master °ÑĞÂÊı¾İºÏ²¢¸üĞÂÍ¬²½µ½±¾µØ
-Äã¿ÉÒÔÊ×ÏÈÖ´ĞĞ git fetch [alias] ¸æËß Git È¥»ñÈ¡ËüÓĞÄãÃ»ÓĞµÄÊı¾İ£¬È»ºóÄã¿ÉÒÔÖ´ĞĞ git merge [alias]/[branch] ÒÔ½«·şÎñÆ÷ÉÏµÄÈÎºÎ¸üĞÂ£¨¼ÙÉèÓĞÈËÕâÊ±ºòÍÆËÍµ½·şÎñÆ÷ÁË£©ºÏ²¢µ½ÄãµÄµ±Ç°·ÖÖ§¡£ 
+	2ã€ä»è¿œç«¯ä»“åº“æå–æ•°æ®å¹¶å°è¯•åˆå¹¶åˆ°å½“å‰åˆ†æ”¯ï¼šgit merge
+		 git merge origin/master æŠŠæ–°æ•°æ®åˆå¹¶æ›´æ–°åŒæ­¥åˆ°æœ¬åœ°
+	ä½ å¯ä»¥é¦–å…ˆæ‰§è¡Œ git fetch [alias] å‘Šè¯‰ Git å»è·å–å®ƒæœ‰ä½ æ²¡æœ‰çš„æ•°æ®ï¼Œç„¶åä½ å¯ä»¥æ‰§è¡Œ git merge [alias]/[branch] ä»¥å°†æœåŠ¡å™¨ä¸Šçš„ä»»ä½•æ›´æ–°ï¼ˆå‡è®¾æœ‰äººè¿™æ—¶å€™æ¨é€åˆ°æœåŠ¡å™¨äº†ï¼‰åˆå¹¶åˆ°ä½ çš„å½“å‰åˆ†æ”¯ã€‚ 
