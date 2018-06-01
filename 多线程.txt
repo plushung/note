@@ -25,16 +25,31 @@
 		进入可运行状态后等待cpu调度进入运行状态Running
 		yield方法可以让一个running状态的线程转入runnable。
 		
-守护线程
-	守护线程总是在其他非守护线程结束后才会结束
+守护线程(后台线程)
+	守护线程总是在其他非守护线程结束后就会结束
+	Thread对象的setDaemon()将线程设置为后台线程
+	
 
 中断线程
-	interrupt():若当前线程被阻塞则中断当前线程,
+	在线程被阻塞时中断线程
+	
+	不可中断阻塞
+		synchronized同步阻塞与IO阻塞不能响应中断
+	解决不可中断阻塞
+		使用Locks来控制临界区，用NIO来做IO操作，他们都能响应中断
+		
+	interrupt():
+		若当前线程被阻塞则中断当前线程,将线程的中断标志设为true
+		在wait(),sleep(),t.join()时，被阻塞线程运行interrupt(),即可中断阻塞状态，并在阻塞出抛出中断异常
+		当捕获了中断异常后，线程的中断标志会被清除，即设置为false
 	isinterrupted:判断当前线程是否中断
 	interrupted()检查当前线程是否发生中断，并清除中断状态
 	中断是一个状态！interrupt()方法只是将这个状态置为true而已。
 	
-
+线程优先级
+	线程优先级将线程的重要性传递给调度器，优先执行优先级高的线程
+	通过thread对象的setPriority(int ..)设置优先级，JDK有10种优先级
+	
 线程行为
 	wait() 与 notify/notifyAll 方法必须在同步代码块中使用
 	线程等待：
@@ -47,7 +62,7 @@
 
 	线程让步：
 		Thread.yield()
-		转让cpu控制权，让别的就绪状态线程运行
+		转让cpu控制权，让别的具有相同优先级的就绪状态线程运行，但并不保证会被采纳
 
 	线程睡眠：
 		public static Thread.sleep() 
@@ -55,16 +70,22 @@
 	　　　　
 	线程加入：
 		public join()
-		在一个线程中调用其他线程otherthread.join(),将等其他线程执行完后才继续本线程。
+		在一个线程中调用其他线程otherthread.join(),将等其他线程执行完后或被中断才继续本线程。即直到otherthread.isAlive()为false
 
--------------------------------------------------------------------------------------------------------------------
+线程捕获异常
+	在某条线程中抛出未捕获的异常时，该异常不会不能被其他任何线程捕获到，只能有线程自己处理自己的异常
+	异常处理器UncaughtExceptionHandler
+		处理线程内的未捕获异常
+		实现该接口，然后调用Thread对象的setUncaughtExceptionHandler()方法设置异常处理器
+		
 同步
 	synchronize控制同步临界区的访问
 		线程运行到同步临界区时，
 		若获得了锁，则从内存中取回变量的值，存储到线程的缓存中，
 		释放锁时再将同步块中的变量写到内存中，保证可见性 	
 		线程取得锁期间执行的操作为原子操作，保证操作的原子性
-	基于监听器的同步及等待
+		
+	基于对象监听器的同步及等待
 		synchronized修饰:
 			类方法(Class对象作锁)，方法(实例对象作锁)，同步块(可以指定任意对象作锁)
 			构造方法不能使用synchronized关键字
@@ -89,6 +110,8 @@
 			
 		作用:
 			保证变量的可见性(直接读写内存，其他线程可见)与有序性(禁止JVM对变量的操作指令重排序，确保操作按顺序执行)
+			用于读取和赋值时是安全的，但进行运算并赋值时是不安全的
+			当需要单独的一个变量作条件控制被多线程访问的程序，并在只对变量赋值来改变条件时，用volatile变量
 			
 		volatile :在类的属性声明中使用
 			修饰被不同线程访问和修改的变量
@@ -97,15 +120,15 @@
 		volatile 的读性能消耗与普通变量几乎相同，但是写操作稍慢
 		
 	volatile、synchronized 和 final 实现可见性
-	synchronized 中和在 lock、unlock 中操作保证原子性。或使用atomic类作变量保证操作原子性
+	synchronized 中和在 lock、unlock 中操作保证操作原子性。或使用atomic类作变量保证操作原子性
 	volatile 和 synchronized 两个关键字来保证线程之间操作的有序性
 
 		可见性：
 			是指线程之间的可见性，一个线程修改的状态对另一个线程是一定可见的。也就是一个线程修改的结果。另一个线程马上就能看到。
 			变量的修改会被马上同步到内存
 
-		原子性：
-			原子是世界上的最小单位，具有不可分割性。一个不可分割的操作叫原子操作。：a++ 由a+1和a=a+1俩步操作组成，非原子操作，
+		原子性(原子操作)：
+			一个不可分割的操作叫原子操作。：a++ 由a+1和a=a+1俩步操作组成，非原子操作，
 			高并发操作a++时，会出错
 
 		有序性:
@@ -119,22 +142,49 @@
 		死锁:
 			线程1的运行需要线程2持有的锁，而线程2的运行需要线程1持有的锁，
 			结果，线程1等待线程2的锁，线程2等待线程1的锁，永远互相等待，造成死锁
+			
+			解决死锁
+				1.防止循环等待
 		活锁：
 			线程占用锁后总是重复运行一些不能结束的操作，像while(ture),使得线程占用锁一直运行却作无用功
 		饿死:
 			总是有高优先级的线程在运行，而使得低优先级的线程得不到运行的机会
 
-等待和通知
-	线程交互
+线程交互协作
+	等待和通知处理线程协作
 		wait()：使持有锁的线程进入等待池等待
 		notify()：使锁的等待池中的线程进入锁池，等待获得锁去执行
 		notifyAll():使锁的等待池中的所有线程进入锁池，等待获得锁执行
 	
+	同步队列解决线程协作
+		果酱奶油吐司制作与消费P715
+		使用BlockingQueue解决生产者与消费者问题，因其是线程安全的，所以不用synchronized同步也能被多线程并发访问
+		器控制并发访问的方式是加ReentrantLock，读写时都用ReentrantLock
+		LinkedBlockingQueue，ArrayBlockingQueue，SynchronousQueue，PriorityBlockingQueue
+		
+		PriorityBlockingQueue
+			在优先队列上加上并发访问时阻塞的功能
+		LinkedBlockingQueue
+			默认容量动态增加无限制，存在时间最长的元素先出列（链表的头结点）FIFO ，若无元素则用Condition的await阻塞线程
+		ArrayBlockingQueue
+			容量给定，公平模式下使用队列的线程顺序遵循FIFO、非公平模式下使用队列的线程顺序不指定，若无元素则用Condition的await阻塞线程
+	
+	线程间通过管道通信
+		PipeWriter/PipeReader与PipeInputStream/PipeOutputStream
+			使线程间建立通信管道进行消息交流，一个输入Pipe只连接一个输出Pipe
+		输入pipe 
+			read()
+				读取字符流，或字节流，若无数据可读，则阻塞
+		输出pipe 
+			write()
+				写数据到Pipe中，不会阻塞
 	生产者与消费者问题
 	
 线程局部变量
+		口口口口口口口口口口口口口口口口口口口口每条线程使用一个口存储
 	ThreadLocal<T> 
 		定义一个存储线程变量的类，存储当前线程存入的值。每条线程存储与获取变量时，总会取得当前线程对应的那个值
+		每条使用该类存储数据的线程都会分配到一个属于自己的存储空间来存储本线程可见的数据
 	set()
 		存入线程局部变量
 	get()
@@ -150,12 +200,16 @@
 	TimeTask()
 		定时任务，是Runnable的一个抽象类
 
-
+同步线程
+	时多条线程在同一时间开始运行
+	CountDownLatch
+	CyclicBarrier
+	
 
 并发工具类	java.util.concurrent.* 	//为了不用synchronized来处理并发访问，提高性能
 	其里面的Lock锁，atomic都是建立在CAS上的
 	什么是CAS		//像hibernate通过version来加乐观锁一样  比较新旧？赋值更新：啥都不做
-		CAS，Compare and Swap即比较并交换。 java.util.concurrent包借助CAS实现了区别于synchronized同步锁的一种乐观锁。
+		CAS，Compare and Set即比较并交换。 java.util.concurrent包借助CAS实现了区别于synchronized同步锁的一种乐观锁。
 		CAS有3个操作数：内存值V，旧的预期值A，要修改的新值B。
 			V=V.equit(A)?B:V
 		CAS的关键点在于，系统在硬件层面保证了比较并交换操作的原子性，处理器使用基于对缓存加锁或总线加锁的方式来实现多处理器之间的原子操作。
@@ -171,11 +225,14 @@
 		乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。
 		其实现过程就是CAS
 		
-	java.util.concurrent包
+		1. 对于数据更新频繁的场合，悲观锁效率更高
+		2. 对于数据更新不频繁的场合，乐观锁效率更高
+		
+	执行器Executor
 		并发编程中常用到的类，如：Executors
 		
 		Executor:
-			执行器接口
+			执行器接口,用于管理线程Thread对象
 			执行单一的Runnable对象，无返回值
 		ExecutorService:
 			执行若干Runnable对象，无返回值
@@ -187,58 +244,72 @@
 			execute()
 			或
 			submit()：执行若干Callable或Runnable对象并返回保存着结果的Future对象
-		Future
-			功能：
-				保存Callable返回的结果，取消线程任务，判断任务是否完成
-			get()：取得Callable返回的结果
-			cancle()：取消任务
-			isDone()：判断是否完成任务
-			
+		
 		Executor执行完后要关闭，否则里面的线程会一直占用资源
 			shutdown()
 				shutdown后的Executor将不再就受新的任务。强行submit会抛出RejectedExecutionException
 			shutdownNow()
-				shutdownNow后的Executor将不再就受新的任务,并且取消正在执行的task。
+				shutdownNow后的Executor将不再就受新的任务,并且取消正在执行的task。通过调用Executors创建的线程的interrupt()方法。中断线程
 				抛出CancellationException，强行submit会抛出RejectedExecutionException
 				
-		Executors：	//
+		Executors：	
 			一个工厂类，用于创建Executor，ExecutorService，ScheduleExecutorService，ThreadFactory
 			用于取得多种Executor的子类的实例，关联到callable和future
 			如：
+			随任务增加线程方式
+				newCachedThreadPool()：ExecutorService的实例，无需指定初始化线程数，有新任务时自动创建线程处理
 			单一线程方式
-				newSingleThreadExecutor()：创建只有一条线程的ExecutorService的实例
+				newSingleThreadExecutor()：创建只有一条线程的ExecutorService的实例,提交多个任务时，任务进入等待队列，等待执行
 				newSingleThreadScheduledExecutor()：创建只有一条线程的ScheduleExecutorService的实例
 			线程池方式
-				newFixThreadPool(int n)：创建带有容量为n的线程池的ExecutorService的实例
+				newFixedThreadPool(int n)：创建带有容量为n的线程池的ExecutorService的实例
 				newScheduledThreadPool(int n)：创建带有容量为n的线程池的ScheduleExecutorService的实例
+		
+		有返回值的线程任务
+			callable接口
+				用于创建有返回值的任务，重写call()方法。必需用ExecutorService的submit()方法来执行Callable任务。
+				ExecutorService.submit()会返回Future对象，该对象保存了Callable执行的返回结果
+				ExecutorService.execute()无返回值，用于Runnable任务
 			
-	java.util.concurrent.atomic包
+			Future类
+				功能：
+					保存Callable返回的结果，取消线程任务，判断任务是否完成
+					get()：取得Callable返回的结果
+					cancle()：取消任务
+					isDone()：判断Callable任务是否完成
+		
+		ThreadFactory接口
+			线程工厂，定义线程的创建一个怎样的线程，定制Executor中创建的线程的属性
+			向Executor传递一个ThreadFactory，定制Executor的线程属性，如守护线程，优先级，线程名称等属性
+				
+				
+	原子类atomic
 		包提供了一系列原子类,用于并发访问，实现原子性与可见性
 		在操作这些原子类时不会阻塞线程，提高性能，因为没有用synchronize对其没有加同步锁访问，而是通过CAS乐观锁来保证变量的原子操作；
 		
 		atomic类的CAS
 			修改atomic变量的值时，通过unsafe.compareAndSwapInt()来进行操作，保证操作原子性
 			
-	java.util.concurrent.locks包
+	显式锁Locks
+		Locks的fair/unfair
+			公平模式：
+				线程想取得锁，若锁不可用则进入ReentrantLock的等待队列，即线程会保存到一个FIFO的Queue中
+				,等待时间最长的线程首先获得锁，先进先出
+			非公平模式：
+				线程想取得锁，若锁不可用则等待，所有线程尽可能快地取得锁，
+				有可能同一线程能连续获得锁，而等待了很久的线程迟迟不能取得锁
 		Lock接口	//取代synchronize
 			锁框架，提供一种比加synchronize监听器关联的锁更灵活的并发访问加锁操作
 			方法：
 				lock()	：线程取得锁，若锁不可用则被阻塞一直等待
 				tryLock()：尝试取得锁，若成功取得则返回ture，否则返回false，不用等待获得锁
+				tryLock(long timeout,TimeUnit unit)：尝试取得锁，在timeout内，若成功取得则返回ture，否则返回false。
 				unlock():释放获得的锁，若线程没持有锁却释放，抛出IllegalMonitorStateException，在finally中unlock(),以防止死锁
 			
 			ReentrantLock重入锁
 				Lock的一个实现，持有一个计数器，记录着该锁的被lock多少次，允许同一线程多次加锁lock()
 				线程调用加锁方法（lock，tryLock，lockInterruptily）时，持有量+1，调用unlock()时，持有量-1，持有量减为0时，线程释放该锁
 				其控制高并发的方式是CAS的实现，因此比synchronized有更高性能
-				
-				fair/unfair
-					公平模式：
-						线程想取得锁，若锁不可用则进入ReentrantLock的等待队列，即线程会保存到一个FIFO的Queue中
-						,等待时间最长的线程首先获得锁，先进先出
-					非公平模式：
-						线程想取得锁，若锁不可用则等待，所有线程尽可能快地取得锁，
-						有可能同一线程能连续获得锁，而等待了很久的线程迟迟不能取得锁
 						
 				方法：
 					isLocked():判断有any线程取得锁
@@ -279,10 +350,9 @@
 				signal():唤醒一个等待中的线程，
 				signalAll():唤醒所有等待中的线程
 			
-			用于生产者/消费者
+			用于生产者/消费者模型
 				
-			
-	new ddd
+
 
 
 
