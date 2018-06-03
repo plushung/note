@@ -1,0 +1,191 @@
+选择器
+	$("")为jquery的选择器
+	按标签名选择
+		$("p")
+	按标签id选择
+		$("#pid")
+	按标签class选择
+		$(".pclass")
+
+回调函数
+	javascript使用callback函数来接收某个动作的返回结果
+	如接收JQuery各种事件发生时的event对象
+	如进行ajax时接收服务器的响应内容
+		
+元素事件处理
+	发生事件时用function处理事件
+		.click(function)	
+		.dblclick()
+		.mouseenter()
+		.mouseleave()
+	绑定事件
+		bind("event",handler)
+		unbind("event")
+		以上两种方法的底层也是用on、off实现
+		on("event",handler)
+		off("event")
+		ex：
+			on("click",actionClick)
+			off("click")
+	事件触发时会向handler传递一个event对象，用以做其他事情
+		function actionclick(event){ alert(event) }
+		
+	阻止事件冒泡
+		event.stopPropagation()
+	
+	自定义事件
+		var e=JQuery.event("eventName")
+	触发自定义事件
+		.trigger(e)
+		
+元素动态效果
+	隐藏/显示:
+		.hide(duration,callback)		//在duration时间内完成动画
+		.show(duration,callback)
+		.toggle()
+	淡入/淡出:
+		.fadeIn( [duration ] [, easing ] [, complete ] )
+		.fadeIn( options )	//options为对象｛key：val｝
+		.fadeTo(duration,opacity)		//在duration内将不透明度变为opacity
+		.fadeout()
+		.fadeToggle([duration ] [, easing ] [, complete ] )//淡入+淡出
+			参数选项与fadeIn（）相似
+	上滑/下滑:
+		Description: Display or hide the matched elements with a sliding motion.
+		.slideUp()
+		.slideDown()
+		.slideToggle()
+		参数选项:
+			( [duration ] [, complete ] )
+			( options )//options为对象｛key：val｝
+			( [duration ] [, easing ] [, complete ] )
+		回调:以上动作完成后调用函数
+
+元素删除
+	.remove()  	删除整个元素，元素不在了
+	.empty()		清空内容，元素还在
+
+获取选定元素的内容
+	.text()		获取text内容
+	.html()	获取html内容
+	.val()  	获取元素的value
+	.attr(attrName) 	获取元素额指定属性的值
+	.prop(propName)	获取元素额指定属性的值
+	
+设置选定的html元素的内容
+	.text(content)	设置text内容
+	.html(content)	设置html内容
+	.val(content)  	设置元素的value值
+	·.attr(attrName，attrVal) 
+		设置元素指定属性的值
+	·.attr(obj) 	
+		通过js对象/键值对设置元素的值 obj={key/val}
+	·.attr(attrName，function) 
+		通过function返回值设置元素的值，回调函数
+	.prop(propName，propVal)
+		设置元素指定属性的值
+		与attr类似
+
+DOM节点添加元素
+	.append(..)  	在元素内的后面添加内容
+	.prepend(..)	在元素内的前面添加内容
+	.before(..)	在元素前添加内容
+	.after(..)	在元素后添加内容
+		..内容可以是 html，JQuery对象，DOM对象
+		“<p>xx</p>” | $("<p></p>") | document.createElement("p"),
+
+操纵css样式
+	修改样式
+		传递javascript对象修改多个样式
+			.css( {x:x1,y:y1} )
+		修改单个样式
+			.css("name","value")
+			ex:.css("backgroundColor","red")
+		添加类样式
+			.addClass(cssClass) 为指定元素添加某类样式
+				cssClass：.css文件下定义的样式类型
+				ex:.style{...} 为一个css样式类
+		移除类样式
+			.removeClass(cssClass) 移除元素的css样式类
+		交替变换类样式
+			.toggleClass(cssClass) 用css样式类交替变换元素的css样式	
+
+DOM元素盒子模型
+	.height()
+	.width()		修改盒子模型的element的宽高
+	.innerHeight()	
+	.innerWidth()	修改盒子模型的border内不包括border部分的宽高
+	.outerHeight([true])
+	.outerWidth([true])	修改盒子模型的border外包括border部分的宽高的宽高
+			[true]:还包括margin，即整个和子的高。否则只包括到border
+			
+遍历子孙节点
+	.children(..)	遍历元素内的一级孩子节点，非孙节点
+	.find(..) 	遍历元素内的任意子孙节点，包括孩子节点与子孙节点
+	".."：过率子孙节点
+	
+遍历父节点
+	.parent(..)		获取上一级父元素		//..可具体选择父节点
+	.parents(..)		获取所有父元素 		//..可选具体要获取哪个父元素
+	.parentUntil("#div1")	获取到id为div1节点之间的父元素
+
+遍历同级节点
+	.sibings()		选择所有同级元素
+	.next()		选中下一个同级元素	
+	.nextAll()		选择下面所有元素
+	.nextUntil("Until")	选择下面到until的所有元素
+
+	类似next，方向相反
+	.prev()	
+	.preAll()
+	.preUntil()
+	
+对遍历得到的集合过滤
+	.first()		选取集合中的第一个元素
+	.last()		选取集合中的最后个元素
+	.eq(num)	选取集合中的第num个
+	.filter('p')	选取集合中的p标签
+	.not("p")	除去集合中的p元素
+
+遍历及过滤参数说明
+	参数与选择器中的参数相同，都是"#pid",".pclass","p"之类的
+	
+JQuery的Ajax支持
+	$.ajax({...})
+		option={
+		url:"",
+		data:"",	//发给服务器的数据
+		dataType:"",//期望收到的数据类型
+		contentType:"application/json",//设置ContentType
+		success:function(data,status,xhr){}//成功接受响应时调用函数
+		error:function(xhr,status){}
+		}
+		$.ajax(option) //option为js对象
+	GET方法请求
+		$.get("url", {requestParam}, callback(responseData))
+	POST方法请求
+		$.post(url,{params},function(data,status,xhr),dataType)
+		向服务器的url地址用params请求，data接收服务器返回的数据，可根据data局部更新数据，不用整个页面重新加载,daraType:希望服务器发回的数据类型：json、xml、html。。。
+		$.post("http://ssw",{params:jj},function(data,status,xhr){},"json")
+	请求json的响应
+		$.getJson("url",{param},function（data）｛｝) //通过get方法请求
+	在某个元素里加载内容
+		.load("fraction.htm"[,param][,afterComplete（data,status,xhr）])
+		
+自定义JQuery
+	定义一个属于自己的函数jquery库,拓展jquery库
+	自定义JQuery函数
+		$.fname = function(){..}
+	自定义元素函数
+		$.fn.fname = function(){..}
+	使用方法
+		$.fname()
+		$("#div").fname()
+
+Jquery的noconflict
+	jquery 用$符号做简写，表示jquery
+	若$与其他框架冲突了,使用$.noConflict()，防止冲突，使$符号不再是Jquery的缩写
+	此时就要以jQuery(“selector”)的方式使用jquery
+	或	
+	var a=$.noConflict()
+	a("selector") 使用

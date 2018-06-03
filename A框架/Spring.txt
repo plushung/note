@@ -34,10 +34,10 @@ Spring IoC 容器
 	bean定义 @scope scope 指定作用域
 	    基于 XML 的配置文件:<bean id="" class=""></bean>
 	    基于注解的配置:启用<context:component-scan>,扫描基于注解的Bean
-			       @Component：一个泛化的概念，表示一个组件（Bean），可作用在任何层次
-   			       @Controller：用于对Controller实现类进行标注，目前该功能与Component相同
-   			       @Repository：用于对DAO实现类进行标注
-    			   @Service：用于对Service实现类进行标注，目前该功能与Component相同,作用和与Bean同
+			@Component：一个泛化的概念，表示一个组件（Bean），可作用在任何层次
+			@Controller：用于对Controller实现类进行标注，目前该功能与Component相同
+			@Repository：用于对DAO实现类进行标注
+			@Service：用于对Service实现类进行标注，目前该功能与Component相同,作用和与Bean同
 	    基于 Java 的配置 :@Configuration 的注解类表示这个类可以作为 bean 定义的来源
 				@Bean 的注解方法将返回一个对象，注册在 Spring 应用程序上下文中
 
@@ -45,7 +45,7 @@ Spring 依赖注入
 	依赖注入有助于把这些类装配在一起，同时保持他们独立。 
 	
 	
-	注入方式：
+	Spring的DI注入方式：
 		基于构造函数
 			<constructor-arg type="int" value="2001"/>注入直接值
 			<constructor-arg  type="Integer" ref="beanId"/>注入引用的bean
@@ -82,12 +82,12 @@ Spring 基于注解的配置
 	@Qualifier 注释，指定要注入的BeanId
 	JSR-250 注解
 		@PostConstruct， @PreDestroy 相当于initMethod和destoryMethod，用于方法上
-		@Resource（name=“beanid”）=@autowire+@qualifier
+		@Resource(name=“beanid”)=@autowire+@qualifier
 
 spring的事件处理
 	当加载 beans 时，ApplicationContext（上下文） 发布（产生）某些类型的上下文事件	
 		ContextRefreshedEvent
-		ContextStartedEvent 	使用 ConfigurableApplicationContext 接口中的 start() 方法启动 ApplicationContext 时，该事件被发布
+		ContextStartedEvent 		使用 ConfigurableApplicationContext 接口中的 start() 方法启动 ApplicationContext 时，该事件被发布
 		ContextStoppedEvent		使用 ConfigurableApplicationContext 接口中的 stop() 方法停止 ApplicationContext 时，该事件被发布
 		ContextClosedEvent		close() 停止 ApplicationContext 时，发布这个事件
 		RequestHandledEvent
@@ -115,9 +115,9 @@ Spring AOP
 		环绕通知	around
 
 	AOP的配置实现
-		Spring默认使用java的JDK代理
+		Spring默认使用java的JDK代理实现AOP
 		或
-		用增强型的代理框架Aspetj
+		使用增强型的代理框架Aspetj
 			classpath下要包含以下AspectJ 库文件
 				aspectjrt.jar
 				aspectjweaver.jar
@@ -130,7 +130,7 @@ Spring AOP
 						<aop:pointcut>
 						<aop:before>
 				声明切面:在<aop:config>标签里配置
-					 <aop:aspect id="myAspect" ref="aBean">
+					<aop:aspect id="myAspect" ref="aBean">
 					ref引用一个bean，用来作切面对象
 
 				声明切点:在<aop:aspect>标签里配置
@@ -153,19 +153,19 @@ Spring AOP
 					private void businessService() {}
 				
 				声明通知:
-					@After("businessService()")
+					@After("businessService()")	//应用于businessService切点
 					public void afterAdvice()
 					@Around("recordLog()")//around通知有一个ProceedingJoinPoint参数
-						public void around(ProceedingJoinPoint pjp)
+					public void around(ProceedingJoinPoint pjp)
 
 Spring JDBC 框架
 	JdbcTemple类:负责处理连接数据库时的所有的低层细节
 		JdbcTemplate 类的实例是线程安全配置的
 
 	存储过程（Stored Procedure）：
-	是在大型数据库系统中，一组为了完成特定功能的SQL 语句集，存储在数据库中，
-	经过第一次编译后再次调用不需要再次编译，用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。
-	存储过程是数据库中的一个重要对象。
+		是在大型数据库系统中，一组为了完成特定功能的SQL 语句集，存储在数据库中，
+		经过第一次编译后再次调用不需要再次编译，用户通过指定存储过程的名字并给出参数（如果该存储过程带有参数）来执行它。
+		存储过程是数据库中的一个重要对象。
 
 Spring 事务管理（commit，rollback。。。）
 	事务的四个关键属性说成是 ACID
@@ -191,7 +191,7 @@ Spring 事务管理（commit，rollback。。。）
 	Spring 支持使用 Spring AOP 框架的声明式事务管理。声明式事务管理比编程式事务管理更可取
 	即将事务模块声明为Aspect，运用AOP的方式管理事务      @Transaction
 
-	Spring 事务抽象：
+	Spring 事务管理器接口：
 		PlatformTransactionManager 接口
 			TransactionDefinition 是在 Spring 中事务支持的核心接口
 			TransactionStatus 接口为事务代码提供了一个简单的方法来控制事务
@@ -207,7 +207,7 @@ Spring 事务管理（commit，rollback。。。）
 			应用通知
 				<aop:config>
 					<aop:pointcut exeception="execition(*.*.method)">	//定义切点（哪里）
-					<aop:advisor advice-ref="txmanager">			//引用通知（做什么）,引用事务管理器作切点上的通知
+					<aop:advisor advice-ref="txmanager">			//引用通知者（做什么）,引用事务管理器作为切点上的通知
 		或	
 		另为一种通过@Transactional实现事务管理实现，
 		要在cfg.xml添加<tx:annotation-driven transaction-manager="managername"/>开启注解方式的声明式事务
@@ -221,7 +221,8 @@ Spring 事务管理（commit，rollback。。。）
 		
 		JPA:
 			1.EntityManagerFactory中取得EntityManager
-			2.EntityManager执行事务
+				
+			2.EntityManager执行数据库操作
 			JPA实体管理分为 应用程序管理类型 和 容器管理类型
 				应用程序管理类型的EntityManagerFactory
 					通过PresistenceProvider的createEntityManagerFactory()取得
@@ -257,7 +258,7 @@ Spring 事务管理（commit，rollback。。。）
 			像Controller，可以被组件扫描到，其里面发生的异常可被Spring框架捕获
 			2.被注解的bean产生的异常会被转换为Spring的同一数据访问异常，DAO_Access_exception
 			由Spring统一处理(无论是用Hibernate还是JPA，统统变为Spring数据访问异常)
-			！！！要配置一个前置处理器进行转换，
+			！！！要配置一个前置处理器进行DAO异常转换转换，
 			
 		@Transactional
 			是使用Spring AOP实现的
