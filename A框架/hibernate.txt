@@ -1,5 +1,3 @@
-
-
 获取sessionFactory对象
 
 从sessionFactory中取得session
@@ -9,6 +7,7 @@
 JPA
 	通过JDK 5.0注解或XML描述对象－关系表的映射关系，将实体映射成数据库的表
 	持久化上下文EntityManager由JPA创建
+	
 JTA
 	Java Transaction API，译为Java事务API。JTA允许应用程序执行分布式事务处理,决定持久化何时提交到数据库
 	每个事务Transaction由JTA创建
@@ -34,7 +33,7 @@ trancaction 提交事务或回滚
 
 Hibernate 架构	
 	1.Configuration对象
-		表示Hibernate的配置包括实体类映射配置(Entity.hbm.xml),和数据库配置(hibernate.cfg.xml / hibernate.porperties)
+		表示Hibernate的配置包括实体类映射配置(Entity.hbm.xml),和数据库配置(hibernate.cfg.xml | hibernate.porperties)
 		包含两种组件
 			数据库连接(hibernate.cfg.xml / hibernate.porperties)
 				用以配置数据库链接
@@ -74,7 +73,6 @@ Hibernate 架构
 			参数的值指明了要使用的实现类的全名
 			可以用"jta"、"thread" 和 "managed"3个简写分别对应内置的3个Context
 
-
 配置
 	1 Configuration
 		用来构建一个（不可变的（immutable））org.hibernate.SessionFactory
@@ -93,22 +91,23 @@ Hibernate 架构
 		3.通过Configuration对象的取得SessionFactory
 			Configureation.buildSessionFactory();
 			
-	3 Session（取得jdbc连接）	//这是一个持久化上下文，为实体的持久化提供环境
+	3 Session（jdbc连接）		//这是一个持久化上下文，为实体的持久化提供环境
 		前提是配置好数据源或JDBC
 		4. SessionFactory.openSession()
-			SessionFactory会从连接池获得一个连接
+			SessionFactory会从连接提供器(ConnectionProvider)中获得一个JDBC连接。
 			
 			1.hibernate.connection.pool_size 是hibernate自带的，可用c3p0连接池替代
-			在hibernate.connection.pool_size的位置用c3p0的配置替代即可
-				hibernate.connection.driver_class = org.postgresql.Driver
-				hibernate.connection.url = jdbc:postgresql://localhost/mydatabase
-				hibernate.connection.username = myuser
-				hibernate.connection.password = secret
-				hibernate.c3p0.min_size=5
-				hibernate.c3p0.max_size=20
-				hibernate.c3p0.timeout=1800
-				hibernate.c3p0.max_statements=50
-			如果设置了 hibernate.c3p0.* 相关的属性，Hibernate将使用 C3P0ConnectionProvider 来缓存 JDBC 连接
+				在hibernate.connection.pool_size的位置用c3p0的配置替代即可
+					hibernate.connection.driver_class = org.postgresql.Driver
+					hibernate.connection.url = jdbc:postgresql://localhost/mydatabase
+					hibernate.connection.username = myuser
+					hibernate.connection.password = secret
+					hibernate.c3p0.min_size=5
+					hibernate.c3p0.max_size=20
+					hibernate.c3p0.timeout=1800
+					hibernate.c3p0.max_statements=50
+				如果设置了 hibernate.c3p0.* 相关的属性，
+				Hibernate将使用 C3P0ConnectionProvider 来缓存 JDBC 连接，openSession()将从其中取得连接
 			
 			1.配置成从注册在 JNDI 中的 Datasource 处获得连接
 				属性
@@ -117,6 +116,11 @@ Hibernate 架构
 					
 			1.通过实现 org.hibernate.connection.ConnectionProvider 接口，定义属于你自己的获得JDBC连接的插件策略
 				hibernate.connection.provider_class，选择一个自定义的实现类，为hibernate提供jdbc连接
+		
+		4. SessionFactory.getCurrentSession()
+			会从CurrentSessionContext对象中取得连接，该连接由SessionContext管理，不用手动close
+			sessionContext可以是Jta，Thread，managed分别有JTA
+			若没配置CurrentSessionContext，但配置了JTA事务，hibernate则会默认使用JTASessionContext来作为CurrentSessionContext的配置
 		
 	4可选的配置属性
 		常用:	
@@ -150,9 +154,7 @@ Hibernate 架构
 											
 			 
 			JNDI 绑定的 SessionFactory
-
 			
-
 事务与并发
 	session的begainTransaction（）过程
 		1确定事务的提供者
@@ -160,8 +162,7 @@ Hibernate 架构
 		2.取得事务
 			由session所在的上下文(context),决定是否创建一条transaction
 			若session所在的上下文已经有hibernateTransaction的一个实例则直接返回这条事务
-			
-			若session所在的上下文已经没有hibernateTransaction实例
+			若session所在的上下文没有hibernateTransaction实例
 			则由上下文取得transactionFactory的引用，并创建一个hibernateTransaction实例返回给session
 		
 		session——————>beginTrransaction————>getTransaction----->begin---->return to session
@@ -202,7 +203,7 @@ Hibernate 架构
 		hibernate是对JDBC的轻量封装，本身并不对事务进行管理
 		JDBC事务		JDBCTransactionFactory
 			JDBC可以处理单数据源的事务，只能对应一个数据库的事务
-			由程序员手动管理事务
+			由程序员手动管理事务(管理事务的begin、commit、rollback)
 				0.加载数据库驱动class.forname()
 				1.配置DriverManager，包括数据库的地址密码用户名，
 				2.从DriverManager中取得Connection
@@ -210,7 +211,7 @@ Hibernate 架构
 				4.用Connection对象实现事务，commit，rollback
 			顺序
 				getSession-->beginTransaction--->transaction.commit---->session.close 
-				//若通过getcrrentsession()取得Session，commit会将session.close
+				//若通过getcrrentsession()取得Session，commit会将session.close，在Transaction提交时，由上下文自动执行close
 				//若通过opensession()取得Session，要手动session.close，再commit
 		JTA事务		JTATransactionFactory
 			通过JTA等的事务管理器取得数据库的连接，一条事务可以同时从多个数据源中取得连接，简单的说 jta是多库的事务 jdbc是单库的事务
@@ -235,7 +236,7 @@ Hibernate 架构
 	事务与并发
 		事务边界
 			JTA编程式事务
-				JTA标准化了事务管理与事务分布式事务，他begin(),与commit()系统事务，通过编程地begin()和commit()确定事务边界
+				JTA标准化了事务管理与分布式事务，他begin(),与commit()系统事务，通过编程地begin()和commit()确定事务边界
 				手动使用UserTransaction的begin()和commit()
 				
 			声明式事务
@@ -293,7 +294,7 @@ Hibernate 架构
 						可选@Type(type="dbtimestamp"),让hinernate统一从数据库读取时间
 					或	不用时间戳和版本号
 					3.在类上@OpmisticLocking（type=ALL）
-						在检索实例或刷型持久化上下文时对该实体额所有未修改属性检测与数据库上的对比，进行冲突检测
+						在检索实例或刷型持久化上下文时对该实体的所有未修改属性检测与数据库上的对比，进行冲突检测
 						type=dirty 选项只在多条事务同时修改同一行记录的同一字段的值时才检测冲突，多条事务可同时修改同一行
 						
 					4.手动检查版本				//使数据可重复读
@@ -314,7 +315,7 @@ Hibernate 架构
 					LockModeType.pessimistic_write:	确保可重复读，确保不会幻读，即串行化查询
 						在数据库执行查询时加读写锁，其他事务不可读写，并且不可加sx锁
 						锁定查询的行
-						mysql : hibernate对该模式的处理是查询时sql语句后加上“for updata”，为查询的记录加读写锁
+						mysql : hibernate对该模式的处理是查询时sql语句后加上“for updata”，为查询的记录加写锁
 
 持久化类
 	
@@ -360,6 +361,12 @@ Hibernate 架构
 			持久态或托管态被session的delete删除了，那么对象就成了删除态，此时数据库中没有该对象的记录，像临时态一样
 
 对象/关系数据库映射基础		
+	<hiberante-mapping>
+		<class name="User" table="Usertable">
+			<id name="Id" column ="id" generator="identity">
+			<set name="Comments" table="User_Comments" >
+				<key column="From_user_id">
+				<one-to-many column="Comment_id" class="Comment">
 	通过映射文件配置映射
 		映射文件为***-hbm.xml
 		<hibernate-mapping>
@@ -398,7 +405,7 @@ Hibernate 架构
 						<key column="EVENT_ID"/>			//persion实体类对应的是关联表里的PERSON_ID字段
 						<many-to-many column="PERSON_ID" class="Person"/>//关联表里的PERSON_ID字段对应的是Person实体类，并且event类与persion类是多对多关联的
 					</set>								//包含的是实体类的集合
-					 Event 映射文件里增加了 set 元素的 inverse="true" 属性。 这意味着在需要的时候，Hibernate 能在关联的另一端 — Person 类得到两个实体间关联的信息。
+					Event 映射文件里增加了 set 元素的 inverse="true" 属性。 这意味着在需要的时候，Hibernate 能在关联的另一端 — Person 类得到两个实体间关联的信息。
 				
 				单对多关联
 					<set name="pages">						//pages集合的关系映射
@@ -666,7 +673,7 @@ Hibernate 架构
 							 inverseJoinColum=@JoinColumn( name="PART_ID")//另一个表主键在中间表中对应的字段
 							)	
 						//注释的是另一个表指向本表的外键字段。另一表的PART_ID为外键，本表是一 
-					<set name="parts">
+					<set name="parts" table="tableName">
 						<key column="productSerialNumber" not-null="true"/>//另一个表指向本表的外键字段
 						<one-to-many class="Part"/>			//被关联的类名
 					</set>
@@ -800,7 +807,7 @@ Hibernate 架构
 					双向关联 的两个对像a，b中，a添加b时，b要同时保存a，保证双方关联关系正确，即操作要可以传递
 				jpa级联解决级联操作的传递问题
 					通常在@OneToMany侧配置cascade属性，使操作可以级联起来，
-					即a的属性上用了@OneToMany(cascafe=CascadeType.persist),那么保存a时会级联保存b到数据库中
+					即a的属性上用了@OneToMany(cascade=CascadeType.persist),那么保存a时会级联保存b到数据库中
 						cascadeType：
 							cascadeType.persist		//级联保存	保存本侧时，先保存另一侧
 							cascadeType.remove		//级联删除	hibernate会先加载集合实例，在对每个实例进行remove()操作，执行多条delete的sql，比较低效
@@ -814,10 +821,11 @@ Hibernate 架构
 					若a删除了，a的b引用会在数据库被删除，
 					但是，若c同时引用了b，在c update()时，被删除的b会随c的更新再次记录到数据库，b又出现在数据库中了！！导致数据不一致
 					由于b也是实体，有自己的生命周期，可以被其他实体引用
+		
 		关于双向关联
 			若b的fieldB 属性有 mappedBy“a.fieldA”，
 			则当a的fieldA属性保存了b之后才能把ab关系持久化到数据库，
-			若a.fieldA没保存过b，那么ab关系不会被存储到数据库，即使b.fieldB保存了a，也不能保存ab关系
+			若a.fieldA没保存过b，那么ab关系不会被存储到数据库，即使b.fieldB保存了a，也不能保存ab关
 			
 		1.@OneToMany @ManyToOne		//若有基于外键，则外键必位于多侧
 			@OneToMany：
@@ -845,7 +853,7 @@ Hibernate 架构
 					基于外键列：2(默认)	
 						@Joincolumn 		//重写多的一方的基于本实体表的外键列名
 					基于中间表：			//此时的表有 两个外键，其中 多的一方作主键即本侧是主键外键
-						多侧只能@JoinTable() 		//使用重写中间表的信息
+						只能在多侧@JoinTable() 		//使用重写中间表的信息
 						
 			级联删除操作cascade不能在多的实体类中使用，否则有外键冲突
 			
@@ -853,6 +861,7 @@ Hibernate 架构
 			
 			实体集合排序
 				OrderColumn(name="cloumn")	//指定按哪列排序
+				OrderBy()	//OrderColumn会覆盖OrderBy()
 		
 		2.@OneToOne					//若有基于外键，则外键位于位于本侧
 			单向：
@@ -885,7 +894,7 @@ Hibernate 架构
 			双向：
 				基于中间表
 					一侧@JoinTable
-					另一侧mappedBy该侧只读关系，不保存关系，被mappedBy的一侧即@JoinTable侧存储双方的关系
+					另一侧mappedBy该侧只读取关系，不保存关系，被mappedBy的一侧即@JoinTable侧存储双方的关系
 					
 		4.更复杂的关联
 			通过第3方中间实体类保存多元多对多关联
@@ -971,9 +980,24 @@ EntityManager 	//持久化上下文~=session
 		getReference()
 			
 会话	
-	Session s=SessionFactory.getCurrentSession()
-		SessionFactory会把当前当前java线程与一个Session对象绑定，调用getCurrentSession()时，会把当前线程绑定的Session对象返回
-		cfg.xml中配置会话跟踪current_session_context_class 的值为thread 使session对象与在一条线程上活动，与一条线程绑定，
+	Session本质为一个JDBC connection
+	SessionFactory.getCurrentSession()
+		会从CurrentSessionContext对象中取得连接，该连接由SessionContext管理，不用手动close
+			sessionContext可以是Jta，Thread，managed分别由JTA，Thread，SessionManager来管理Session
+			若没配置CurrentSessionContext，但配置了JTA事务，hibernate则会默认使用JTASessionContext来作为CurrentSessionContext的配置
+		若配置了CurrentSessionContext为Thread
+			SessionFactory会把当前当前java线程与一个Session对象绑定，调用getCurrentSession()时，会把当前线程绑定的Session对象返回
+			cfg.xml中配置会话跟踪current_session_context_class 的值为thread 使session对象与在一条线程上活动，与一条线程绑定，
+			通过线程本地变量ThreadLocal<map>将Session保存在当前线程中,并与SessionFactory关联起来，通过Map保存Session与SessionFactory的关联
+		若配置了CurrentSessionContext为Jta
+			SessionFactory会把当前jta的transaction与一个Session对象绑定，调用getCurrentSession()时，会把与当前线程所属的那条JTA事务绑定的Session对象返回
+			使用JTACurrentSessionContext必需将hibernate.transaction.factory_class配置成JTATransactionFactory，使用JTA的事务，并正确配置JTA
+			通过JTACurrentSessionContext中的Map将Session与当前事务关联，并让SessionFactory管理Session
+	或
+	SessionFactory.openSession()
+		SessionFactory会从连接提供器(ConnectionProvider)中获得一个JDBC连接。此时Session由程序员来管理，要手动关闭close()
+		若使用了连接池c3p0，ConnectionProvider就用C3p0的那一个
+		
 	session的生命周期
 		当getCurrentSession()或openSession()获取一个session时，Session的生命周期开始
 		当事务结束的时候，不管是提交还是回滚，Hibernate 会自动把 org.hibernate.Session 从当前线程剥离，并结束Session
@@ -1026,8 +1050,7 @@ EntityManager 	//持久化上下文~=session
 				Root信息
 					type()：Root代表的实体的类				//T.class,
 					get("name")：Root代表的实体的属性name		//name属性的类型
-					
-					
+										
 		4.Select				//构造一条获取查询根所代表的实体的select语句
 			CQ.select（column1，column2）的入参是要取得的列
 				select[ column1，column2 ,..]from human；
@@ -1219,7 +1242,7 @@ EntityManager 	//持久化上下文~=session
 		标量即不能构成实体的元素
 	
 	返回动态实例
-		用返回的标量构成一个非实体类的实例
+		使用JPQL查询，用返回的标量构成一个非实体类的实例
 			select new package.DynamicClass(h.id,h.name,b.title) from human h,book b;
 				返回DynamicClass的实例化对象，注意，他有有参构造函数DynamicClass（Long，String，String）
 				要用全限定类名
@@ -1249,17 +1272,16 @@ EntityManager 	//持久化上下文~=session
 	2.自定义insert，updata，delete
 		实体类上@SQLInsert，@SQLUpdate，@SQLDelete
 		sql属性为自定义sql语句
-		
-			
+				
 映射标准SQL查询(NativeQuery)的结果
 	映射的结果有3种
-		1.实体类entities
-		2.非实体类classes
-		3.单纯的标量columns
+		1.实体类entityresult
+		2.非实体类constructor-result
+		3.单纯的标量column
 	xml		//定义在NativeQuery.xml中
 		<sql-result-set-mapping name=“NAME”>			//定义映射的名子，通过名字应用映射
 			<entity-result entity-class=“*.*.User”>		//SQL查询结果映射为User实体
-				<field-result name=“id” column="ID">	//指定结果中的列映射到哪个字段
+				<field-result name=“id” column="ID">	//指定结果中的列映射到实体类字段
 				....
 			<constructor-result target-class=“*.*.sumary”>	//SQL查询结果映射为有构造器的普通POJO类-sumary
 				<column name="ID" class="Long">	//指定构造器参数映射的列
@@ -1281,9 +1303,7 @@ EntityManager 	//持久化上下文~=session
 		混合实体，非实体，标量映射时，通过元组（Object[]）取得结果,Object[]的元素代表每个sql映射
 		
 	使用JPA规范进行SQL查询
-		em.createNativeQuery("SQL"),还可以添加参数指定sql结果集映射使用上面定义的映射
-	
-	
+		em.createNativeQuery("SQL"，"resultSetMapping"),还可以添加参数指定sql结果集映射使用上面定义的映射
 		
 hibernate抓取策略
 	延时加载
@@ -1338,10 +1358,9 @@ hibernate抓取策略
 			在实体类上@EntityListeners(listener.class)
 	用hibernate拦截器（**）
 		hibernate拦截器可进行粒度更细的拦截，用于记录操作
-		1实现hibernate.interceptor接口
-		2.在配置文件中配置"hibernate.ejb.interceptor"属性为interceptor接口的实现类
-		
-			
+		1实现hibernate.interceptor接口或继承EmptyInterceptor
+		2.在配置文件中配置"hibernate.ejb.interceptor"属性为interceptor接口的实现类或用Configuration.setInterceptor()
+				
 缓存
 	有一级缓存与二级缓存，都存在于内存或硬盘
 	默认下，Hibernate 将缓存所有的在会话层缓存中的持久的对象
@@ -1354,6 +1373,7 @@ hibernate抓取策略
 		hibernate本身只提供二级缓存的规范，有第三方插件做具体实现。EHCache 
 		
 		Hibernate 配置二级缓存通过两步设置
+			0.设置EHCache.xml配置文件
 			1.在配置文件hibernate.cfg.xml中	配置二级缓存提供者
 				h4前
 				<property name="hibernate.cache.provider_class">
@@ -1364,6 +1384,9 @@ hibernate抓取策略
 					
 			2.激活二级缓存
 				<property key="hibernate.cache.use_second_level_cache">true</prop>
+				
+			3.指定在那个实体类上用二级缓存
+				<class-cache usage="read-only" class="Human"/>
 			
 	使用缓存
 		1.使用配置文件中的 hibernate.cache.use_query_cache="true" 属性 	
@@ -1397,9 +1420,6 @@ hibernate抓取策略
 		4.不被其他应用共享的数据
 		5.容忍少量并发访问的数据
 		
-	
-	
-	
 批处理
 	启用批处理
 		配置文件中配置每批大小
@@ -1428,6 +1448,8 @@ hibernate抓取策略
 		或在sessionFactory.setInterceptor(interceptor)	//此interceptor的范围是属于SessionFactory的
 	或
 	openSession（interceptor）	//在一个session范围内定义一个interceptor
+	或
+	或用Configuration.setInterceptor()	//配置拦截器
 	3进行查询，拦截器会拦截到每个阶段的动作，并做出反应
 	
 session事件	

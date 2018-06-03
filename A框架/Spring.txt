@@ -21,10 +21,15 @@ Spring IoC 容器
 
 	BeanFactory 容器
 		它可以加载配置文件中定义的 bean，将所有的 bean 集中在一起，当有请求的时候分配 bean
+		采用延迟加载的方式创建Bean，即在需要某个Bean时才实例化Bean
+		支持BeanPostProcessor，BeanFactoryPostProcessor，不过要手动创建
 	ApplicationContext 容器
 		COntext是spring的核心
-		包含BeanFactory所有功能，
+		包含BeanFactory所有功能，但Bean的加载方式是急加载，在容器启动时，就把全部Bean都实例化出来
 		另外增加了企业所需要的功能，比如，从属性文件从解析文本信息和将事件传递给所指定的监听器
+		支持BeanPostProcessor，BeanFactoryPostProcessor，在ApplicationContext上是自动注册好的
+		派生	
+			WebApplicationContext	 	//用于web应用的ApplicationContext
 
 	bean定义 @scope scope 指定作用域
 	    基于 XML 的配置文件:<bean id="" class=""></bean>
@@ -109,46 +114,49 @@ Spring AOP
 		抛出异常后通知	after-throwing
 		环绕通知	around
 
-	AOP的配置实现	
-		classpath下要包含以下AspectJ 库文件
-    		aspectjrt.jar
-			aspectjweaver.jar
-			aspectj.jar
-    		aopalliance.jar
+	AOP的配置实现
+		Spring默认使用java的JDK代理
+		或
+		用增强型的代理框架Aspetj
+			classpath下要包含以下AspectJ 库文件
+				aspectjrt.jar
+				aspectjweaver.jar
+				aspectj.jar
+				aopalliance.jar
 
-		xml方式：(要先声明一个Aspect的Bean)
-			<aop:config>
-				<aop:aspect>
-					<aop:pointcut>
-					<aop:before>
-			声明切面:在<aop:config>标签里配置
-  				 <aop:aspect id="myAspect" ref="aBean">
-				ref引用一个bean，用来作切面对象
+			xml方式：(要先声明一个Aspect的Bean)
+				<aop:config>
+					<aop:aspect>
+						<aop:pointcut>
+						<aop:before>
+				声明切面:在<aop:config>标签里配置
+					 <aop:aspect id="myAspect" ref="aBean">
+					ref引用一个bean，用来作切面对象
 
-			声明切点:在<aop:aspect>标签里配置
-				<aop:pointcut id="businessService" 
-					expression="execution(* com.tutorialspoint.Student.getName(..))"/>
+				声明切点:在<aop:aspect>标签里配置
+					<aop:pointcut id="businessService" 
+						expression="execution(* com.tutorialspoint.Student.getName(..))"/>
 
-			声明通知：在<aop:aspect>标签里配置
-				<aop:before pointcut-ref="businessService"
-					method = "adviceMethod">
-				ref 引用一个切点businessService，在该切点调用该aspect的一个method：adviceMethod
-		注解方式：
-			xml配置文件要声明以下标签以启用@AspectJ
-			<aop:aspectj-autoproxy/>或@EnableAspectJAutoProxy
-			声明切面:
-				@Aspect
-				public class AspectModule｛｝
-			
-			声明切点:
-				@Pointcut("execution(* com.xyz.myapp.service.*.*(..))")
-				private void businessService() {}
-			
-			声明通知:
-				@After("businessService()")
-   				public void afterAdvice()
-				@Around("recordLog()")//around通知有一个ProceedingJoinPoint参数
-    				public void around(ProceedingJoinPoint pjp)
+				声明通知：在<aop:aspect>标签里配置
+					<aop:before pointcut-ref="businessService"
+						method = "adviceMethod">
+					ref 引用一个切点businessService，在该切点调用该aspect的一个method：adviceMethod
+			注解方式：
+				xml配置文件要声明以下标签以启用@AspectJ
+				<aop:aspectj-autoproxy/>或@EnableAspectJAutoProxy
+				声明切面:
+					@Aspect
+					public class AspectModule｛｝
+				
+				声明切点:
+					@Pointcut("execution(* com.xyz.myapp.service.*.*(..))")
+					private void businessService() {}
+				
+				声明通知:
+					@After("businessService()")
+					public void afterAdvice()
+					@Around("recordLog()")//around通知有一个ProceedingJoinPoint参数
+						public void around(ProceedingJoinPoint pjp)
 
 Spring JDBC 框架
 	JdbcTemple类:负责处理连接数据库时的所有的低层细节
