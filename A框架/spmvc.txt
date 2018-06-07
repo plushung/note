@@ -40,6 +40,7 @@ Spring MVC
    			<param-value>/WEB-INF/HelloWeb-servlet.xml</param-value>  (RootWebApplicatonContext)
 		定义上下文配置文件位置
 		可以通过在 web.xml 文件中添加 servlet 监听器 ContextLoaderListener 自定义配置文件的名称和位置，该配置是根应用上的
+		配置了contextConfigLocation就要配置ContextLoaderListener <listener>来启动上下文配置文件
 		在web.xml里定义ContextLoaderListener 监听器
 		静态资源映射
 			web下配置
@@ -54,7 +55,7 @@ Spring MVC
 	
 	servlet.xml配置文件	//或者使用基于代码的配置，继承WebApplicationInitializer
 		启用组件扫描，扫描controller <context:component-scan base-package="..">
-		启用javaconfig  <context:annotation-config />
+		启用java配置  	<context:annotation-config />
 		配置视图解析器	<Bean class="**viewResolver">
 		声明bean		<baen class="..">
 
@@ -78,19 +79,24 @@ Spring MVC Content
 			RootWebApplicationContext<----DispatcherServlet1's  WebApplicationContext
 							|<----DispatcherServlet2's  WebApplicationContext
 							|<----DispatcherServlet3's  WebApplicationContext
-							...
-			<context-param>
-				<param-name>contextConfigLocation</param-name>
-				<param-value>/WEB-INF/springDispatcherServlet-servlet.xml</param-value>
-			</context-param>
-			//在context-param下指定的配置文件是RootWebApplicationContext
+			...
 			
-			<init-param>
-            	<param-name>contextConfigLocation</param-name>
-           		<param-value>servletname-servlet.xml</param-value>
-        	</init-param>
-			//在<servlet><init-param>下指定的配置文件是WebApplicationContext
-
+			RootWebApplicationContext		整个应用范围
+				<context-param>
+					<param-name>contextConfigLocation</param-name>
+					<param-value>/WEB-INF/springDispatcherServlet-servlet.xml</param-value>
+				</context-param>
+				//在context-param下指定的配置文件是RootWebApplicationContext
+				
+			WebApplicationContext			整个DispatcherServlet范围
+				<init-param>
+					<param-name>contextConfigLocation</param-name>
+					<param-value>servletname-servlet.xml</param-value>
+				</init-param>
+				//在<servlet><init-param>下指定的配置文件是WebApplicationContext
+			
+			同时要配置ContextLoaderListener监听器<listener>以自动装配Spring applicationContext.xml的配置信息
+			
 			//可以只配置RootWebApplicationContext	
 	
 	DispatcherServlet：
@@ -107,7 +113,7 @@ Spring MVC Content
 			MultipartResolver	解析multi-part的传输请求，比如支持通过HTML表单进行的文件上传等
 			FlashMapManager		存储并取回两次请求之间的FlashMap对象
 
-			可在WebApplicationContext(servlet.xml)中配置以上特殊Bean
+			可在WebApplicationContext(applicationContext.xml)中配置以上特殊Bean
 			或 
 			用AbstractDispatcherServletInitializer，简化配置
 				AbstractDispatcherServletInitializer拓展了Servlet的ServletContainerInitializer，
@@ -135,6 +141,11 @@ Spring MVC Content
 				映射http://project/{paramName}请求，
 				在控制器方法的入参用 @PathVariable（“paramName”） 取得paramName位置的值
 			
+			路径变量:
+				http://project/{paramName}，url上的部分，paramName是一个路径变量，通过@PathVariable取得
+			路径参数:
+				url上？后的键值对，http://project？id=1213. id是一个路径参数，与请求体参数一样，通过@RequestParam取得，
+			
 			带正则表达式的URI模板？！
 				/{varName:regex}/* regex为正则表达式
 	
@@ -161,8 +172,8 @@ Spring MVC Content
 				读取Request请求体数据,绑定到方法参数中
 				@RequestBody注解暗示了方法参数应该被绑定了HTTP请求体的值。
 				可以处理的ContentType为（GET，POST）
-							   application/x-www-form-urlencoded 表单数据（以PUT方式提交时必需用@RequestBody）
-							   application/json, application/xml等must
+				    application/x-www-form-urlencoded 表单数据（以PUT方式提交时必需用@RequestBody）
+				    application/json, application/xml等must
 				HttpMessageConverter负责将HTTP请求信息转换成对象 (ex:将json内容转换为对象，要用jackson2.jar库)
 			
 			使用@ResponseBody注解映射响应体
@@ -191,9 +202,9 @@ Spring MVC Content
 				controller里的方法实行时会用请求中的参数绑定到方法参数中
 
 				用法技巧:
-				暴露表单引用对象为模型数据：放在处理器的一般方法（非功能处理方法）上时，是为表单准备要展示的表单引用对象
-			与@SessionAttributes("currentUser"）配合
-			往 Session 中存储或者从 Session 中取出指定属性名的具体对象
+					暴露表单引用对象为模型数据：放在处理器的一般方法（非功能处理方法）上时，是为表单准备要展示的表单引用对象
+					与@SessionAttributes("currentUser"）配合
+					往 Session 中存储或者从 Session 中取出指定属性名的具体对象
 			
 			0.！使用@ModelAttribute注解的方法会在每一个@RequestMapping标注的方法前执行，			
 			1.Model类，（不通过@ModelAttribute添加）默认在控制器返回的视图名对应的视图上有效，
@@ -204,7 +215,7 @@ Spring MVC Content
 			3.离开控制器后，model要不渲染到视图显示，要不消失
 
 		@SessionAttributes（“name”）
-			用于控制器类级上
+			用于控制器类上
 			参数指定存贮在session上的模型数据的名称
 			把指定模型数据名添加到一个session中
 			
@@ -401,7 +412,7 @@ Spring MVC Content
 				流程:
 					DespatcherServlet检测请求若为Multipart则把该请求交给MultipartRevolver解析
 						CommonsMultipartRevolver把请求包装为MultipartHttpServletRequest对象
-		2处理Servlet 3.0下的MultipartResolver，StandardServletMultipartResolver
+		2处理Servlet 3.0中的MultipartResolver，StandardServletMultipartResolver
 			要使用基于Servlet 3.0的多路传输转换功能，
 			你必须在web.xml中为DispatcherServlet添加一个multipart-config元素
 				<multipart-config>
@@ -417,8 +428,6 @@ Spring MVC Content
 			或
 			在AbstractAnnotationConfigDispatcherServletInitializer
 				下重写customizeRegistration()
-				
-				
 					依赖于Servlet 3.0对multipart请求的支持（始于Spring 3.1）
 	
 		Spring MVC 处理客户端发起的文件上传请求
@@ -456,6 +465,7 @@ Spring MVC Content
 			web.xml在<servlet>标签下的<error-page><location>下定义错误页面
 			当响应的状态码被设置为错误状态码，并且响应体中没有内容时，Servlet容器通常会渲染一个HTML错误页
 				<error-page>
+					<error-code>404</error-code>
 					<location>/error</location>
 				</error-page>
 				
@@ -625,11 +635,11 @@ Spring MVC 启用MVC Java编程配置（@EnableWebMvc）或MVC命名空间（<mv
 				继承WebMvcConfigurationSupport
 				重写addFormatters(FormatterRegistry registry)
 			xml:
-				在<mvc:annotation-driven>下
+				在<mvc:annotation-driven conversion-service=“”>下conversion-service指定一个Formatter的bean
 				只需要提供一个转换服务id为ConversionService的bean
 				
-			转换器负责httpmessage到java对象间的相互转换（@ResponseBody、@RequestBody）
-			格式器负责对@DateTimeFormat，@NumberFormat的字段格式化
+			转换器负责httpmessage到java对象间的相互转换（@ResponseBody、@RequestBody）,如将http请求体的json信息转换为java对象
+			格式器负责对@DateTimeFormat，@NumberFormat的字段格式化，如将json的日期，数字等String对象，格式化为合适的java对象
 			转换器&格式器都通过FormatterRegistry添加
 			转换 xml 添加依赖
 				jackson-dataformat-xml
@@ -660,7 +670,7 @@ Spring MVC 启用MVC Java编程配置（@EnableWebMvc）或MVC命名空间（<mv
 				继承WebMvcConfigurationSupport
 				重写addInterceptors(InterceptorRegistry registr)
 			xml:
-				使用
+				使用xml标签
 				<mvc:interceptors>
 				
 		 Spring MVC 内容协商 
@@ -683,12 +693,12 @@ Spring MVC 启用MVC Java编程配置（@EnableWebMvc）或MVC命名空间（<mv
 					</property>
 				</bean>
 				
-		Spring MVC 自定义消息转换器
+		Spring MVC 消息转换器
 			JavaConfig:
 				覆写configureMessageConverters()
 			xml:
 				<mvc:annotation-driven>
-					<mvc:message-converters>
+					<mvc:message-converters>		//使用converter，converter可以处理任何类型的对象，formatter只能处理String对象 
 						<bean class="Conerter1"></bean>
 						<bean class="Converter2"></bean>
 					</mvc:message-converters>

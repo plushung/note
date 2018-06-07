@@ -77,19 +77,21 @@ spring 集成 JPA 的使用
 		3使用事务
 			1.编程式事务
 				JTA事务取得方式
-					UserTransaction =(UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+					JDNI : UserTransaction =(UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
 				UserTransaction.begin(),-->entityManager.persist()--->entityManager.close()---->UserTransaction.commit(),
 				将事务的管理编程式地写入业务逻辑，手动begin与commit与rollback
 			2.声明时事务
 				在service类上@transaction，声明事务切面，
-				<tx:annotation-driven transaction-manager="transactionManager"或在java配置类上@EnableTransactionManagement(proxyTargetClass=true)
+				<tx:annotation-driven transaction-manager="transactionManager"
+				或
+				在java配置类上@EnableTransactionManagement(proxyTargetClass=true)
 				让spring通过切面管理事务
 	spring管理的hibernate事务
 		1.配置实体管理器，LocalSessionFactoryBean
 			配置持久化单元，hibernate.cfg.xml的配置，有关与数据库连接的配置
 			一个SessionFactory代表一个数据库连接
 		2.配置事务管理器，HibernateTransactionManager
-			管理着SessionFactory
+			管理着Session中的事务
 			
 		3.使用事务
 			1.编程式事务

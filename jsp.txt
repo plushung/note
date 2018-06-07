@@ -1,7 +1,7 @@
 JSTL
 	常用
 		<c:out value="....">	//输出value的值
-		<c:forEach var="var" items="${userlist}">		//将items计算得到的集合元素依次赋值给var，在她的子标签用${var}引用
+		<c:forEach var="var" items="${userlist}">		//items为集合，var代表一次遍历的到的一个集合元素 == for var : items{}
 		<c:test="condition">	//测试condition的条件，为真就执行标签里的东西
 		<c:url >			// 使用可选的查询参数来创造一个URL
 		<c:choose> 	//本身只当做<c:when>和<c:otherwise>的父标签

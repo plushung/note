@@ -34,6 +34,10 @@ http/1.0 200 ok
 
 
 Content-disposition是 MIME 协议的扩展，MIME 协议指示 MIME 用户代理如何处理附加的文件
+响应为下载的文件
+	Content-Type:Application/octet-stream		//响应内容为数据流
+	Content-Disposition:attachment；filename=ddd	//内容当做附件处理，文件名为ddd
+
 
 GET URL http/1.1
 常用请求头
