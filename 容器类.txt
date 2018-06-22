@@ -28,7 +28,10 @@ Collection：保存单个元素
 		ArrayList：
 			底层用数组Object[]实现保存数据，用于随机访问元素，访问速度快，插删数据较慢
 			随ArrayList的尺寸增大，删插数据的代价会越来越大
-			
+			默认大小：10
+			负载因子：1
+			阈值：10*1=10
+			扩容方式：原始大小<1
 		LinkedList：
 			用双向链表保存数据，访问熟读稍慢，插删速度快
 			对比LIst，添加了用于棧，队列，双端队列的方法
@@ -52,7 +55,10 @@ Collection：保存单个元素
 		HashSet：
 			通过Hash函数来存储元素，访问速度快，但不保证元素顺序，存入的元素要实现HashCode()方法，才能用Hash存储
 			内部维护一个HashMap，元素被存放在HashMap的key上，用于快速查找元素
-			
+			默认大小：16
+			负载因子：0.75f
+			阈值：16*0.75=12
+			扩容方式：原始大小<1
 		TreeSet：
 			实现了SortSet接口，通过红黑Tree数据结构保存并排序元素，按升序（自然排序）来存放元素，
 			存入的元素要实现Comparable接口，才能进行比较排序，过ComparaTo方法比较
@@ -68,7 +74,6 @@ Collection：保存单个元素
 		要求顺序:TreeSet>LinkedHashSet>HashSet
 		
 	Queue：
-		按排队规则取得元素，通常是FIFO，元素从一端插入另一端取出，通过Comparable接口比较排列元素，决定输出顺序
 		按排队规则取得元素，通常是FIFO，元素从一端插入另一端取出，通过Comparable接口比较排列元素，决定输出顺序
 		
 		单向队列，一边入一边出 
@@ -88,19 +93,21 @@ Collection：保存单个元素
 			peek()，查看队尾元素
 			,poll(),remove(),将取出堆根元素，即优先级最高的元素
 			
-		线程安全版本Queue
+		线程安全版本Queue 	通过加ReentrantLock控制并发访问
 			ConcurrentLinkedQueue
-			
-			LinkedBlockingQueue
-
+				
 			PriorityBlockingQueue
-			
+				在优先队列上加上并发访问时阻塞的功能
+			LinkedBlockingQueue
+				默认容量动态增加无限制，存在时间最长的元素先出列（链表的头结点）FIFO ，若无元素则用Condition的await阻塞线程
 			ArrayBlockingQueue
+				容量给定，公平模式下使用队列的线程顺序遵循FIFO、非公平模式下使用队列的线程顺序不指定，若无元素则用Condition的await阻塞线程
 			
 			
 Map：保存一对元素
 	是一组“键值对“对象，里面每个对象有Key和对应的value，通过键的equals()比较键，确保无重复键
 	存储方式：key/value对 长度可变,
+	map中使用Entity保存键值对实体，Node是Entity的一个实现，即实际用Node保存一对元素
 	
 	基本方法:
 			put()
@@ -109,7 +116,11 @@ Map：保存一对元素
  	HashMap 类：
 		使用散列函数存储数据，具有很快的访问速度，同时也就不能保证顺序
 		通过hashCode()取得键,有极高的检索速度。因此键元素要实现hashCode()方法，同时要用equals()来判定元素是否为同一个
-		
+		每对元素保存到Node数组---table中，在下标为(hash&Maxindex)的位置放入元素
+		默认大小：16
+		负载因子：0.75f
+		阈值：16*0.75=12
+		扩容方式：原始大小<1
 		当存储的元素达3/4时自动扩容并对元素再散列
 	
 	TreeMap：

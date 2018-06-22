@@ -159,7 +159,7 @@
 	同步队列解决线程协作
 		果酱奶油吐司制作与消费P715
 		使用BlockingQueue解决生产者与消费者问题，因其是线程安全的，所以不用synchronized同步也能被多线程并发访问
-		器控制并发访问的方式是加ReentrantLock，读写时都用ReentrantLock
+		其控制并发访问的方式是加ReentrantLock，读写时都用ReentrantLock
 		LinkedBlockingQueue，ArrayBlockingQueue，SynchronousQueue，PriorityBlockingQueue
 		
 		PriorityBlockingQueue
