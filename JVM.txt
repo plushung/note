@@ -10,10 +10,11 @@
 			当无用对象的内存碎片较多时，自适应地使用"停止-复制"法来进行垃圾回收
 		
 	查找'活'对象
+		从GC根节点开始遍历对象
 		通过遍历堆栈区和静态存储区的引用，找出这些引用所指向的存活的对象。二次标记。
 	
 	实施清理算法
-		停止-复制:（多无用内存时）
+		停止-复制:（多无用内存时 MinorGC）
 			在清除无用对象，释放内存前先停止程序运行，再执行清除工作
 			缺点：
 				浪费了一半的内存来做复制操作
@@ -43,6 +44,7 @@
 		分代收集法（G1）：
 			将java堆分为一系列年轻代和老年代区，不同区用不同GC算法（自适应）
 			年轻代区域存活对象较少，使用Copy to Survivor（复制算法）
+				新生代包括Eden和Survivor区
 				将Eden和Servicor中的存活对象，复制到新的Survivor区，若新的Survivor不够大则复制到老年代区，完成GC
 				Eden区：Java新对象的出生地（如果新创建的对象占用内存很大，则直接分配到老年代）
 			老年代区域存活对象较多，使用标记-整理进行GC
@@ -51,18 +53,48 @@
 垃圾收集器
 	新生代都用复制算法清理
 	老年带使用标记-整理算法清理
-	serial：新生代，单线程
-	parNew：新生代，多线程
-	parallel scavenge：新生代，多线程，关注点为将垃圾回收时间控制在可控范围内
-	serial Old:老年代，单线程
-	Parallel Old：老年代，多线程
-	CMS：使用标记-清除算法，与用户线程同时运行，进行并发标记，并发清除，缩短Stop-The-world时间
-	G1：并发（利用多线程与多cpu，缩短停顿），分代收集，空间整合（GC后内存连续），可预测的停顿（指定GC时间在N ms内）
+	新生代
+		serial：新生代，单线程
+		parNew：新生代，多线程
+		parallel scavenge：新生代，多线程，关注点为将垃圾回收时间控制在可控范围内
+		G1
+	老年代
+		serial Old:老年代，单线程
+		Parallel Old：老年代，多线程
+		CMS：使用 标记-清除 算法，与用户线程同时运行，进行并发标记，并发清除，缩短Stop-The-world时间
+		G1：并发（利用多线程与多cpu，缩短停顿），分代收集，空间整合（GC后内存连续），可预测的停顿（指定GC时间在N ms内）
 	
 G1:
-	-XX:MaxGCPauseMillis=50  //gc在50ms内完成
-	-XX:G1HeapRegionSize=1~32 //G1的每个Region大小为1-32M
-	-XX:+PrintGCDetails
+	G1将内存划分为多个固定大小的region存放对象（YGC，OGC）		
+		//物理上不连续，G1的新生代与老年代的物理空间不分开，其他GC器将新生代与老年代的物理空间分开（CMS）
+	每个region有一个membered Set保存到其他Region或到其他收集器的对象的引用	
+		//不用全堆扫描
+	
+	步骤
+		初始标记：stop the world，只标记GCroot的直接关联对象
+		并发标记：同用户线程一起运行，标记所有GCRoot可达的对象
+		最终标记：stop the world，修正并发标记时的，用户运行导致的标记变动的那部分标记记录
+		筛选回收：对Region估计回收价值，排序，执行回收计划
+		
+	
+	最大垃圾收集暂停时间：-XX:MaxGCPauseMillis=50  //gc在50ms内完成
+	设置每个G1堆区的大小：-XX:G1HeapRegionSize=1~32 //G1的每个Region大小为1-32M
+	打印垃圾收集信息：-XX:+PrintGCDetails	
+	直接晋升到老年代的对象大小：-XX:+PretenuerSizeThreshold=15
+	使用某垃圾收集器：-XX:+UseSerialGC
+	
+	-Xms20M 堆大小20m
+	-Xmx20M 堆最大20M
+	-Xmn10m new新生代占10M
+	-XX:SurvivorRatio new新生代中Eden与Survivor之比
+
+新生代到老年代 		分配担保，大对象，老年对象（age=15），动态对象年龄
+	1.GC时，Eden执行minor GC，Eden的对象被复制到Survivor，Survivor放不下则被复制到老年代，（分配担保机制），若老年代也不够大，则对老年代进行FullGC
+	2.新生代对象的每次Minor GC，会使对象age+1，当对象的Age达到-XX:MaxTenuringThreshold时（默认15），则被复制到老年代区
+	3.新建对象若大于-XX:+PretenuerSizeThreshold,则直接存放到老年代， 大对象如：长字符串，大数组
+	4.survivor中age相同的对象较多时，比age大的对象被晋升为老年代
+Full GC
+	stop the world，GC时暂停用户线程
 	
 准备开始GC
 	1.jvm有多条运行的线程
