@@ -92,6 +92,7 @@ alias 名别名
 
 		
 连结查询
+	select * from tb lefft outer join tb1 on tb.g==tb1.g where tb.a>4
 	Inner join table_name on == where ..	//两个表的相交部分
 		等值查询,左边表的记录数目与有边表记录的数目相同,基于这些表之间的共同字段
 	left outer join table_name on ==		//左表的全部及两表的相交部分
@@ -112,19 +113,25 @@ NULL值处理
 	用is null / is not null 判断null值
 	
 	
-修改表项
+修改表项 drop/add/modify/change/alter/rename
 	删除列	drop
-		alter table Table_name drop column_name;
+		alter table Table_name 
+			drop column_name;
 	增加列	add
-		alter table table_name add column_name char(10);
+		alter table table_name 
+			add column_name char(10);
 	修改列属性	modify		//sqlserver为alter column_name
-		alter table table_name modify column_name int;
+		alter table table_name 
+			modify column_name int;
 	修改列名及属性 change
-		alter table table_name change column_name newname int;
+		alter table table_name 
+			change column_name newname int;
 	直接修改某列的默认值 alter
-		ALTER TABLE testalter_tbl ALTER i SET DEFAULT 1000
+		ALTER TABLE testalter_tbl 
+			ALTER i SET DEFAULT 1000
 	修改表名 
-		alter table table_name RENAME TO new_table_name
+		alter table table_name 
+			RENAME TO new_table_name
 		
 		
 		

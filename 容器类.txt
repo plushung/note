@@ -58,7 +58,7 @@ Collection：保存单个元素
 			默认大小：16
 			负载因子：0.75f
 			阈值：16*0.75=12
-			扩容方式：原始大小<1
+			扩容方式：原始大小<1 （x2）
 		TreeSet：
 			实现了SortSet接口，通过红黑Tree数据结构保存并排序元素，按升序（自然排序）来存放元素，
 			存入的元素要实现Comparable接口，才能进行比较排序，过ComparaTo方法比较
@@ -157,11 +157,12 @@ Tree存储方式		接口:SortedSet,SortedMap. 唯一实现:TreeSet，TreeMap
 				CopyOnWriteArrayList
 					读取时不加锁
 					写入时加ReentrantLock，并复制源数组，对副本进行修改，然后用副本取代源数组，最后解锁
-				CopyOnWriteSet
+				CopyOnWriteArraySet
 					使用CopyOnWriteArrayList并去掉重复元素
 			
-				CopyOnWrite在迭代时，能够有效防止出现ConcurrentModificationException（快速失败）
-			
+				CopyOnWrite在迭代时，能够有效防止出现ConcurrentModificationException（快速失败），
+				安全失败（fail-safe）基于对数组的复制，修改原数组不会导致副本抛出异常，能够安全地失效
+				
 			2.synchronized装饰容器
 				Collections.Synchronized*(Collection s)
 					使用装饰器设计模式,包装普通容器类，
