@@ -94,12 +94,13 @@ Collection：保存单个元素
 			,poll(),remove(),将取出堆根元素，即优先级最高的元素
 			
 		线程安全版本Queue 	通过加ReentrantLock控制并发访问
-			ConcurrentLinkedQueue
-				
+			LinkedBlockingQueue
+				在FIFO队列上加上并发访问时阻塞的功能,
+				默认容量动态增加无限制，存在时间最长的元素先出列（链表的头结点）FIFO ，若无元素则用Condition的await阻塞线程
 			PriorityBlockingQueue
 				在优先队列上加上并发访问时阻塞的功能
-			LinkedBlockingQueue
-				默认容量动态增加无限制，存在时间最长的元素先出列（链表的头结点）FIFO ，若无元素则用Condition的await阻塞线程
+			ConcurrentLinkedQueue
+				
 			ArrayBlockingQueue
 				容量给定，公平模式下使用队列的线程顺序遵循FIFO、非公平模式下使用队列的线程顺序不指定，若无元素则用Condition的await阻塞线程
 			
@@ -107,7 +108,7 @@ Collection：保存单个元素
 Map：保存一对元素
 	是一组“键值对“对象，里面每个对象有Key和对应的value，通过键的equals()比较键，确保无重复键
 	存储方式：key/value对 长度可变,
-	map中使用Entity保存键值对实体，Node是Entity的一个实现，即实际用Node保存一对元素
+	map中使用Entity保存键值对实体，Node类是Entity的一个实现，即实际用Node保存一对元素
 	
 	基本方法:
 			put()

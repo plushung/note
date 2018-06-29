@@ -1,13 +1,13 @@
 Spring MVC
 	流程：
-					DispatcherServlet
-		HTTP request-------------------->|
+						DispatcherServlet
+		HTTP request-------------------->	|
 							|					（handlerchain : 包含Handler本身及与该handler有关的拦截器，handler与拦截器的执行是链式的）
 							|<------->HandlerMapping	从所有HandlerMapping中查找看有无可处理该请求的handler，有则返回该handlerchain。
 							|					一个HandlerMapping映射一个controller，DispatcherServlet持有HandlerMapping的集合，选择适当的Controller 
 							|<------->Controller			从HandlerMapping取得Handler后，由handlerAdaptor调用Controller中的方法，并在Controller前后调用拦截器，返回model and viewname
-							|<------->ViewResolver		根据viewname解释取得实际视图名,仅仅是解析出真视图名，返回view，不渲染
-		HTTP request<--------------------|<------->View				用model渲染并返回视图，View接口就接收request与response以及Model，将Model的数据输出渲染到response	
+							|<------->ViewResolver		视图解析器根据viewname解释取得实际视图名,仅仅是解析出真视图名，返回view，不渲染
+		HTTP request<--------------------	|<------->View				用model渲染并返回视图，View接口就接收request与response以及Model，将Model的数据输出渲染到response	
 	
 	DispatchServlet初始化时初始化一系列Resolver，HandleMapping（s），HandlerAdapter（s），HandleExceptionresolver,RequestToViewNameTranslator,视图解析器（s），FlashMapManager
 		protected void initStrategies(ApplicationContext context) {  
@@ -93,7 +93,7 @@ Spring MVC Content
 					<param-name>contextConfigLocation</param-name>
 					<param-value>servletname-servlet.xml</param-value>
 				</init-param>
-				//在<servlet><init-param>下指定的配置文件是WebApplicationContext
+				//在<servlet><init-param>下指定的配置文件是WebApplicationContext，定义DispatcherServlet所有的Context
 			
 			同时要配置ContextLoaderListener监听器<listener>以自动装配Spring applicationContext.xml的配置信息
 			
@@ -153,19 +153,17 @@ Spring MVC Content
 				/${xxxx}/*
 			
 			可消费（contentType）的媒体类型（根据请求类型处理请求）
-				consumes="application/json" 参数指定处理
-				ContentType为“ApplicationContext/json”的请求,
+				consumes="application/json" 参数指定处理ContentType为“ApplicationContext/json”的请求,
 				请求体的值放到@RequestBody的参数中
 
 			可生产（Accept）的媒体类型（根据响应类型处理请求）
-				produces="application/json"参数指定处理
-				Accept为“ApplicationContext/json”的请求
+				produces="application/json"参数指定处理Accept头为“application/json”的请求
 				服务器返回的是ApplicationContext/json
 
-					推荐用MediaType定义好的一些常量为consumes/produces赋值
+			推荐用MediaType定义好的一些常量为consumes/produces赋值
 
 		定义@requestMapping的处理方法:
-			使用@RequestParam将请求参数绑定至方法参数,如表单的参数
+			使用@RequestParam将请求参数绑定至方法参数,如表单的参数，路径参数
 				@RequestParam(path="id", required=false)）指定要绑定的参数，非必需
 			
 			使用@RequestBody注解映射请求体
@@ -282,12 +280,15 @@ Spring MVC Content
 						<ref name="localinterceptor"/>
 		
 		部署拦截器
-			在xml配置文件中
+			在xml配置文件中		
+			//拦截器集合（interceptors）中为每个拦截器（interceptor）配一个映射路径（mapping）和拦截器实现的（bean）
 				<mvc:interceptors >		//mvc拦截器
 					<!-- 如果不定义 mvc:mapping path 将拦截所有的URL请求 -->	
-					<mvc:mapping path="/user/**" />  
-					<bean class="introceptor.Minterceptor">	//具体拦截器
-					</bean>
+					<mvc:interceptor>
+						<mvc:mapping path="/user/**" /> 
+						<bean class="introceptor.Minterceptor">
+						</bean>
+					</mvc:interceptor>
 				</mvc:interceptors>
 		
 			使用@ResponseBody或ResponseEntity的方法时
@@ -296,7 +297,7 @@ Spring MVC Content
 			请让你的应用实现ResponseBodyAdvice接口，并将其定义为一个@ControllerAdvice bean或直接在RequestMappingHandlerMapping中配置。
 	
 	Spring MVC 视图解析(ViewResolver)
-		解析视图名，给分发器渲染
+		解析视图名，给分发器渲染，解析到的只是实际视图全名，而不是视图本身
 		基础:使用ViewResolver接口解析视图
 		Spring有非常多内置的视图解析器:
 			其中：UrlBasedViewResolver
@@ -383,7 +384,7 @@ Spring MVC Content
 	Spring MVC 提供地区信息(LocaleResolver)
 		DispatcherServlet通过LocaleResolver对象为你提供了自动使用用户的地区信息来解析消息的能力。
 		
-		地区解析器LocaleResolver
+		LocaleResolver地区解析器
 			LocaleResolver对象来完成的解读地区信息。
 			一个请求进入处理时，DispatcherServlet会查找一个地区解析器。如果找到，就尝试使用它来设置地区相关的信息
 		Accept请求头解析器
@@ -448,12 +449,15 @@ Spring MVC Content
 		
 		操作:
 			使用SimpleMappingExceptionResolver //与Servlet API提供的异常映射特性是功能等价
-			或 在控制器的异常处理方法上注解@ExceptionHandler //仅仅处理该处理器里的异常
+			或 
+			在控制器的异常处理方法上注解@ExceptionHandler //仅仅处理该处理器里的异常
 				直接在控制类的某个方法上用@ExceptionHandler，使得这个方法处理该控制器发生的错误
-			或 在@ControllerAdvice类中的方法@ExceptionHandler，//可以处理多个处理器的异常
+			或 
+			在@ControllerAdvice类中的方法@ExceptionHandler，//可以处理多个处理器的异常
 				@ControllerAdvice定义一个专门处理控制器事件的控制器类，
 				在该控制器方法上@ExceptionHandler方法处理特定的控制器错误
 			若@ExceptionHandler方法只返回错误码不返回内容，则由Servlet容器渲染在web.xml下指定的错误页面
+			
 		默认处理器异常解析器DefaultHandlerExceptionResolver会将Spring MVC抛出的异常转换成对应的错误状态码。
 			DefaultHandlerExceptionResolver在启用mvc（@EnableWebMvc/<mvc:annotation-dirven>）时默认已经被注册了
 		
@@ -514,13 +518,13 @@ Spring MVC Content
 			Cache-Control 
 				帮助私有缓存（比如浏览器端缓存）和公共缓存（比如代理端缓存）
 			Last-Modified
-				
+				最后修改时间
 			ETag
 				标识给定的URL下的内容有无变化
 					客户端就可以在后续的GET请求中使用这个ETag头表示，一般是将它放在If-None-Match请求头中。
 					此时若内容没有变化，服务器端会直接返回304: 内容未更改。
 					
-		1.Spring MVC在控制器中设置cache
+		响应时设置cache头
 			若控制器返回ResponseEntity
 			可在ResponseEntity上配置cache 或直接在httpservletResponse中设置头
 				ResponseEntity.
@@ -528,9 +532,9 @@ Spring MVC Content
 					cacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES)).//设置缓存时间
 					lastModified(1000).//设置lastModified头
 					eTag("123456").//设置eTag标志头，用于决定需不需要更新缓存
-					body(db);//返回到响应体中的model
+					body(model);//返回到响应体中的model
 			
-		2.SPring mvc通过控制器的WebRequest 参数检测客户端的缓存是否已更改
+		接收请求时使用Cache头信息
 			request.checkNotModified( lastModified )
 				lastModified传入最后更改时间，与request头的If-Modified-Since比较
 				//false--不用更改  true--需要更改
@@ -545,17 +549,18 @@ Spring MVC Content
 				
 			若资源未修改返回一个304响应状态码HTTP 304 Not Modified（资源未修改）
 					
-		3.Spring mvc对静态资源设置缓存
-			xml:
-				<mvc:resources mapping="/resources/**" location="/public-resources/">
-					<mvc:cache-control max-age="3600" cache-public="true"/>
-				</mvc:resources>
-			JavaConfig类:
-				继承WebMvcConfigurerAdapter
-				重写addResourceHandlers(ResourceHandlerRegistry registry)
-					registry.addResourceHandler("/resources/**")
-					.addResourceLocations("/public-resources/")
-					.setCacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic());
+		3.Spring mvc控制静态资源
+			静态资源映射及源缓存
+				xml:
+					<mvc:resources mapping="/resources/**" location="/public-resources/">
+						<mvc:cache-control max-age="3600" cache-public="true"/>
+					</mvc:resources>
+				JavaConfig类:
+					继承WebMvcConfigurerAdapter
+					重写addResourceHandlers(ResourceHandlerRegistry registry)
+						registry.addResourceHandler("/resources/**")
+						.addResourceLocations("/public-resources/")
+						.setCacheControl(CacheControl.maxAge(1, TimeUnit.HOURS).cachePublic());
 					
 		web容器 创建弱ETag对象(只节省带宽，不省计算资源)
 		它是纯Servlet技术实现的过滤器，因此，它可以与任何web框架无缝集成
@@ -570,8 +575,8 @@ Spring MVC Content
 			比较etag2=etag1?304(未修改):200
 			
 Spring MVC 用JavaConfig 初始化Servlet容器 ServletInitializer
-	Servlet 3.0以上的环境下，你可以通过编程的方式来配置Servlet容器了
-	WebApplicationInitializer <--- --- --- AbstractDispatcherServletInitializer		基于servlet3.0的ServletInitializer
+	Servlet 3.0以上的环境下，可以通过编程的方式来配置Servlet容器了
+	WebApplicationInitializer <--- --- --- AbstractDispatcherServletInitializer		基于servlet3.0的ServletInitializer，servlet会自动使用该类初始化web上下文
 		继承AbstractDispatcherServletInitializer(ADSI)使DispatcherServlet配置变得更简单，
 			1.你只需要覆写相应的方法
 			2.在其中提供servlet映射
@@ -584,7 +589,7 @@ Spring MVC 用JavaConfig 初始化Servlet容器 ServletInitializer
 					createServletApplicationContext()
 			4.ADSI同样也提供了便捷的方式来添加过滤器Filter
 				getServletFilters()
-		===========
+		或
 		xml web.xml
 			<servlet>
 				<servlet-name>springDispatcherServlet</servlet-name>
@@ -596,7 +601,8 @@ Spring MVC 用JavaConfig 初始化Servlet容器 ServletInitializer
 				<param-value>/WEB-INF/springDispatcherServlet-servlet.xml</param-value>
 			</context-param>
 			
-Spring MVC 启用MVC Java编程配置（@EnableWebMvc）或MVC命名空间（<mvc:annotaiton-dirven>）
+Spring MVC 启用MVC 
+	Java编程配置（@EnableWebMvc）或MVC命名空间（<mvc:annotaiton-dirven>）
 	启用MVC:
 		@Configuration
 		@EnableWebMvc
@@ -630,13 +636,19 @@ Spring MVC 启用MVC Java编程配置（@EnableWebMvc）或MVC命名空间（<mv
 			如果你想对默认配置进行定制，
 			在<mvc:annotation-driven/>元素下配置支持的属性和子元素。
 		
-		Spring MVC 转换与格式化
+		Spring MVC 转换器与格式化器
 			javaconfig:
 				继承WebMvcConfigurationSupport
 				重写addFormatters(FormatterRegistry registry)
+					在register添加Convertor和Formatter
 			xml:
-				在<mvc:annotation-driven conversion-service=“”>下conversion-service指定一个Formatter的bean
+				在<mvc:annotation-driven conversion-service=“”> //conversion-service指定一个Formatter的bean，在绑定对象属性时，格式化对象
+					<mvc:message-converters register-defaults="true">//配置对象转换器，将java对象转换为Json或其他
+						<bean ></bean>
+					</mvc:message-converters>
+				 </mvc:annotation-driven>
 				只需要提供一个转换服务id为ConversionService的bean
+				
 				
 			转换器负责httpmessage到java对象间的相互转换（@ResponseBody、@RequestBody）,如将http请求体的json信息转换为java对象
 			格式器负责对@DateTimeFormat，@NumberFormat的字段格式化，如将json的日期，数字等String对象，格式化为合适的java对象
@@ -671,7 +683,12 @@ Spring MVC 启用MVC Java编程配置（@EnableWebMvc）或MVC命名空间（<mv
 				重写addInterceptors(InterceptorRegistry registr)
 			xml:
 				使用xml标签
-				<mvc:interceptors>
+				<mvc:interceptors>	//拦截器集合
+					<mvc:interceptor>	//一个拦截器
+						<mvc:mapping path="/user/**" />	//拦截器拦截的路径 
+						<bean class="introceptor.Minterceptor">//拦截器的具体实现类
+						</bean>
+				   </mvc:interceptor>
 				
 		 Spring MVC 内容协商 
 			if通过请求的url的拓展名.json/.xxxx确定要返回什么内容
