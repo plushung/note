@@ -243,7 +243,7 @@ Spring MVC Content
 				4.由处理该请求的线程对 DeferredResult进行设值，然后Spring MVC会重新把请求分派回Servlet容器，恢复处理
 				5. DispatcherServlet再次被调用，恢复对该异步返回结果的处理
 				
-	Spring MVC 处理器映射(HandlerMapping)
+	处理器映射(HandlerMapping)
 		 <mvc:annotation-driven/>//作用是处理器映射
 		 //作用于@Controller,它会自动注册DefaultAnnotationHandlerMapping与AnnotationMethodHandlerAdapter
 		 //默认配置了RequestMappingHandlerAdapter,并为他配置了一个默认的HttpMessageConverter
@@ -296,7 +296,7 @@ Spring MVC Content
 			若要postHandler起作用，
 			请让你的应用实现ResponseBodyAdvice接口，并将其定义为一个@ControllerAdvice bean或直接在RequestMappingHandlerMapping中配置。
 	
-	Spring MVC 视图解析(ViewResolver)
+	视图解析(ViewResolver)
 		解析视图名，给分发器渲染，解析到的只是实际视图全名，而不是视图本身
 		基础:使用ViewResolver接口解析视图
 		Spring有非常多内置的视图解析器:
@@ -315,7 +315,7 @@ Spring MVC Content
 				如果需要在应用中使用多种不同的视图技术，可以使用ResourceBundleViewResolver
 		
 		另外：org.springframework.http.converter.json.MappingJacksonHttpMessageConverter
-			用于解析json的消息转换器，MessageConverter有就不用视图解析了
+			用于解析json的消息转换器，MessageConverter有了就不用视图解析了
 		
 		推荐用thymeleaf视图技术
 			引入依赖
@@ -345,7 +345,7 @@ Spring MVC Content
 						return thv;
 					}
 		
-		Spring MVC 视图链
+		视图链
 			Spring支持同时使用多个视图解析器，在他们的bean设置order属性指定它们的次序，1优先，order越大越后
 				 <property name="order" value="1"/>
 			for viewResolver i in viewResolverS:
@@ -358,7 +358,7 @@ Spring MVC Content
 			如果不把InternalResourceViewResolver放置在解析器链的最后，将可能导致解析器链无法完全执行
 			 InternalResourceViewResolver永远都会返回一个视图。（可能是null）
 		
-		Spring MVC 视图重定向
+		视图重定向
 			重定向视图 RedirectView
 				控制器返回一个重定向视图RedirectView，使DispatcherServlet放弃使用一般的视图解析机制，
 				Spring重定向视图RedirectView调用HttpServletResponse.sendRedirect()实现重定向
@@ -381,7 +381,7 @@ Spring MVC Content
 		Spring MVC 内容协商解析器
 			ContentNegotiatingViewResolver，不解析视图，而是把解析工作交给其他视图解析器
 			
-	Spring MVC 提供地区信息(LocaleResolver)
+	提供地区信息(LocaleResolver)
 		DispatcherServlet通过LocaleResolver对象为你提供了自动使用用户的地区信息来解析消息的能力。
 		
 		LocaleResolver地区解析器
@@ -396,11 +396,11 @@ Spring MVC Content
 		地区更改拦截器
 			LocaleChangeInterceptor
 			
-	Spring MVC 主题概览
+	主题概览
 		Spring Web MVC框架提供的主题来为整站的应用设置皮肤/主题，这可以提高用户体验。
 		主题 是指一系列静态资源的集合，并且主要是样式表和图片，它们决定了你的应用的视觉风格。
 		
-	Spring MVC 文件上传(MultipartResolver)
+	文件上传(MultipartResolver)
 		MultipartFile file
 		1使用MultipartResolver与Commons FileUpload传输文件
 			通用Multipart解析器CommonsMultipartResolver（MultipartRevolver的一个实现）
@@ -431,7 +431,7 @@ Spring MVC Content
 				下重写customizeRegistration()
 					依赖于Servlet 3.0对multipart请求的支持（始于Spring 3.1）
 	
-		Spring MVC 处理客户端发起的文件上传请求
+		处理客户端发起的文件上传请求
 			场景:http消息体中既有form-data的消息，又有像json这样的meta-data数据，
 			   消息体中有多部分数据
 			若消息体中只有form-data则在控制器参数中添加@RequestParam（“name”）即可取得Multipart数据
@@ -443,7 +443,7 @@ Spring MVC Content
 				若name的数据是meta-data（如json），则把他当作@RequestBody处理，
 					若ContentType=“ApplicationContext/json”,就MappingJackson2HttpMessageConverter转换成对象
 					
-	Spring MVC 异常处理HandlerExceptionResolver,ResponseStatusExceptionResolver
+	控制器异常处理HandlerExceptionResolver,ResponseStatusExceptionResolver
 		spring的处理器异常解析器HandlerExceptionResolver接口，负责处理控制器里发生的异常
 		它只是提供了resolveException(Exception, Hanlder)方法的一个实现而已，方法会返回一个ModelAndView
 		
@@ -473,7 +473,7 @@ Spring MVC Content
 					<location>/error</location>
 				</error-page>
 				
-	Spring MVC 对"约定优于配置"的支持
+	对"约定优于配置"的支持
 		在spring mvc中的命名按照 约定 的命名规则去命名，则可以大大减少配置，达到快速构建应用的目的
 		约定优于配置 在M V C 三个层面上的都得到Spring MVC的支持
 		
@@ -574,7 +574,7 @@ Spring MVC Content
 			把jsp视图渲染得到etag2
 			比较etag2=etag1?304(未修改):200
 			
-Spring MVC 用JavaConfig 初始化Servlet容器 ServletInitializer
+SpringMVC 用JavaConfig初始化Servlet容器 ServletInitializer
 	Servlet 3.0以上的环境下，可以通过编程的方式来配置Servlet容器了
 	WebApplicationInitializer <--- --- --- AbstractDispatcherServletInitializer		基于servlet3.0的ServletInitializer，servlet会自动使用该类初始化web上下文
 		继承AbstractDispatcherServletInitializer(ADSI)使DispatcherServlet配置变得更简单，
@@ -627,7 +627,7 @@ Spring MVC 启用MVC
 			Jaxb2RootElementHttpMessageConverter：Java对象<-->XML之间的互相转换
 				——该转换器在classpath下有JAXB2依赖并且没有Jackson 2 XML扩展时被注册
 				
-	Spring MVC 默认配置的定制化
+	默认配置的定制化
 		javaconfig:
 			实现WebMvcConfigurer接口
 				或
@@ -636,14 +636,16 @@ Spring MVC 启用MVC
 			如果你想对默认配置进行定制，
 			在<mvc:annotation-driven/>元素下配置支持的属性和子元素。
 		
-		Spring MVC 转换器与格式化器
+		转换器与格式化器
 			javaconfig:
 				继承WebMvcConfigurationSupport
 				重写addFormatters(FormatterRegistry registry)
 					在register添加Convertor和Formatter
 			xml:
-				在<mvc:annotation-driven conversion-service=“”> //conversion-service指定一个Formatter的bean，在绑定对象属性时，格式化对象
-					<mvc:message-converters register-defaults="true">//配置对象转换器，将java对象转换为Json或其他
+				在<mvc:annotation-driven conversion-service=“”> 
+					//conversion-service指定一个Formatter的bean，在绑定对象属性时，格式化对象
+					<mvc:message-converters register-defaults="true">
+						//配置对象转换器，将java对象转换为Json或其他
 						<bean ></bean>
 					</mvc:message-converters>
 				 </mvc:annotation-driven>
@@ -656,7 +658,7 @@ Spring MVC 启用MVC
 			转换 xml 添加依赖
 				jackson-dataformat-xml
 			
-		Spring MVC 验证支持
+		数据验证支持
 			JavaConfig:
 				在Spring MVC中，你可以配置一个全局的Validator实例
 					继承WebMvcConfigurationSupport
@@ -667,17 +669,20 @@ Spring MVC 启用MVC
 			xml:
 				<mvc:annotation-driven validator="ValidatorId" >
 				
-			spring通过LocalValidatorFactoryBean验证器类支持JSR-303/JSR-349的Bean验证
-			JSR-303是一个数据验证的规范，但是spring并没有对其进行实现，
-			Hibernate Validator是实现了这一规范的，通过此这个实现来讲SpringMVC对JSR-303的支持
-			使用Apache BVal :: BVal JSR ? 1.1.1
-			要加入依赖
-			javax.validation.validation-api库//jsr303协议
-			和jsr303-validation库		//jsr验证器的实现
-			必需要有jsr303否则不可验证
+			validation：数据验证规范，JSR-303是一个数据验证的规范，必需要有jsr303否则不可验证
+				要加入依赖
+				javax.validation.validation-api库//jsr303协议
+				和jsr303-validation库		//jsr验证器的实现
+			validator：根据验证规范实施数据验证
+				Hibernate Validator是实现了这一规范的，通过此这个实现让SpringMVC对JSR-303的支持
+				
 			配置验证器后即可对@Valid和@Validated的控制器输入参数进行验证
-		
-		Spring MVC 拦截器配置
+				@Null，@NotNull，@max
+			
+			spring通过LocalValidatorFactoryBean验证器类支持JSR-303/JSR-349的Bean验证
+			，但是spring并没有对其进行实现，
+			
+		拦截器配置
 			JavaConfig:
 				继承WebMvcConfigurationSupport
 				重写addInterceptors(InterceptorRegistry registr)
@@ -690,7 +695,7 @@ Spring MVC 启用MVC
 						</bean>
 				   </mvc:interceptor>
 				
-		 Spring MVC 内容协商 
+		内容协商 
 			if通过请求的url的拓展名.json/.xxxx确定要返回什么内容
 			else不能通过拓展名确定返回内容的则通过请求头的Accept决定要返回的内容类型
 			配置返回内容协商，使返回正确类型的内容
@@ -710,7 +715,7 @@ Spring MVC 启用MVC
 					</property>
 				</bean>
 				
-		Spring MVC 消息转换器
+		消息转换器
 			JavaConfig:
 				覆写configureMessageConverters()
 			xml:
@@ -721,7 +726,7 @@ Spring MVC 启用MVC
 					</mvc:message-converters>
 				</mvc:annotation-driven>
 				
-		Spring MVC 视图控制器
+		视图控制器
 			JavaConfig:	
 				继承WebMvcConfigurationSupport
 				重写addViewControllers(ViewControllerRegistry registry)
@@ -731,8 +736,8 @@ Spring MVC 启用MVC
 				
 			将所有"/"请求 直接转发 给名字为"home"的视图
 			
-		Spring MVC 视图解析器
-			！！！都要有声明ViewResolver bean
+		视图解析器
+			ViewResolver bean
 			JavaConfig:	
 				继承WebMvcConfigurationSupport
 				重写configureViewResolvers(ViewResolverRegistry registry)
@@ -744,7 +749,7 @@ Spring MVC 启用MVC
 						<mvc:default-views>	//设置默认View的bean
 							<bean >
 		
-		Spring MVC 回到默认的Servlet来进行静态资源服务，用web容器的默认servlet
+		处理静态资源服务，用web容器的默认servlet
 			javaconfig
 				继承WebMvcConfigurationSupport
 				如果要完全定制自己的Converter
@@ -757,6 +762,6 @@ Spring MVC 启用MVC
 			允许默认的Servlet处理被DispatcherServlet拦截的url资源(静态资源)
 			若Web应用服务器的默认Servlet不是default则
 				<mvc:default-servlet-handler default-servlet-name="mydefault" />	指定web的默认servlet
-			或用
-				<mvc:resources location="/js/**" mapping="/resources/**"/>
-				处理静态资源
+			或
+			用<mvc:resources location="/js/**" mapping="/resources/**"/>
+				由SpringMvc处理静态资源
