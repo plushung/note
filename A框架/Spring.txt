@@ -1,9 +1,19 @@
+
+Spring ApplicationContext
+	-------------------------------------------------------------------------------------
+	|	<bean <bean>>
+	|	<AOP>
+	|	
+	
+
+
+
 体系结构：包括
 	核心容器（Core Container）
 		核心容器由核心，Bean，上下文和表达式语言模块组成
 			核心提供基本组成部分，包括 IoC 和依赖注入功能
 			Bean模块用工厂模式实现
-			上下文它是访问定义和配置的任何对象的媒介。
+			上下文是访问,定义和配置的所有对象的媒介。
 			
 	数据访问/集成（DataAccess/Integration）
 		包括 JDBC，ORM，OXM，JMS 和事务处理模块
@@ -16,7 +26,7 @@
 
 
 Spring IoC 容器
-	容器将创建对象，连接对象（DI），配置对象，管理对象的整个生命周期从创建到销毁
+	容器将创建对象，连接(组装)对象（DI），配置对象，管理对象的整个生命周期从创建到销毁
 	使用依赖注入，把对象组装成组件（Bean）
 
 	BeanFactory 容器
@@ -43,7 +53,8 @@ Spring IoC 容器
 
 Spring 依赖注入
 	依赖注入有助于把这些类装配在一起，同时保持他们独立。 
-	
+	什么是依赖注入
+		将一个对象所依赖的其他对象在对象创建时，从对象外部传入其依赖的对象，完成对象的组装。
 	
 	Spring的DI注入方式：
 		基于构造函数
@@ -53,6 +64,12 @@ Spring 依赖注入
 			通过属性的setter方法设置值，name指定要设置的属性名
 			<property name="spellChecker" ref="spellChecker"/>
 			<property name="spellChecker" value="spellChecker"/>
+			<porperty name="msc">
+				<value>mscValues</value>
+			</porperty>
+			<porperty name="msc">
+				<ref>mscValues</ref>
+			</porperty>
 	注入集合：
 		<set>,<list>,<map>,<props>
 		
@@ -98,7 +115,7 @@ spring的事件处理
 	把ApplicationListener配置成bean，context发布事件时，Listener Bean监听到并处理
 
 Spring AOP
-	跨一个应用程序的多个点的功能被称为 横切关注点 ，这些横切关注点在概念上独立于应用程序的业务逻辑。
+	跨一个应用程序的多个点的功能被称为横切关注点，这些横切关注点在概念上独立于应用程序的业务逻辑。
 	Aspect（方面）:独立于业务逻辑的功能模块
 		如日志记录模块、审计模块、声明式事务模块、安全性模块和缓存模块等
 
