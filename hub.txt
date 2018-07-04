@@ -1,0 +1,4 @@
+ali     git@code.aliyun.com:w619904620/testP.git (fetch)
+ali     git@code.aliyun.com:w619904620/testP.git (push)
+origin  git@github.com:plushung/note.git (fetch)
+origin  git@github.com:plushung/note.git (push)
