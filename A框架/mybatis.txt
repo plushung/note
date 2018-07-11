@@ -3,9 +3,72 @@ SqlSessionBuilder
 SqlSessionFactory
 	SqlSession工厂，通过SqlSessionBuilder从mybatis的XML配置文件中构建，
 	或用Configuration类用纯java构建，最佳的作用域是应用作用域
+	用openSqlsession()创建一个SqlSession,
 SqlSession
 	从SqlSessionFactory中取得，用来执行的数据库的操作，线程不安全，最佳的作用域是请求或方法作用域
 	每次从SqlSessionFactory中取得SqlSession后用完必须close，否则会占用连接池
+	select方法
+		select(String statementId)
+		selecyOne(String statementId)
+		selectList(String statementId)
+		selectMap(String statementId,Object parameter,ResultHandler<T> handler)
+			statment：要使用的select的id，
+			parameter：parameterType的参数
+			ResultHandler<T> handler:对返回结果自定义地处理
+	
+	使用映射器-----Mapper.class:Mapper.xml
+		SqlSession直接使用sql映射id去执行sql存在类型安全问题
+		使用映射器Mapper接口，解决类型安全问题
+		1.定义一个mapper接口
+			映射实体类的操作
+		2.映射器的方法
+			映射器的方法名与要映射的sql映射的id相同，方法入参即mapper.xml的paramaterType
+			方法名必须匹配映射语句的 ID
+		3.方法的参数
+			与paramaterType匹配
+			用@MapKey（"param"）代替入参
+		
+		使用注解定义mapper
+			Mapper.xml的标签定义可在映射器中用对应的注解来定义
+	
+	批量立即更新
+		flushStatements()，立即执行存储在JDBC中的更新语句
+	
+	事务控制
+		commit，rollback；
+		
+	SqlSession本地缓存
+		每个SqlSession实例都有一个本地缓存，在增删改、提交事务、关闭事务以及关闭 session 时清空本地缓存，如hibernate
+		
+SQL语句构建器		http://www.mybatis.org/mybatis-3/zh/statement-builders.html
+	使用SQL()类优雅地构建一条SQL语句。可用if来选择要插入的sql
+	new SQL(){{
+		SELECT("cloumns");
+		WHERE("ID = #{id}")
+		FROM("ACCOUNT A");
+		INNER_JOIN("COMPANY C on D.COMPANY_ID = C.ID");
+		WHERE("P.FIRST_NAME like ?");
+		OR();
+		WHERE("P.LAST_NAME like ?");
+		GROUP_BY("P.ID");
+		HAVING("P.LAST_NAME like ?");
+		ORDER_BY("P.FULL_NAME");
+		if (id != null) {
+		  WHERE("P.ID like #{id}");
+		}
+	}}.toString();
+	或
+	用.method的方式
+	或
+	用SqlBuilder
+		BEGIN()开始一段sql
+		SQL()返回BEGIN()到SQL()间的SQL构造，ex：SELECT(".."),FROM("..")
+		public String selectBlogsSql() {
+		  BEGIN(); // Clears ThreadLocal variable
+		  SELECT("*");
+		  FROM("BLOG");
+		  return SQL();
+		}
 	
 XML配置文件SqlMapConfig.xml
 	<properties>
