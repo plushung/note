@@ -443,7 +443,8 @@ Spring MVC Content
 				若name的数据是meta-data（如json），则把他当作@RequestBody处理，
 					若ContentType=“ApplicationContext/json”,就MappingJackson2HttpMessageConverter转换成对象
 					
-	控制器异常处理HandlerExceptionResolver,ResponseStatusExceptionResolver
+	控制器异常处理@ControllerAdvice
+		HandlerExceptionResolver,ResponseStatusExceptionResolver
 		spring的处理器异常解析器HandlerExceptionResolver接口，负责处理控制器里发生的异常
 		它只是提供了resolveException(Exception, Hanlder)方法的一个实现而已，方法会返回一个ModelAndView
 		

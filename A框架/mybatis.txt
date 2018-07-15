@@ -1,0 +1,73 @@
+
+Controller(service1(dao1，dao2),service2(dao1，dao2)),Controller(..)
+TransactionManager以AOP的方式对Service类进行事务管理
+Mybatis架构
+	Mybatis的配置文件（配置MyBatis的运行环境------SqlMapConfig.xml）
+		配置数据源，事务等
+
+	映射文件（配置sql语句映射-------mapper.xml）核心
+		定义了sql语句如何映射
+		
+	会话工厂（加载mybatis配置文件------sqlMapConfig.xml）
+		sqlSessionFactory，与hibernate的sessionFactory的作用一样，加载配置文件，管理session的生命周期，即管理每个连接
+		与Spring时用Spring的实现---SqlSessionFactoryBean，与spring整合
+		<bean id="mybatisFactory" class="org.mybatis.spring.mapper.SqlSessionFactoryBean">
+			<property name="database" ref="c3p0">
+			<property name="configure" value="classpath:mabatis/mybatis_configure.xml">
+	会话对象（执行数据库操作------sqlSession）
+		从sqlSessionFactory中创建，进行增删改查
+		
+	执行器（sqlSession中执行sql的组件-------Executor）
+		直接与数据库打交道，sqlsession内部通过执行器来操作数据库
+		执行器包括：基本执行器和缓存执行器
+		
+	底层封装对象（封装了sql映射的各种信息------mapped statement）
+		封装了映射的sql语句，输入参数映射（paramterType），输出结果映射（resultType）
+		输入/输出参数的类型：
+			自定义的POJO类型，java简单类型，HashMap
+		
+		
+Mapper
+	定义：
+		映射SQL语句
+		方法>>>Sql
+	Mapper.java接口:
+		是java编码中使用Mapper.xml中的sql语句的一个入口，在service中注入mapper，使用mapper的方法，执行查询
+		与一个同名的Mapper.xml对应，
+		其中的方法与Mapper.xml的同id名的select标签对应
+		方法的入参与select标签的paramterType属性值对应
+		方法的返回与select标签的resultType属性值对应
+	Mapper.xml
+		定义如何查询数据库，执行怎样的sql语句。
+		与同名的Mapper.java在同一个包下
+		
+	可通过mybatis的逆向工程生成某个数据库对应的Mapper接口，Mapper.xml和POJO类
+	mapper.xml与hibernate的.hbm.xml映射文件不同
+		此mapper.xml定义的是Mapper类的方法到
+	
+自定义mapper.xml的sql映射
+	<mapper namespace="userinfoMapper" >	//该mapper映射的是哪个POJO
+		<select id="ss" paramterType="condition" resultType=“user”>	//定义select语句的映射，paramterType给定查询条件的包装对象，resultType说明查询返回的POJO对象
+			select User.* from usertb
+			<where>	//给出sql查询条件where
+				id>0	//可直接写条件
+				<include refid="query_condition"></include>	//或使用动态查询，此处的refid为sql片段（<sql>标签的内容），将会用到pamaterType传入的对象
+				//include包含sql片段
+				
+		<sql id="query_condition">						//sql片段
+			<if test="condition.name!=null">				//test使用传入的参数condition判断去决定使用那些sql片段
+				count='${condition.count}'				//sql片段中使用传入的条件
+	</mapper>
+				
+prepareStatement参数映射
+	包装了查询实体类时，要输入的查询条件，该查询条件以包装类的属性做条件。
+	在查询时，向包装对象实例的属性传入值，并以该包装对象实例的属性作为查询的条件paramterType来加入查询条件
+	通过paramterType引入对象后，运行时包装对象的所有属性会被注册到select标签的上下文，以便使用
+		
+扫描器
+	指定一个包名，用扫描器对其中的mapper扫描，自动生成mabatis中的实体类到数据库映射，（hibernate中实体类与数据库的映射要手动定义）
+	创建一个MapperScannerConfigure的扫描器Bean，传入basePackage参数对指定的包扫描，
+	并指定sqlSessionFactoryBeanName，为扫描得到的实体类映射mapper指定其所属的sqlSessionFactory
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigure">
+		<property name="basePackage" value="mypackage">
+		<property name="sqlSessionFactoryBeanName" value="mybatisFactory">

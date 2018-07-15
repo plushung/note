@@ -144,13 +144,17 @@ NULL值处理
 		drop view view_name；
 
 索引		//属于表的		on  alter
-	是一种数据结构，用B+tree实现，用于快速查找某节点，节点上存储着表中某列列值，根据该列通过索引快速查找记录
+	是一种数据结构，用B+tree实现，用于快速查找某节点数据，节点上存储着表中某列列值，根据该列通过索引快速查找记录
 	使用索引加快检索速度，但降低了写入速度
 	
 	建议：
 		只在查询频繁的列上建立索引，不在频繁修改的列上建立索引
 		
 	创建表时创建索引
+		CREATE TABLE 表名 ( 
+			[...], 
+			INDEX 索引名 (列名1，列名 2,...)
+			);
 		简单索引	//在 某个表的 某列上on创建索引
 			CREATE INDEX index_Name ON table_name (cloumn_name,..) 
 		唯一索引	
@@ -352,3 +356,16 @@ delimiter $$
 		return (v1v)
 		end$$
 	delimiter;
+	
+预编译
+	定义
+		prepare staName from ‘select * from usertb where id>?’
+	传参执行
+		set @b=10；
+		execute staName using @b;
+		
+范式
+	1、1NF(第一范式)
+		第一范式是指数据库表中的每一列都是不可分割的基本数据项
+	2、2NF(第二范式)
+		第二范式要求数据库表中的每个实例或行必须可以被唯一地区分，可唯一地区分没行记录

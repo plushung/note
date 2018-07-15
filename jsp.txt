@@ -7,3 +7,12 @@ JSTL
 		<c:choose> 	//本身只当做<c:when>和<c:otherwise>的父标签
 			<c:when> 		//<c:choose>的子标签，用来判断条件是否成立
 			<c:otherwise>	//接在<c:when>标签后，当<c:when>标签判断为false时被执行
+			
+jsp内置对象
+	request
+	response
+	session
+	page
+	context
+	application
+	
