@@ -1,73 +1,226 @@
-
-Controller(service1(dao1��dao2),service2(dao1��dao2)),Controller(..)
-TransactionManager��AOP�ķ�ʽ��Service������������
-Mybatis�ܹ�
-	Mybatis�������ļ�������MyBatis�����л���------SqlMapConfig.xml��
-		��������Դ�������
-
-	ӳ���ļ�������sql���ӳ��-------mapper.xml������
-		������sql������ӳ��
-		
-	�Ự����������mybatis�����ļ�------sqlMapConfig.xml��
-		sqlSessionFactory����hibernate��sessionFactory������һ�������������ļ�������session���������ڣ�������ÿ������
-		��Springʱ��Spring��ʵ��---SqlSessionFactoryBean����spring����
-		<bean id="mybatisFactory" class="org.mybatis.spring.mapper.SqlSessionFactoryBean">
-			<property name="database" ref="c3p0">
-			<property name="configure" value="classpath:mabatis/mybatis_configure.xml">
-	�Ự����ִ�����ݿ����------sqlSession��
-		��sqlSessionFactory�д�����������ɾ�Ĳ�
-		
-	ִ������sqlSession��ִ��sql�����-------Executor��
-		ֱ�������ݿ�򽻵���sqlsession�ڲ�ͨ��ִ�������������ݿ�
-		ִ��������������ִ�����ͻ���ִ����
-		
-	�ײ��װ���󣨷�װ��sqlӳ��ĸ�����Ϣ------mapped statement��
-		��װ��ӳ���sql��䣬�������ӳ�䣨paramterType����������ӳ�䣨resultType��
-		����/������������ͣ�
-			�Զ����POJO���ͣ�java�����ͣ�HashMap
-		
-		
-Mapper
-	���壺
-		ӳ��SQL���
-		����>>>Sql
-	Mapper.java�ӿ�:
-		��java������ʹ��Mapper.xml�е�sql����һ����ڣ���service��ע��mapper��ʹ��mapper�ķ�����ִ�в�ѯ
-		��һ��ͬ����Mapper.xml��Ӧ��
-		���еķ�����Mapper.xml��ͬid����select��ǩ��Ӧ
-		�����������select��ǩ��paramterType����ֵ��Ӧ
-		�����ķ�����select��ǩ��resultType����ֵ��Ӧ
-	Mapper.xml
-		������β�ѯ���ݿ⣬ִ��������sql��䡣
-		��ͬ����Mapper.java��ͬһ������
-		
-	��ͨ��mybatis�����򹤳�����ĳ�����ݿ��Ӧ��Mapper�ӿڣ�Mapper.xml��POJO��
-	mapper.xml��hibernate��.hbm.xmlӳ���ļ���ͬ
-		��mapper.xml�������Mapper��ķ�����
+SqlSessionBuilder
+	一旦创建了 SqlSessionFactory，就不再需要它了,其作用域为局部变量，只用于创建SqlSessionFactory。
+SqlSessionFactory
+	SqlSession工厂，通过SqlSessionBuilder从mybatis的XML配置文件中构建，
+	或用Configuration类用纯java构建，最佳的作用域是应用作用域
+	用openSqlsession()创建一个SqlSession,
+SqlSession
+	从SqlSessionFactory中取得，用来执行的数据库的操作，线程不安全，最佳的作用域是请求或方法作用域
+	每次从SqlSessionFactory中取得SqlSession后用完必须close，否则会占用连接池
+	select方法
+		select(String statementId)
+		selecyOne(String statementId)
+		selectList(String statementId)
+		selectMap(String statementId,Object parameter,ResultHandler<T> handler)
+			statment：要使用的select的id，
+			parameter：parameterType的参数
+			ResultHandler<T> handler:对返回结果自定义地处理
 	
-�Զ���mapper.xml��sqlӳ��
-	<mapper namespace="userinfoMapper" >	//��mapperӳ������ĸ�POJO
-		<select id="ss" paramterType="condition" resultType=��user��>	//����select����ӳ�䣬paramterType������ѯ�����İ�װ����resultType˵����ѯ���ص�POJO����
-			select User.* from usertb
-			<where>	//����sql��ѯ����where
-				id>0	//��ֱ��д����
-				<include refid="query_condition"></include>	//��ʹ�ö�̬��ѯ���˴���refidΪsqlƬ�Σ�<sql>��ǩ�����ݣ��������õ�pamaterType����Ķ���
-				//include����sqlƬ��
-				
-		<sql id="query_condition">						//sqlƬ��
-			<if test="condition.name!=null">				//testʹ�ô���Ĳ���condition�ж�ȥ����ʹ����ЩsqlƬ��
-				count='${condition.count}'				//sqlƬ����ʹ�ô��������
-	</mapper>
-				
-prepareStatement����ӳ��
-	��װ�˲�ѯʵ����ʱ��Ҫ����Ĳ�ѯ�������ò�ѯ�����԰�װ���������������
-	�ڲ�ѯʱ�����װ����ʵ�������Դ���ֵ�����Ըð�װ����ʵ����������Ϊ��ѯ������paramterType�������ѯ����
-	ͨ��paramterType������������ʱ��װ������������Իᱻע�ᵽselect��ǩ�������ģ��Ա�ʹ��
+	使用映射器-----Mapper.class:Mapper.xml
+		SqlSession直接使用sql映射id去执行sql存在类型安全问题
+		使用映射器Mapper接口，解决类型安全问题
+		1.定义一个mapper接口
+			映射实体类的操作
+		2.映射器的方法
+			映射器的方法名与要映射的sql映射的id相同，方法入参即mapper.xml的paramaterType
+			方法名必须匹配映射语句的 ID
+		3.方法的参数
+			与paramaterType匹配
+			用@MapKey（"param"）代替入参
 		
-ɨ����
-	ָ��һ����������ɨ���������е�mapperɨ�裬�Զ�����mabatis�е�ʵ���ൽ���ݿ�ӳ�䣬��hibernate��ʵ���������ݿ��ӳ��Ҫ�ֶ����壩
-	����һ��MapperScannerConfigure��ɨ����Bean������basePackage������ָ���İ�ɨ�裬
-	��ָ��sqlSessionFactoryBeanName��Ϊɨ��õ���ʵ����ӳ��mapperָ����������sqlSessionFactory
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigure">
-		<property name="basePackage" value="mypackage">
-		<property name="sqlSessionFactoryBeanName" value="mybatisFactory">
+		使用注解定义mapper
+			Mapper.xml的标签定义可在映射器中用对应的注解来定义
+	
+	批量立即更新
+		flushStatements()，立即执行存储在JDBC中的更新语句
+	
+	事务控制
+		commit，rollback；
+		
+	SqlSession本地缓存
+		每个SqlSession实例都有一个本地缓存，在增删改、提交事务、关闭事务以及关闭 session 时清空本地缓存，如hibernate
+		
+SQL语句构建器		http://www.mybatis.org/mybatis-3/zh/statement-builders.html
+	使用SQL()类优雅地构建一条SQL语句。可用if来选择要插入的sql
+	new SQL(){{
+		SELECT("cloumns");
+		WHERE("ID = #{id}")
+		FROM("ACCOUNT A");
+		INNER_JOIN("COMPANY C on D.COMPANY_ID = C.ID");
+		WHERE("P.FIRST_NAME like ?");
+		OR();
+		WHERE("P.LAST_NAME like ?");
+		GROUP_BY("P.ID");
+		HAVING("P.LAST_NAME like ?");
+		ORDER_BY("P.FULL_NAME");
+		if (id != null) {
+		  WHERE("P.ID like #{id}");
+		}
+	}}.toString();
+	或
+	用.method的方式
+	或
+	用SqlBuilder
+		BEGIN()开始一段sql
+		SQL()返回BEGIN()到SQL()间的SQL构造，ex：SELECT(".."),FROM("..")
+		public String selectBlogsSql() {
+		  BEGIN(); // Clears ThreadLocal variable
+		  SELECT("*");
+		  FROM("BLOG");
+		  return SQL();
+		}
+	
+XML配置文件SqlMapConfig.xml
+	<properties>
+		定义全局的属性名和值（property参数）,或从外部引入配置文件（resource属性），在下面通过${name},引用属性值
+	<settings>
+		mybatis框架的运行时配置，如缓存cacheEnabled，懒加载lazyLoadingEnabled。。
+	<typeAliases>
+		定义全局资源的简单别名，以便在后面直接用别名代替全限定名
+		手动配置:typeAlias
+		包扫描自动配置:package
+	<typeHandlers>
+		java:数据库 类型转换器
+	<plugins>
+		mybatis使用插件定义拦截器来对方法进行调用拦截，
+		
+	<environments>
+		配置mybatis的环境，可以设置多个环境，如数据源，事务管理等
+		<transactionManager>
+			配置事务管理器，type有JDBC，MANAGED
+			JDBC:
+				JDBC 的提交和回滚设置，它依赖于从数据源得到的连接来管理事务作用域。
+			MANAGEDL:
+				让容器来管理事务的整个生命周期，本身无实现，
+				默认会关闭连接，将closeConnection属性设置为false来使连接保持 
+		<datasource>
+			三种内建的数据源类型（也就是 type=”[UNPOOLED|POOLED|JNDI]”）
+			UNPOOLED
+				配置数据源信息，driver，url，username，password，事务隔离级别
+			POOLED	
+				配置自带的连接池的各种参数
+			JNDI
+				使用外部的JNDI数据源
+				initial_context – 这个属性用来在 InitialContext 中寻找上下文
+				data_source – 这是引用数据源实例位置的上下文的路径
+				
+	<databaseIdProvider>
+		根据数据源的数据库类型选择执行不同的sql语句，
+		type属性设置为DB_VENDOR，mybatis会自动根据配置的数据源的id来选择方言 
+		<property>设置用哪种数据库的sql方言，类似hibernate的dialog
+	
+	<mappers>	
+		导入映射器配置
+		<mapper>
+			定义一个映射器
+			resource属性，从类路径引入mapper.xml
+			class属性，从java类中引入mapper类
+		<package>
+			扫描一个包，自动引入包中的mapper类
+			name包的全限定名
+
+##MyBatis 的基本原则之一，是将焦点和努力放到查询和结果映射，
+##因此在同时用hibernate和mybatis实现读写分离时，mybatis一般用于读取查询数据
+			
+Mapper xml映射文件
+	mapper映射文件的顶级元素
+	
+	resultMap – 结果映射，是最复杂也是最强大的元素，用来描述如何从数据库结果集中来加载对象。
+		type:映射到的类
+		autoMapping:使该resultMap自动映射。
+	
+		<id>：映射标识属性
+		<result>：映射普通属性
+		<constructor>：向要实例化的对象的构造函数注入参数
+			<idArg>:映射构造器的id属性
+			<arg>：映射构造器的普通属性
+		<association>：映射关联的实体
+			子resultMap，<resultMap>有的元素，<assoication>都有
+			select属性:自定义用定义好的select的id来检索得到该关联对象
+			resultMap属性:将关联实体的结果用结果映射来映射而成
+		<collenction>：映射集合
+			子resultMap，
+			select属性:使用定义好的select的id来检索集合里的元素
+			resultMap属性:将关联实体的结果用结果映射来映射而成
+		<discriminator>：鉴别选择器
+			switch-case语句：根据某column的值，添加额外结果映射
+			case：不同column值选择的映射
+			
+		javaType：属性要映射成哪种java类型，用于select
+		jdbcType:属性指定update，insert，delete时，映射成哪种数据库类型
+		property:属性映射的类的属性名
+		column：属性映射的表的列名	
+		
+	select – 映射查询语句
+		id属性:通过id属性使用该select语句
+		parameterType属性:传入该语句的参数属性
+		resultType:该语句返回结果的类型（实体类的类型或map），若返回集合则表示集合内容的类型
+		resultMap:返回结果通过<resultMap>来映射成某种类的实例
+		fetchSize属性:每次从数据库抓取数据数量
+		内容：	
+			执行的sql语句，参数使用占位符#{nn}
+			
+	delete – 映射删除语句
+	update – 映射更新语句
+	insert – 映射插入语句
+		parameterType属性:传入该语句的参数属性
+		flushCache属性:是否在语句调用时刷新一二级缓存
+		statementType属性:使用何种statment，默认是使用预编译语句
+		timeout属性:语句执行超时时间
+		
+		insert，update特有
+			useGenerateKyes属性：true/false
+				是否使用数据库的自动递增，来为指定的字段设置值,将对keyProperty的元素进行自动赋值
+			keyProperty属性：	
+				指定要数据库自动赋值的属性
+			对于不支持自动赋值的数据库可用<selectKey>来对要自动生成值得属性赋值，类似hibernate的Generator
+			
+	sql – 可被其他语句引用的可重用语句块，在任何地方用<include>引入sql
+		id：其他地方通过id来重用sql语句块
+		使用传入的参数:${param}
+		引用sql语句块
+			<include>
+				refid：要引用的sql语句块的id
+				<property>
+					向sql语句块传入参数，name/value
+
+	Sql中的参数
+		SQL中使用占位符#{..}
+		来表示要传入的参数,参数类型是paramaterType，若为实体类，则参数为实体类的各属性
+		简单形式#{id}
+		复杂形式#{department，javaType=int,jdbcType=NUMERIC，typeHandler=MyTypeHandler}
+			对参数进行复杂的映射
+		
+	
+    cache – 给定命名空间的二级缓存配置。
+		内置缓存： eviction属性="FIFO"，采用fifo顺序来移除对象
+		自定义缓存类：type属性:使用一个cache接口的实现类来进行缓存
+    cache-ref – 其他命名空间缓存配置的引用。
+		引用其他mapper中的cache
+
+动态SQL	----解决不同条件的SQL语句
+	<if test="param=condiction">
+		若提供给查询语句的参数param符合条件，就嵌入if下的sql到SQL中
+	<choose>
+		<when>
+		<otherise>
+		多条件选择，switch-case
+	<where>
+		当where下有内容时插入where，否则，去掉where，配合<if>使用，若没有一个if匹配，则去掉where
+	<trim prefix="where" prefixOverride="and ">
+		将其中的sql的prefixOverride的内容去除，并插入prefix的内容
+	<set>
+		动态更新时要更新的列的集合动态sql插入
+		update user 
+			<set> 
+			<if..> username=#{username}</if>	
+			<if..> age=#{age}</if>	
+	<foreach>
+		向查询传入一个集合，用集合中的元素作条件，遍历筛选出数据库中的数据
+		collection：传入的集合类型
+		index：当前遍历的下标
+		item：当前遍历到的元素
+		在下面用#{.}引用
+	
+		
+>>>>>>> 03e149022f9df76765a125d051880dac2a4fc80f
