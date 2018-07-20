@@ -52,3 +52,18 @@ QUIT_STAET
 		3.象使用本地的Java类一样使用远程服务代理
 			demoService.action();
 	
+	
+Provider
+	提供者应用名：application name
+	提供者提供的服务接口及实现引用：service interface ref
+	注册中心地址：register address
+	使用的协议及暴露的端口：protocol name port
+	
+	
+	
+consumer	
+	消费者应用名：application name
+	消费者使用的服务接口及通过id来引用该服务的Bean：reference interface id
+	注册中心地址：register address	//地址的端口为服务提供协议端口
+	
+	
