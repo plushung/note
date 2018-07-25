@@ -1,0 +1,8 @@
+动态文本 	Mustache 语法
+	<tab>{{content}}</tab>
+	文本信息{{}}里的内容随content改变而改变
+动态属性	v-bind指令 简写为:
+	<tab :prob="content">文本</teb>
+	标签的属性prob的值随content变化，属性中不能用Mustache 语法
+计算属性
+	
