@@ -87,16 +87,17 @@ Collection：保存单个元素
 			LinkedList实现的Queue的子类Deque接口，所以LinkedList已经是一种queue，Deque
 			是一种FIFO队列，以元素在队列中等待时间最长的元素先出
 			
-		PriorityQueue优先队列(用二叉堆实现)
+		PriorityQueue优先队列(给予优先堆实现，是一个二叉堆)  根据comparable接口的方法排序
 			非FIFO队列，优先级高的元素先出列，有次序的，也是通过实现了Comparable接口的元素来实现排序，像treeSet
 			offer()时，元素经过排序存放在堆数据结构中，默认是按元素的自然顺序排序，可为其提供Comparator来按照自己定义的顺序排序，优先顺序
 			peek()，查看队尾元素
 			,poll(),remove(),将取出堆根元素，即优先级最高的元素
 			
-		线程安全版本Queue 	通过加ReentrantLock控制并发访问
+		线程安全版本Queue 	！！通过加ReentrantLock控制并发访问
 			LinkedBlockingQueue
 				在FIFO队列上加上并发访问时阻塞的功能,
-				默认容量动态增加无限制，存在时间最长的元素先出列（链表的头结点）FIFO ，若无元素则用Condition的await阻塞线程
+				默认容量动态增加无限制，存在时间最长的元素先出列（链表的头结点）FIFO ，若
+				访问时加ReentrantLock，无元素则用Condition的await阻塞线程
 			PriorityBlockingQueue
 				在优先队列上加上并发访问时阻塞的功能
 			ConcurrentLinkedQueue
@@ -105,7 +106,7 @@ Collection：保存单个元素
 				容量给定，公平模式下使用队列的线程顺序遵循FIFO、非公平模式下使用队列的线程顺序不指定，若无元素则用Condition的await阻塞线程
 			
 			
-Map：保存一对元素
+Map：保存一对元素，key唯一，元素的hashcode作key
 	是一组“键值对“对象，里面每个对象有Key和对应的value，通过键的equals()比较键，确保无重复键
 	存储方式：key/value对 长度可变,
 	map中使用Entity保存键值对实体，Node类是Entity的一个实现，即实际用Node保存一对元素
@@ -137,42 +138,43 @@ Map：保存一对元素
 	要求有序:TreeMap>LinkedHashMap>HashMap
 
 Hash存储方式		hashSet，hashMap，LinkedHashSet，LinkedHashMap
-	通过Hash（散列）来存储数据可加快数据的检索速度
+	通过Hash（散列）来存储数据可加快数据的检索速度（拿hashcode为数组下标，随机读取元素）
 	使用Hash时，元素要实现hashCode()方法，生成自定义的Hash码，Object的hashCode()默认是用对象的地址来计算hashCode的
 	
 	通过hashCode计算得到的散列码有可能冲突，使得一个hashCode对应多个键(要在数组下标为hashCode的位置中存储这多个键的集合)，
-	解决哈希冲突，同时要实现equals()方法,从集合中取得相应键的实体，保证元素的唯一性
+	解决哈希冲突，同时要实现equals()方法,从共享hashcode的集合中取得相应键的实体，保证元素的唯一性
 	
 Tree存储方式		接口:SortedSet,SortedMap. 唯一实现:TreeSet，TreeMap
 	通过红黑二叉树存储元素，涉及到元素的比较排序，因此元素要实现Comparable接口或继承comparator类
 
-普通容器并发修改
-	保护机制：
-		快速报错：当使用Iterator遍历容器时，有其他线程对同一容器做出修改，则会报错，是java的保护机制----fail-fast
-			抛出ConcurrentModificationException，并发修改异常
-			
-	解决方法
-		使用并发容器(免锁容器)			//synchronized 同步容器已经不再使用，Vector、HashTable	。这里的是非synchronized容器
-		
-			1.ReentrantLock控制写操作的容器
-				CopyOnWriteArrayList
-					读取时不加锁
-					写入时加ReentrantLock，并复制源数组，对副本进行修改，然后用副本取代源数组，最后解锁
-				CopyOnWriteArraySet
-					使用CopyOnWriteArrayList并去掉重复元素
-			
-				CopyOnWrite在迭代时，能够有效防止出现ConcurrentModificationException（快速失败），
-				安全失败（fail-safe）基于对数组的复制，修改原数组不会导致副本抛出异常，能够安全地失效
+并发
+	普通容器并发修改
+		保护机制：
+			快速报错：当使用Iterator遍历容器时，有其他线程对同一容器做出修改，则会报错，是java的保护机制----fail-fast
+				抛出ConcurrentModificationException，并发修改异常
 				
-			2.synchronized装饰容器
-				Collections.Synchronized*(Collection s)
-					使用装饰器设计模式,包装普通容器类，
-					简单地用synchronized关键字装饰容器的每个方法，使非线程安全的容器类能够被安全地访问。
+		解决方法
+			使用并发容器(免锁容器)			//synchronized 同步容器已经不再使用，Vector、HashTable	。这里的是非synchronized容器
+			
+				1.ReentrantLock控制写操作的容器	//使容器安全失效
+					CopyOnWriteArrayList
+						读取时不加锁
+						写入时加ReentrantLock，并复制源数组，对副本进行修改，然后用副本取代源数组，最后解锁
+					CopyOnWriteArraySet
+						使用CopyOnWriteArrayList并去掉重复元素
+				
+					CopyOnWrite在迭代时，能够有效防止出现ConcurrentModificationException（快速失败），
+					安全失败（fail-safe）基于对数组的复制，修改原数组不会导致副本抛出异常，能够安全地失效
 					
-			3.另一种并发控制的容器
-				ConcurrentHashMap、ConcurrentLinkedQueue
-				JDK8之前，使用分段锁对容器进行部分加锁，该分段锁继承了ReentrantLock
-				JDK8之后，应用CAS对容器进行并发控制。即更新前与旧值比较，若不同则放弃更新
+				2.synchronized装饰的容器
+					Collections.Synchronized*(Collection s)
+						使用装饰器设计模式,包装普通容器类，
+						简单地用synchronized关键字装饰容器的每个方法，使非线程安全的容器类能够被安全地访问。
+						
+				3.另一种并发控制的容器
+					ConcurrentHashMap、ConcurrentLinkedQueue
+					JDK8之前，使用分段锁对容器进行部分加锁，该分段锁继承了ReentrantLock
+					JDK8之后，应用CAS对容器进行并发控制。即更新前与旧值比较，若不同则放弃更新
 遍历：
 1.foreach
 2.for循环
