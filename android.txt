@@ -1,0 +1,54 @@
+
+
+安卓应用
+	1.一个活动界面为一个Activity类，一般通过继承AppCompatActivity来编写一个活动界面			//Context
+	2.视图布局<View>标签定义 view~layout，用于展示数据的容器，数据包括图片，文字，等		//Bean
+	3.一个活动界面里有多个视图布局，在一个界面显示多样数据							//数据
+	Context1 ( Bean ( 数据 ) )
+	Context2 ( Bean ( 数据 ) )
+	....
+	
+	
+	界面（Activity类）
+		一个活动界面为一个Activity类，一般通过继承AppCompatActivity来编写一个活动界面
+		界面中展现视图
+			通过setContentView(viewId),引用视图的Id来在当前activity设置视图  R.layout.viewId
+			通常在Activity类生命周期的onCreate阶段为界面设置视图
+		销毁一个activity界面
+			activity的finish()方法
+			
+	视图
+		视图模型
+			activity中有一个父视图容器，id=content，该视图用来容纳所有自定义的视图
+			通过向id为content的视图布局中添加视图或移除视图来，决定activity所显示的视图
+			
+		获取视图 	ViewPager，ImageView，TextView等，每个视图标签都有一个对应的java类
+			findViewById(viewId) 通过视图的id来取得指定视图布局，以便修改该视图(view)的内容(data)
+		
+			ViewPager 可左右翻转带数据的页面，viewPager内可轮流切换不同的视图如imageView，
+			在viewPager中滑动切换不同imageView，要显示的视图可以通过实现PagerAdapter来显示
+		
+	适配器 
+		将数据如图片，适配进视图中显示
+		PagerAdapter：
+			将多个数据适配到ViewPager中显示。
+			
+	意图Intent
+		描述不同界面(不是视图)间的跳转
+		Activity的startActivity用于执行一个界面跳转的意图
+		
+	Activity生命周期
+		Activity栈：
+			新的activity入栈处于栈顶，就得active处于栈低，
+			运行状态： onStart之后
+				Activity栈顶元素是正在运行的Activity类
+			暂停状态：onPause
+				Activity失去焦点，但仍然有部分可见，则处于暂停状态
+			停止状态 onStop
+				若某Activity完全被其他Activity挡住，不可见，则停止该Activity
+				新Activity入栈时，原本处于栈顶的Activity被停止
+			销毁 onDestory
+				Activity是一个java类，在人为销毁或低内存时，Activity实例会从jvm堆中被垃圾回收
+				Activity出栈时被销毁，back键使当前Activity出栈
+		
+	
