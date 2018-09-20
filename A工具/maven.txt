@@ -73,3 +73,9 @@ build执行maven生命周期，生命周期各个阶段是一个phase，每个ph
 Test测试
 	maven的test阶段会运行src/test/java中的测试类，
 	其中类名要以Test*开头，方法名以test开头
+	
+	
+	
+若compile和package时报找不到程序包/符号
+	rebuild项目，再用maven package
+
