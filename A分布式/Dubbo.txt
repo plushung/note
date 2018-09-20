@@ -59,7 +59,11 @@ Provider
 	注册中心地址：register address
 	使用的协议及暴露的端口：protocol name port
 	
-	
+	在 Provider 上尽量多配置 Consumer 端属性
+		timeout  方法调用超时
+		retries  重试次数
+		loadbalance	负载均衡，同一个服务多次向注册中心注册，有多个服务地址向consumer提供服务，consumer从这多个地址中选取一个获取服务
+		actives		??
 	
 consumer	
 	消费者应用名：application name
