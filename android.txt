@@ -9,7 +9,7 @@
 	....
 	
 	
-	界面（Activity类）
+	活动（Activity类）
 		一个活动界面为一个Activity类，一般通过继承AppCompatActivity来编写一个活动界面
 		界面中展现视图
 			通过setContentView(viewId),引用视图的Id来在当前activity设置视图  R.layout.viewId
@@ -17,7 +17,7 @@
 		销毁一个activity界面
 			activity的finish()方法
 			
-	视图
+	视图 在Activity界面上显示
 		视图模型
 			activity中有一个父视图容器，id=content，该视图用来容纳所有自定义的视图
 			通过向id为content的视图布局中添加视图或移除视图来，决定activity所显示的视图
@@ -27,6 +27,14 @@
 		
 			ViewPager 可左右翻转带数据的页面，viewPager内可轮流切换不同的视图如imageView，
 			在viewPager中滑动切换不同imageView，要显示的视图可以通过实现PagerAdapter来显示
+			
+		视图上的事件
+			在视图上操作（点击，滑动等事件），view会触发相应的事件，listener可以处理这些事件，
+			向一个view 为每种事件setlistener，以便事件触发时处理该事件
+			
+			事件监听器listener
+				各种on方法代表事件处理的各个阶段
+			
 		
 	适配器 
 		将数据如图片，适配进视图中显示
@@ -34,8 +42,13 @@
 			将多个数据适配到ViewPager中显示。
 			
 	意图Intent
-		描述不同界面(不是视图)间的跳转
-		Activity的startActivity用于执行一个界面跳转的意图
+		描述不同界面(不是视图)间的跳转,它能在程序运行的过程中连接两个不同的组件
+		启动第二个activity
+			component组件，明确指明Intent目标组件的类名称
+			Activity的startActivity用于执行一个界面跳转的意图
+		行动Action
+			表示意图的行动，即表示一个动作，如ACTION_DISCOVERY_FINISHED蓝牙扫描完毕的动作描述
+			后继根据Intent的Action来做下一步操作，如关闭蓝牙扫描
 		
 	Activity生命周期
 		Activity栈：
@@ -51,4 +64,22 @@
 				Activity是一个java类，在人为销毁或低内存时，Activity实例会从jvm堆中被垃圾回收
 				Activity出栈时被销毁，back键使当前Activity出栈
 		
-	
+	四大组件
+		都要在AndroidManifest中静态地配置注册后才能使用
+		Activity,Service,BroadcastReceiver都通过Intent来异步地通信交流
+		
+		Activity活动
+			与用户交互向用户展示的组件，Activity间通过Intent通信
+			通过调用finish()关闭一个activity
+		Service服务
+			不直接与用户交互，在后台运行的组件
+			分为startService和bindService	
+				startService()启动的service的生命周期独立于应用，通过stopService()关闭service
+				bindService()方式启动的service的生命周期与调用service组件的应用的生命周期一样，随调用者销毁而销毁，通过unbindService()提前管理service
+		ContentProvider内容提供
+			是不同应用间共享数据的唯一方式，如共享通信录里的信息，不同应用可通过ContentProvider取得通信录信息
+			应用不直接与ContentProvider交互，而是通过ContentResolver来对Provider进行读写操作
+			ContentProvider使用URI来唯一标识其数据集,这里的URI以content://作为前缀,即每条共享的数据也是以content://xxx来取得的
+		Broadcast receiver广播接收器
+			receiver广播接收者的注册分静态注册(在AndroidManifest文件中进行配置)和通过代码动态创建并以调用Context.registerReceiver()的方式注册至系统。
+			广播接收器仅在响应广播消息时激活，onReceive处理响应广播的操作

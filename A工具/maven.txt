@@ -73,3 +73,12 @@ build执行maven生命周期，生命周期各个阶段是一个phase，每个ph
 Test测试
 	maven的test阶段会运行src/test/java中的测试类，
 	其中类名要以Test*开头，方法名以test开头
+	
+	
+	
+若compile和package时报找不到程序包/符号
+	rebuild项目，再用maven package
+	
+子项目有共同的父项目，并且子项目间要依赖子项目，
+若父项目有依赖，那么子项目依赖同一父项目下的子项目时会出现循环依赖
+导致子项目打包运行时报找不到依赖的子项目的错误！！！

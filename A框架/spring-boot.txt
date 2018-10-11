@@ -1,0 +1,31 @@
+Spring-boot应用
+	注解
+		@SpringBootApplication
+			声明一个带有main函数的类为SpringBootApplication的入口，
+			会自动扫描@SpringBootApplication 所在类的同级包以及下级包里的 Bean，可通过自定scanBasePackages扫描指定包
+			该注解包含了@Configuration、@EnableAutoConfiguration、@ComponentScan注解
+			
+			@EnableAutoConfiguration
+				根据类路径中的 jar 包依赖为当前项目进行自动配置，自动导入相关依赖，并自动配置，如自动配置MVC
+	
+	配置文件
+		Spring-boot首先自动使用位于classpath的application.properties作为应用配置文件
+		
+		配置文件映射成配置实体类
+			通过操作pojo对象来获取配置文件中的配置属性
+			@Component
+				让spring将配置类扫描成Bean
+			@ConfigurationProperties(prefix="module")
+				用于绑定指定前缀下配置的属性值到实体类中属性上
+				属性绑定是通过getter和setter去绑定属性的，！！一定要为配置类提供getter and setter
+			@PropertyResource
+				指定要绑定的配置文件
+				
+		多环境配置
+			多环境配置文件名需要按规范application-{profile}命名，根据默认配置文件application的spring.profiles.active的值加载不同环境的配置
+			若application.properties的spring.profiles.active为dev
+				application-dev.properties会被加载
+				application-prod。properties不会被加载
+			另外，可在-jar启动时在后面加上spring.profiles.active={profile}，指定用什么配置，即启动时指定环境
+			
+		
