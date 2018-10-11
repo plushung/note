@@ -70,4 +70,37 @@ consumer
 	消费者使用的服务接口及通过id来引用该服务的Bean：reference interface id
 	注册中心地址：register address	//地址的端口为服务提供协议端口
 	
+Invoker
+	Invoker 是实体域，它是 Dubbo 的核心模型，Invoker代表一个可执行的实体，如：一个服务，一个注册中心等实体
 	
+	
+服务治理
+	cluster
+		从容错的维度，保证能为消费者提供可用的服务
+		
+		
+	目录服务Directory  Static/Registry---->List<Invoker>
+		用来记录可用的Invoker列表，Directory.list来列出所有的Invoker种类，这里的每个Invoker表示一种服务
+		
+		StaticDirectory 	静态目录
+			Invoker列表通过构造器传入Directory中
+			
+			多个注册中心集群用StaticDirectory记录注册中心的Invoker列表，静态地添加注册中心列表
+			需要多少个注册中心，就向register标签中加多少个注册中心的url，每个register标签会构造一个注册中心Invoker
+			
+		RegistryDirectory	注册目录
+			Invoker列表通过注册中心来获取得到存放到Directory中，通过注册中心动态地添加服务调用列表
+		
+			服务的集群用RegistryDirectory来记录服务的Invoker列表，服务从注册中心获取，因此用RegistryDirectory来得到服务调用列表
+			
+			引用服务时，对应该服务的Directory类实例会负责向注册中心（zookeeper）订阅该服务，第一次订阅会拿到所有服务提供方的信息
+			
+	路由与配置  Router.route----> Invokers>Invoker的实现
+		用Directory.doList获取到服务列表后（Invoker列表），然后根据Router列表对Invoker进行路由选择
+		Router对Invoker列表中的每种服务进行路由，得到该种服务的实现的集合（Invokers），Invokers里的元素都实现了同一种Invoker
+		
+	负载均衡
+		从性能的维度，使得提供给消费者的服务性能最好，消费者平均地消费服务实例
+	
+		经过Router获取到某种服务的Invokers后，负载均衡根据选择的负载均衡策略，从服务实现群（Invokers）中选择一个具体的服务调用。
+		保证Invokers的每个服务的工作量合理平均
