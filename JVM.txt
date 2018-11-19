@@ -1,5 +1,5 @@
 运行时数据区域	
-	方法区（永久代）：存放class的元数据，和常量池，内容被永久保存，
+	方法区（永久代）：存放class的元数据，和常量池，
 		jdk8后被移除，方法区用本地内存的元数据空间（metaspace）取代。类的元数据放入 native memory, 常量池和类的静态变量放入java堆中
 		通过-XX:MaxMetaspaceSize=128m指定元数据空间大小，不设置JVM将会根据一定的策略自动增加本地元内存空间。
 	运行时常量池（与class文件中的常量池区分开）
@@ -191,6 +191,7 @@ JVM参数
 	-Xmx20M 堆最大20M
 	-Xmn10m new新生代占10M
 	-XX:SurvivorRatio new新生代中Eden与Survivor之比
+	-XX:NewRatio	新生代与老年代比值1：n
 	-Xloggc:gcfile.log  //将GC信息输出到文件
 	-Xint  		 //将虚拟机运行与解析模式，仅使用解析器解析执行
 	-Xcomp		 //强制vm使用编译模式，仅使用编译器编译后执行

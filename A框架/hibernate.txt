@@ -827,6 +827,8 @@ Hibernate 架构
 			则当a的fieldA属性保存了b之后才能把ab关系持久化到数据库，
 			若a.fieldA没保存过b，那么ab关系不会被存储到数据库，即使b.fieldB保存了a，也不能保存ab关
 			
+			因为b中的a是通过a中的b映射得到的，b中的a不能通过直接添加保存，只能通过a中加b再映射的到
+			
 		1.@OneToMany @ManyToOne		//若有基于外键，则外键必位于多侧
 			@OneToMany：
 				单向：		

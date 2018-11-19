@@ -1,0 +1,127 @@
+springboot下使用Rabbit
+	1.添加依赖
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+	####### AMQP 是一种消息队列的协议规范，rabbit实现了这规范	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		或者
+		<dependency>
+			<groupId>com.rabbitmq</groupId>
+			<artifactId>amqp-client</artifactId>
+			<version>3.6.5</version>
+		</dependency>
+			不用springboot的amqp，直接用rabbitMq的java客户端依赖
+		
+	2.添加配置application.properties
+		spring.rabbitmq.host=yiuhung.top			//rabbit部署的主机
+		spring.rabbitmq.port=5672				//rabbit端口 5672为rabbit服务器端口，15672为rabbit管理端口
+		spring.rabbitmq.password=w619904620		//用户名
+		spring.rabbitmq.username=root			//密码
+		spring.rabbitmq.publisher-confirms=true		//
+		spring.rabbitmq.virtual-host=/				//虚拟地址
+		
+	3.注解方式使用rabbit侦听消息队列信息
+		订阅监听已存在的队列
+			@RabbitListener(queues = "QueueName")
+		订阅监听队列,若队列不存在则创建一个
+			@RabbitListener(queuesToDeclare = @Queue("QUeueName"))
+		主动创建一个队列，并绑定ExChange和Queue
+			通过Binding 绑定Exchange和Queue
+			@RabbitListener(
+				bindings = @QueueBinding(
+				value = @Queue("theUserQueue"),
+				key = "user",   //指定routing key，使该方法只处理routing key为user的信息，该队列只接受user的routing key的信息
+				exchange = @Exchange("theExchange")
+			))
+			指定了key即routing key，发布消息时，根据exchange和routing key来将消息发布到有绑定关系的Queue中
+			
+			通过同一Exchange的不同routing key来分开不同的消息队列
+			
+			如同一订单服务（OrderExchange）下的多种订单（多个 Routing Key）有各自的消息队列（queue）
+
+	4.发布消息
+		使用AmqpTemplate发布消息
+			通过指定Exchange和routing key发布
+				exchange
+			直接发布到某个消息队列
+				amqpTemplate.convertAndSend("dirQueue", message);
+			
+			
+Queue:
+	消息队列，以FIFO队列存放消息生产者发送过来的消息，由消费者消费消息
+	
+Exchange
+	交换器，消息生产者先将消息发给交换器，交换器选择将消息（路由）发送给Queues
+	
+	Binding：
+		绑定Exchange和Queue，使Exchange能将消息路由到绑定的Queue，每个的binding有一个binding key
+		消息生产者发布消息时，一般给出一个routing key，Exchange根据消息的routing key和与queue间的bingding的key，选择将消息路由到那个quque
+		
+Exchange type
+	交换器交换类型
+		fanout
+			Exchange将消息发送到所有与其绑定的queue中
+		direct
+			直接将消息发送到匹配routing key的queue中
+			Routing Key==Binding Key时，消息发送到绑定的queue中
+		topic
+			routing key的每个部分由 . 分隔开，表示一些话题
+				如	key = order.saleOrder.computerOrder
+					key = order.feebackOrder.foodOrder
+			binding的bandingKey用"*"和"#"模糊匹配routing key
+				如 *.saleOrder.* 的Queue可以接收所有销售订单的消息
+				order.*.* 的queue可以接收所有订单的消息
+			* 匹配一个用 . 分隔的单词
+			# 匹配任意个用 . 分隔的单词
+		headers
+		
+ConnectionFactory
+	创建Connection
+		
+Connection
+	Connection就是建立一个TCP连接，生产者和消费者的都是通过TCP的连接到RabbitMQ Server中的
+	
+Channel虚拟连接
+	建立在上面TCP连接的基础上，数据流动都是通过Channel来进行的，
+	为了防止消息连接频繁地断开和连接造成的延时，在一个保持连接的TCP连接下，用channel来处理每个数据流动
+
+
+原始方法使用RabbitMq
+	加依赖
+	 <dependency>
+		<groupId>com.rabbitmq</groupId>
+		<artifactId>amqp-client</artifactId>
+		<version>3.6.5</version>
+	 </dependency>
+	1.创建ConnectionFactory
+		new ConnectionFactory()
+		配置RabbitMq信息
+		factory.setHost("localhost");
+		factory.setUsername("lp");
+		factory.setPassword("");
+		factory.setPort(2088);
+	2.用factory创建Connection	
+		factory.newConnection()
+		
+	3.在Connection上创建一个或多个Channel（虚拟连接）
+		Channel channel = connection.createChannel();
+	
+	4.用Channel声明并创建队列
+		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		
+	5.用Channel向某队列推送消息
+		channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
+		
+	6.关闭Channel和Connection
+		channel.close() connection.closr()
+		
+	消息消费者
+	
+		
+	

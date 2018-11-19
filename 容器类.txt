@@ -37,8 +37,8 @@ Collection：保存单个元素
 			对比LIst，添加了用于棧，队列，双端队列的方法
 			
 			除了List的基本方法外，特有方法
-				getFirst(),element()，peek()：取得链表中的表头元素，不移除,peek在无元素时返回null
-				removeFirst(),remove()，poll():移除并返回表头元素,poll在无元素时返回null
+				getFirst(),element()，peek()：取得链表中的表头元素，不移除,peek在无元素时返回null, 访问链头元素（队头元素）
+				removeFirst(),remove()，poll():移除并返回表头元素,poll在无元素时返回null			取出链头元素（队头元素）
 				removeLast():像队列一样，移除时间长的元素，移除队尾元素
 				
 		Stack
@@ -115,7 +115,7 @@ Map：保存一对元素，key唯一，元素的hashcode作key
 			put()
 			get()
 
- 	HashMap 类：
+ 	HashMap 类： 	采用链地址法解决hash冲突，数组+链表的存储机制
 		使用散列函数存储数据，具有很快的访问速度，同时也就不能保证顺序
 		通过hashCode()取得键,有极高的检索速度。因此键元素要实现hashCode()方法，同时要用equals()来判定元素是否为同一个
 		每对元素保存到Node数组---table中，在下标为(hash&Maxindex)的位置放入元素
