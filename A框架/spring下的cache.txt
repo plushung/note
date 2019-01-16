@@ -1,0 +1,27 @@
+
+
+1.配置缓存管理器
+	cacheManager一般用spring的SimpleCacheManager
+	配置cache体，有Ehcache和concurrentMap两种，或添加第三方cache如redis
+	自定义cache：
+		实现
+
+spring 通过切面使用缓存
+XML方式：
+	2.配置缓存的aop通
+		<cache:advice>	//指定cache-manager
+			<cache:caching>	//指定要用的缓存
+				<cache:cacheable>	//用有则直接返回，无则创建并返回的方式添加、返回缓存的数据
+								//指定作用的方法、key
+				<cache:cache-evict>	//指定作用的方法，key，移除相应的key的值
+								
+注解方式：
+	2.启用缓存注解
+		<cache:annotation-driven> //要指定manager，像事务管理器一样
+	3.@cacheable
+		用有则直接返回，无则创建并返回的方式添加、返回缓存的数据。
+	 @cacheput
+		每次用都将值放入缓。
+	 @CacheEvict
+		移除一个键值对
+	 

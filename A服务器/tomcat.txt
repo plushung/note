@@ -32,7 +32,7 @@ Tomcat
 			
 	从Engine开始对请求消息进行处理，所以Engine及子容器都有一个Pipeline组件对请求进行处理
 	
-	Engine容器:	StandardEngine
+	Engine容器:	StandardEngine （请求处理引擎）
 		代表一个Service的全局Servlet引擎，每个Service有一个Engine，可以处理同一Service的多个连接器发来的请求，并下发请求给合适的Host容器
 		实现Engine interface自定义Engine,
 		
@@ -44,9 +44,11 @@ Tomcat
 		一个Web应用程序抽象，为Web应用程序部署到Tomcat中运行时，会转化为Context对象，
 		同一台主机包含多个Context，即包含多个应用程序，可通过实现Context interface自定义上下文的实现， StandardContext已经提供了默认实现
 	
-	Wrapper容器
-		一个Servlet的容器，每个Wrapper容器有一个对应的Servlet对象对请求进行逻辑处理，Wrapper组件调用Servlet的方法处理请求
-		Context中有多个Wrapper容器
+		Wrapper容器
+			一个Servlet的容器，每个Wrapper容器有一个对应的Servlet对象对请求进行逻辑处理，Wrapper组件调用Servlet的方法处理请求
+			Context中有多个Wrapper容器
+			
+		context中包含的组件：wrappers（调用处理请求的servlet逻辑），manager（管理请求中的session对象，StandardManager）
 		
 	Container：
 		容器，引擎(Engine)容器、主机(Host)容器、上下文(Context)容器和Wraper容器均继承自Container接口，
@@ -54,14 +56,14 @@ Tomcat
 	
 	
 	功能模块划分
-		Jsper模快:
+		Jasper模快: ./lib/jasper.jar
 			将JSP页面动态转换为java代码（servlet）并编译成class文件
 		Servlet和Jsp模块:
 			实际处理用户请求的业务逻辑
 		Catalina模块:
 			定义架构中各个部分的实现，规范tomcat开始与停止事件的执行流程
 		Connector模块:
-			它接收用户的请求，并把用户请求包装成标准的Http请求
+			它接收用户的请求，并把用户请求包装成标准的Http请求。（接收socket，封装成http请求）
 		Resource模块：
 			tomcat中的资源文件，配置文件
 
@@ -78,6 +80,7 @@ Connector组件
 		Ajp协议
 	三种模式
 		BIO:java BIO模式，阻塞模式，不能轮询处理socket，无Poller
+			一条连接对应一条线程
 		NIO:java NIO模式，非阻塞模式，轮询处理Socket，套接字终端有Poller组件来轮询处理连接
 		APR:本地代码实现的NIO摸式，非阻塞，轮询处理Socket
 	
