@@ -68,7 +68,7 @@ Exchange type
 		fanout
 			Exchange将消息发送到所有与其绑定的queue中
 		direct
-			直接将消息发送到匹配routing key的queue中
+			直接将消息发送到完全匹配routing key的queue中
 			Routing Key==Binding Key时，消息发送到绑定的queue中
 		topic
 			routing key的每个部分由 . 分隔开，表示一些话题
@@ -80,6 +80,12 @@ Exchange type
 			* 匹配一个用 . 分隔的单词
 			# 匹配任意个用 . 分隔的单词
 		headers
+		
+											消息1：A.B 2:B.C.*
+			 |--------- queue1 Binding Key A.B		1.fanout交换器会将收到的信息发给queue123
+	Exchange ---|--------- queue2 Binding Key B.C.D		2.direct交换器会根据消息的RoutingKey与Binding Key匹配，即1匹配queue1
+			 |--------- queue3 Binding Key A.B.C		3.topic会将RoutingKey与BindingKey进行模糊匹配，如2匹配quque2
+	
 		
 ConnectionFactory
 	创建Connection

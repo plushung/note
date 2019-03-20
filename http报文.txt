@@ -1,65 +1,65 @@
 请求：
-第一行：请求行 
-method url version/type
-post spweb/index.html http/1.0
+	第一行：请求行 
+		method url version/type
+		post spweb/index.html http/1.0
 
-第二行开始：消息头
-ContentType="application/x-www-form-urlencoded"之类的
-Accept="application/json" 表示客户端可接受的内容类型
-Content-Disposition: form-data; name=file;filename=test.txt;
-//表示该部分内容是表单数据form-data，名字为file，文件名为test.txt
-//服务器可以通过获取paramName（“file”）取得该数据
-。
+	第二行开始：消息头
+		ContentType="application/x-www-form-urlencoded"之类的
+		Accept="application/json" 表示客户端可接受的内容类型
+		Content-Disposition: form-data; name=file;filename=test.txt;
+		//表示该部分内容是表单数据form-data，名字为file，文件名为test.txt
+		//服务器可以通过获取paramName（“file”）取得该数据
+		。
 
-第三部分：消息体
-如果用post方法，消息体用来存放请求参数与值
-如果用get方法，url路径后存放请求参数与值
+	第三部分：消息体
+		如果用post方法，消息体用来存放请求参数与值
+		如果用get方法，url路径后存放请求参数与值
 
 
 
 响应：
-第一行：请求行 
-type/version statecode stateCodeDescripty
-ex:
-http/1.0 200 ok
+	第一行：响应行 
+		type/version statecode stateCodeDescripty
+		ex:
+		http/1.0 200 ok
 
-第二行开始：消息头
-下载文件的Header，要添加的东西
-	添加:ContentType="application/PDF" 文件类型
-	     ContentLength=。。。设置消息体内容长度
-	     Content-disposition="attachment;filename=ai.pdf;" 内容处理方式：附件，文件名ai.pdf
+	第二行开始：消息头
+		下载文件的Header，要添加的东西
+			添加:ContentType="application/PDF" 文件类型
+				 ContentLength=。。。设置消息体内容长度
+				 Content-disposition="attachment;filename=ai.pdf;" 内容处理方式：附件，文件名ai.pdf
 
-第三部分：消息体
-服务器返回的结果
+	第三部分：消息体
+		服务器返回的结果
 
 
 Content-disposition是 MIME 协议的扩展，MIME 协议指示 MIME 用户代理如何处理附加的文件
-响应为下载的文件
-	Content-Type:Application/octet-stream		//响应内容为数据流
-	Content-Disposition:attachment；filename=ddd	//内容当做附件处理，文件名为ddd
+	响应为下载的文件
+		Content-Type:Application/octet-stream		//响应内容为数据流
+		Content-Disposition:attachment；filename=ddd	//内容当做附件处理，文件名为ddd
 
 
 GET URL http/1.1
-常用请求头
-	每种属性一行
-	User-Agent:告知服务器client的浏览器类型，client发送请求的应用程序名
-	Accept:客户端可接受的MIME类型
-	Host:客户端要访问的主机名与端口号
-	Cookies:客户端要发给服务器的Cookies信息，包括JSESESSION也在里面
-	Referer:该请求来源于那个网站
-	Cache-Control:对缓存控制
+	常用请求头
+		每种属性一行
+		User-Agent:告知服务器client的浏览器类型，client发送请求的应用程序名
+		Accept:客户端可接受的MIME类型
+		Host:客户端要访问的主机名与端口号
+		Cookies:客户端要发给服务器的Cookies信息，包括JSESESSION也在里面
+		Referer:该请求来源于那个网站
+		Cache-Control:对缓存控制
 	
 http/1.1 200 OK
-常用响应头
-	Cache-Control:控制客户端的缓存信息，如max-age控制缓存信息的生存时间
-	Location:网页重定向的地址，让客户端跳转到该地址
-	Set-Cookie:设置客户端的cookie信息，可一设置多个cookie
+	常用响应头
+		Cache-Control:控制客户端的缓存信息，如max-age控制缓存信息的生存时间
+		Location:网页重定向的地址，让客户端跳转到该地址
+		Set-Cookie:设置客户端的cookie信息，可一设置多个cookie
 	
 TCP建立连接3次握手
 	客户端			服务器
-	  --------------SYN1-------------->
-	  <----ACK(SYN1+1)与SYN2----
-	  ----------ACK(SYN2+1)------->
+	  --------------SYN1-------------->			//客户端主动与服务器同步
+	  <----ACK(SYN1+1)与SYN2----		//服务器应答客户端的同步消息后，也向客户端同步
+	  ----------ACK(SYN2+1)------->			//客户端应答服务器的同步消息
 		  ESTABLISH状态
 	  
 TCP断开连接4次握手
@@ -69,3 +69,6 @@ TCP断开连接4次握手
 	  <------------FIN--------------
 	  -------------ACK------------->
 	客户端等待TIME_WITE后关闭连接
+		为什么TIME_WAIT状态需要经过2MSL(最大报文段生存时间)才能返回到CLOSE状态？
+		一、保证TCP协议的全双工连接能够可靠关闭
+		二、保证这次连接的重复数据段从网络中消失

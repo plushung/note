@@ -416,7 +416,7 @@ Hibernate 架构
 					映射文件中在<set>等集合元素配置的 必需是*对多关联 ，因集合变量存放多个关联的对象
 					不在<set>等集合元素中配置的关联  只能是*对一关联 ，因一个非集合变量只存放一个关联对象
 					单向关联只要在关联的一端配置映射
-					双向关联要在关联的两端都配置映射，且要在多的一端配置inverse=“true”属性
+					双向关联要在关联的两端都配置映射，且要在集合属性上配置inverse=“true”属性
 					必要时table属性指明保存两者关联关系的那个表
 					*对多关联中，<key>表示‘我‘在关联表中是哪个列,class属性表示关联的是哪个实体
 			
@@ -440,7 +440,7 @@ Hibernate 架构
 			@OptimisticLocking (type = OptimisticLockType.ALL)  保证数据在某个操作过程中不会被外界修改
 			public class EmployeeEntity implements Serializable 
 				type:
-					version（版本检查）：只检查 version/timestamp 字段,检查@javax.persistence.Version
+					version（版本检查）：只检查 version/timestamp 字段,即检查有@javax.persistence.Version的字段
 					all（全部）：检查全部字段
 					dirty（脏检查）：只检察修改过的字段，允许某些并行更新
 					none（不检查）：不使用乐观锁定
@@ -535,7 +535,7 @@ Hibernate 架构
 		
 		4普通字段 Property
 			@Transient
-				表示该属性不是表中的字段，只是用来临时使用的，不会持久化到数据库
+				表示该属性不是表中的字段，只是用来临时使用的，不会持久化到数据库，即不将该字段序列化到数据库
 			@Basic
 				属性的默认注解，即未加@Column的属性，对应表的字段，fetch = FetchType.LAZY用来设置懒加载
 			@Lob 
@@ -570,7 +570,7 @@ Hibernate 架构
 				
 		5组件
 			组件类的属性约束只能在Column中用nullable添加
-			将某类定义为组件并声明为实体类的组件属性，是值类型
+			将某类定义为组件并声明为实体类的组件属性，是 值类型
 				@Embeddable
 					将类声明为复合类（组件），有多个属性
 					可指定@Column属性设置列的相关属性，按照我们设定的值去生成表的字段
@@ -637,7 +637,7 @@ Hibernate 架构
 			子表的主键是外键，父表的主键做子表的外键
 		
 	！Hibernate 的类型 
-		实体（Entities）和值（values）
+		实体（Entities）类型和值（values）类型
 			实体的持久状态包含指向其他实体和值类型实例的引用，实体有独立标识，对应数据库中的一个表
 			值对象是随着包含他们的实体而被持久化和删除的，值没有独立的标识，不对应表，是实体属性的成分
 			组件就是用户自定义类，却是值语义的，属于值类型，组件随实体类被持久化和删除

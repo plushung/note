@@ -5,8 +5,9 @@ Spring-boot应用
 			会自动扫描@SpringBootApplication 所在类的同级包以及下级包里的 Bean，可通过自定scanBasePackages扫描指定包
 			该注解包含了@Configuration、@EnableAutoConfiguration、@ComponentScan注解
 			
-			@EnableAutoConfiguration
-				根据类路径中的 jar 包依赖为当前项目进行自动配置，自动导入相关依赖，并自动配置，如自动配置MVC
+		@EnableAutoConfiguration
+			根据类路径中的 jar 包依赖为当前项目进行自动配置，自动导入相关依赖，并自动配置，如自动配置MVC
+			exclude参数将不想自动配置的类禁用
 	
 	配置文件
 		Spring-boot首先自动使用位于classpath的application.properties作为应用配置文件
@@ -28,4 +29,36 @@ Spring-boot应用
 				application-prod。properties不会被加载
 			另外，可在-jar启动时在后面加上spring.profiles.active={profile}，指定用什么配置，即启动时指定环境
 			
+详解springboot
+	自动配置
+		springboot的自动配置通过jar包依赖来自动配置
+		1.SpringFactoriesLoader 类
+			加载jar包文件/META-INF/spring.factories文件
+			该文件等号左边是一个接口或注解类=右侧是配置接口的实现或相关注解。
+			通过配置spring.factories做模块配置
+			
+		2.自动配置生效条件
+			1)classpath存在spring.factories中的指定类
+			2)ApplicationContext存在配置项中指定的Bean
+			3)看配置环境中是否存在特定的配置项
+			4)配置环境中指定配置项是否存在指定的值
 		
+		3.Condiction类
+			可通过Condiction接口的实现来方便地使用自动配置
+			使用不同的@Condictional注解，来实现不同应用需求的自动配置
+			如@CondictionalOnCloudPlatform，@CondictionalOnJndi等
+			
+		4.禁用默认配置
+			在@EnableAutoConfig或@SpringBootApplication中用exclude禁用配置。
+			
+		5.配置源加载 BeanDefinitionReader类
+			XmlBeanDefintionReader类加载xml文件配置源
+			GroovyBeanDefintionReader类加载Groovy文件配置源
+			
+			例外：非BeanDefinitionReader类的实现类，通过spring的自动扫描配置
+			ClassPathBeanDefinitionScanner类
+			AnnotatedBeanDefintionReader类加载注解了@Component的javaconfig配置类，包括@Controller，@Service，@Repository，@Configuration
+			
+			过程：
+				ConfigurationApplicationContext通过BeanDefinitionLoader来加载配置源并注册配置
+				BeanDefinitionLoader调用对应的BeanDefinitionReader来加载配置源，然后将加载好的配置注册到BeanDefinitionRegistry中。

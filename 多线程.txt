@@ -159,6 +159,12 @@
 			
 			解决死锁
 				1.防止循环等待
+				2.加锁顺序
+					所有所有线程以同样的顺序对资源加锁
+				3.加锁时限
+					为加锁的资源添加时限
+				4.死锁检测
+				
 		活锁：
 			线程占用锁后总是重复运行一些不能结束的操作，像while(ture),使得线程占用锁一直运行却作无用功
 		饿死:
@@ -252,7 +258,8 @@
 			执行若干Runnable对象，无返回值
 			执行若干Callable对象，有返回值，立即返回Future对象，用于跟踪若干个异步线程任务的处理，保存了Callable的返回结果，进行异步通信
 		ScheduleExecutorService：
-			与ExecutorService类似
+			定时执行任务
+			与ExecutorService类似，ScheduleExecutorService会按照设定好的周期调度我们的任务
 		
 		ExecutorService使用
 			execute()

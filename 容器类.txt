@@ -93,17 +93,19 @@ Collection：保存单个元素
 			peek()，查看队尾元素
 			,poll(),remove(),将取出堆根元素，即优先级最高的元素
 			
-		线程安全版本Queue 	！！通过加ReentrantLock控制并发访问
-			LinkedBlockingQueue
+		阻塞线程安全版本Queue 	！！通过加ReentrantLock控制并发访问
+			LinkedBlockingQueue、LinkedBlockingDeque
 				在FIFO队列上加上并发访问时阻塞的功能,
 				默认容量动态增加无限制，存在时间最长的元素先出列（链表的头结点）FIFO ，若
 				访问时加ReentrantLock，无元素则用Condition的await阻塞线程
-			PriorityBlockingQueue
-				在优先队列上加上并发访问时阻塞的功能
-			ConcurrentLinkedQueue
-				
 			ArrayBlockingQueue
 				容量给定，公平模式下使用队列的线程顺序遵循FIFO、非公平模式下使用队列的线程顺序不指定，若无元素则用Condition的await阻塞线程
+			PriorityBlockingQueue
+				在优先队列上加上并发访问时阻塞的功能
+		JUC的非阻塞线程安全Queue		！！！用cas保证并发安全
+			ConcurrentLinkedQueue、ConcurrentLinkedDeque
+				用cas保证并发安全
+			
 			
 			
 Map：保存一对元素，key唯一，元素的hashcode作key
@@ -118,7 +120,7 @@ Map：保存一对元素，key唯一，元素的hashcode作key
  	HashMap 类： 	采用链地址法解决hash冲突，数组+链表的存储机制
 		使用散列函数存储数据，具有很快的访问速度，同时也就不能保证顺序
 		通过hashCode()取得键,有极高的检索速度。因此键元素要实现hashCode()方法，同时要用equals()来判定元素是否为同一个
-		每对元素保存到Node数组---table中，在下标为(hash&Maxindex)的位置放入元素
+		每对元素保存到Node数组---table中，在下标为(hash&(length-1))的位置放入元素,所以hashMap容量最好为2的n次方
 		默认大小：16
 		负载因子：0.75f
 		阈值：16*0.75=12
@@ -172,9 +174,9 @@ Tree存储方式		接口:SortedSet,SortedMap. 唯一实现:TreeSet，TreeMap
 						简单地用synchronized关键字装饰容器的每个方法，使非线程安全的容器类能够被安全地访问。
 						
 				3.另一种并发控制的容器
-					ConcurrentHashMap、ConcurrentLinkedQueue
+					ConcurrentHashMap、ConcurrentLinkedQueue，ConcurrentLinkedDeque
 					JDK8之前，使用分段锁对容器进行部分加锁，该分段锁继承了ReentrantLock
-					JDK8之后，应用CAS对容器进行并发控制。即更新前与旧值比较，若不同则放弃更新
+					JDK8之后，应用CAS对容器进行并发控制。即版本号更新前与旧值比较，若不同则放弃更新
 遍历：
 1.foreach
 2.for循环

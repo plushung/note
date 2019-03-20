@@ -282,7 +282,8 @@ Spring 事务管理（commit，rollback。。。）
 		@Transactional
 			是使用Spring AOP实现的
 			进行管理事务(commit,rollback)，所有DAO方法都在事务Context上执行
-			
+			注意了！！！！！1
+				@Transactional只有在遇到RuntimeException时才会rollback！！！！，RuntimeException继承Exception
 			context上下文，或者程序环境，是一段程序运行时所依赖的环境，
 			例如程序的运行要依赖环境中的某些变量
 		JPA&&Hibernate

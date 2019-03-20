@@ -1,0 +1,51 @@
+传统web应用
+ v	一个个服务依赖于底层应用服务器或web容器，每部署一个服务，都需要部署到web容器中，如部署到tomcat服务器中，需要打包成war在tomcat中运行
+ v	特点：运行一个服务必需在应用服务器中部署，不能脱离web容器单独部署
+ v
+集群
+ v	集群，将一个单体应用复制多份，部署到多个服务器上，通过软负载均衡来将流量分到各个服务器上。每个服务器运行的代码完全一样。
+ v
+分布式				系统间只能通过调用子系统接口来使用某种服务
+ v	分布式架构，系统由多个子系统构成，多个子系统单独部署到不同服务器上，每台服务器上运行的代码不一样，子系统共同组成一个更大的系统。
+ v	子系统内的服务模块不可单独在本子系统外使用，即要用服务a只能通过子系统A去调用。
+ v	子系统间调用通过API接口调用
+ v	https://ask.qcloudimg.com/http-save/yehe-1000017/ftv9lyxu1a.jpeg?imageView2/2/w/1620
+ v
+SOA	Rcs项目就是该架构  	系统间可通过直接调用服务来使用服务功能  
+ v	面向服务架构，服务之间通过简单、精确定义接口进行通讯。不同的Web层，可以共用同一个服务层。
+ v	将系统拆分成服务层和表示层，将所有服务抽出来统一放到服务层，不同的表现层通过调用服务层中的一些服务来完成本子系统的功能。
+ v	Dubbo是阿里巴巴SOA服务化治理方案的核心框架。
+ v	https://ask.qcloudimg.com/http-save/yehe-1000017/q1qyx7npvi.jpeg?imageView2/2/w/1620
+ v	
+微服务				用户可直接调用服务接口来使用某种功能
+	当需要某种服务时，服务可以单独启动而且不依赖任何web容器或应用服务器，启动这种服务像启动普通程序一样，只需打包成普通jar，直接运行
+	特点：提供某一服务的程序可作为独立应用单独启动。
+	与SOA的区别就是：用户只能通过子系统的表示层才能使用到SOA中的服务（服务的粒度较大）
+				 用户可以直接通过api使用微服务中的服务（使用服务的粒度更小）
+	
+使用springboot创建微服务
+	application.properties配置文件
+		spring.profile=dev	//描述不同运行环境的配置文件
+	
+	使用某配置文件打包程序
+		添加参数：mvn -Dspring.profile.active=dev  
+			启用dev配置
+	
+	修改内嵌web服务器
+		springboot内嵌了tomcat，可以通过依赖修改内嵌web服务器，原生支持jetty，undertow
+		1.添加spring-boot-starter-web依赖时，用<exclusions>将spring.boot.starter.tomact排除，移除tomcat
+		2.添加spring-boot-starter-jetty依赖，使用jetty作内嵌web服务器。
+		
+	springboot安全
+		添加spring-boot-starter-security依赖
+		@EnableClobalMethodSecurity开启方法层面的安全
+		
+		了解OAuth2授权认证模块
+		
+跨域问题
+	从一个站点请求另一个站点数据时出现跨域问题 即网络位置127.0.0.1的应用请求127.0.0.2的数据，出现跨域问题
+	
+	springboot微服务间调用，有不同站点，分别运行在各自的内嵌服务器中，所以微服务间的调用会有跨域问题。
+		在控制器方法上使用@CrossOrigin来支持跨域请求
+	
+	
