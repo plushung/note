@@ -1,0 +1,49 @@
+倒排索引
+	通过建立单词与文档的映射，用单词关键字查找包含该单词的文档。
+	单词词典（单词）
+		保存了一个个单词分词集合及记载单词本身的一些信息以及指向“倒排列表”的指针的物理文件
+	倒排文件（文档）
+		保存着倒排列表的物理文件
+		
+Lucene
+				
+	Field 域
+		属性
+			分词否Tokenized 为了可以索引
+				是否要将该field的内容进行分词，拆分成多个单词
+				是：拆分成多个单词
+				否：内容直接作为一个整体去索引
+			索引否Index		为了能被搜索
+				该域的数据整体或分词是否要添加到索引文件中，用于搜索
+				是：将该域保存到索引文件中，可搜索该域
+				否：不将该域保存到索引文件中，搜索时不将该域纳入搜索范围
+			存储否Store		为了从lucene中直接取得该域保存的数据
+				该域的数据是否按Lucene的文档格式保存
+				是：该域的数据将保存为Lucene文档
+				否：该域的数据不保存到文件系统（大数据文本一般不直接保存到lucene文档中）
+				场景：数据量大的域不适宜保存下来。只适宜用于分词索引检索，检索到的Lucene文档不含具体数据，只包含同一文档下的所有Field信息
+					可通过该field检索到某文档，从文档中取得文档id，通过该id去关系数据库取得该field对应的大数据文本。
+		类型
+			StringField
+			LongField，IntegerField（数值Field）
+			StoredField
+			TextField
+		
+	建立索引文件
+		1.对源数据进行分词处理，得到一个包含多个单词的词典文件（Term Dictionary），和单词对应的频率文件（frequencies），和单词所在位置的位置文件（positions）
+			词典文件中有指向频率文件和位置文件的指针
+		2.建立Lucene Document，用以表示一个文档。
+			Lucene使用field的概念，用于描述单词出现在文档的什么位置（标题，描述，正文等），某个field包含给定单词
+		2.分词后，建立倒排索引，将倒排索引文件写入硬盘或内存
+	查询关键词
+		[ field：关键词 ]
+		如查找正文（context）中包含单词live的文档
+			context:live
+		
+		查找多个条件
+			AND
+				context：live AND context:great //正文同时包含live和great的文档
+			OR	
+				//正文包含live或great的文档
+			NOT
+				context：live NOT context:great //正文同时包含live同时不包含great的文档

@@ -31,7 +31,7 @@ Collection：保存单个元素
 			默认大小：10
 			负载因子：1
 			阈值：10*1=10
-			扩容方式：原始大小<1
+			扩容方式：原始大小*1.5
 		LinkedList：
 			用双向链表保存数据，访问熟读稍慢，插删速度快
 			对比LIst，添加了用于棧，队列，双端队列的方法
@@ -88,7 +88,7 @@ Collection：保存单个元素
 			是一种FIFO队列，以元素在队列中等待时间最长的元素先出
 			
 		PriorityQueue优先队列(给予优先堆实现，是一个二叉堆)  根据comparable接口的方法排序
-			非FIFO队列，优先级高的元素先出列，有次序的，也是通过实现了Comparable接口的元素来实现排序，像treeSet
+			非FIFO队列，优先级高的元素先出列，有次序的，也是通过实现了Comparable接口的元素来实现优先排序，像treeSet
 			offer()时，元素经过排序存放在堆数据结构中，默认是按元素的自然顺序排序，可为其提供Comparator来按照自己定义的顺序排序，优先顺序
 			peek()，查看队尾元素
 			,poll(),remove(),将取出堆根元素，即优先级最高的元素
@@ -102,6 +102,9 @@ Collection：保存单个元素
 				容量给定，公平模式下使用队列的线程顺序遵循FIFO、非公平模式下使用队列的线程顺序不指定，若无元素则用Condition的await阻塞线程
 			PriorityBlockingQueue
 				在优先队列上加上并发访问时阻塞的功能
+			DelayQueue
+				延时队列，只有在队列中时间够一定值时，才能被出队。
+				
 		JUC的非阻塞线程安全Queue		！！！用cas保证并发安全
 			ConcurrentLinkedQueue、ConcurrentLinkedDeque
 				用cas保证并发安全
@@ -126,12 +129,16 @@ Map：保存一对元素，key唯一，元素的hashcode作key
 		阈值：16*0.75=12
 		扩容方式：原始大小<1
 		当存储的元素达3/4时自动扩容并对元素再散列
+		
+		解决hash冲突：
+			当 hash 碰撞之后写入链表的长度超过了阈值(默认为8)，链表将会转换为红黑树
 	
 	TreeMap：
 		实现了SortedMap接口，通过红黑Tree数据结构保存元素，按键升序来存放元素，键元素要实现Comparable接口来确定顺序排序
 		
 	LinkedHashMap：
-		通过双向链表存储数据，内部维护着HashMap保存元素，保持元素的插入顺序
+		通过双向链表存储数据，内部维护着HashMap保存元素，保持元素的插入顺序或LRU访问顺序（accessOrder=true）
+		重写removeEldestEntry方法可实现LRU缓存，只保留最近的那几个元素
 		
 	HashMap优点：添加查询元素快
 	TreeMap优点:排序的元素

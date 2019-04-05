@@ -272,13 +272,25 @@
 			shutdownNow()
 				shutdownNow后的Executor将不再就受新的任务,并且取消正在执行的task。通过调用Executors创建的线程的interrupt()方法。中断线程
 				抛出CancellationException，强行submit会抛出RejectedExecutionException
-				
+
+		ThreadPoolExecutor：
+			构造方法参数：
+				corePoolSize：指定核心线程数
+				maximumPoolSize：最大线程数
+				keepAliveTime：允许线程空闲时间
+				ThreadFactory：线程工程，用来创建每条线程
+				RejectedExecutionHandler：拒绝执行线程时的处理办法
+		
 		Executors：	
 			一个工厂类，用于创建Executor，ExecutorService，ScheduleExecutorService，ThreadFactory
 			用于取得多种Executor的子类的实例，关联到callable和future
+			
+			Executors通过创建ThreadPoolExecutor来分别创建以下线程池
 			如：
 			随任务增加线程方式
 				newCachedThreadPool()：ExecutorService的实例，无需指定初始化线程数，有新任务时自动创建线程处理
+				任务多时，自动增加线程来做任务
+				任务完成后，灵活回收空闲线程。
 			单一线程方式
 				newSingleThreadExecutor()：创建只有一条线程的ExecutorService的实例,提交多个任务时，任务进入等待队列，等待执行
 				newSingleThreadScheduledExecutor()：创建只有一条线程的ScheduleExecutorService的实例
@@ -314,7 +326,8 @@
 	显式锁Locks
 		Locks的fair/unfair
 			公平模式：
-				线程想取得锁，若锁不可用则进入ReentrantLock的等待队列，即线程会保存到一个FIFO的Queue中
+				线程想取得锁，若锁不可用则进入ReentrantLock的等待队列（使用CAS来将等待线程构造成节点添加到队列后），
+				即线程会保存到一个FIFO的Queue中（AQS的队列）
 				,等待时间最长的线程首先获得锁，先进先出
 			非公平模式：
 				线程想取得锁，若锁不可用则等待，所有线程尽可能快地取得锁，

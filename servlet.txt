@@ -125,3 +125,17 @@ Servlet 网页重定向
 	
 Servlet 自动刷新页面
 	 response.setIntHeader("Refresh", 5);
+
+servlet中的对象
+	ServletContext对象
+		表示整个web应用，是Servlet运行的上下文环境，整个应用下由多个servlet组成。
+		通过setAttribute来设置共享属性，在所有servlet中共享信息。
+		.getRealPath，获取该context中的资源
+		一个web应用层面的配置参数，web下的资源路径，都使用ServletContext来进行获取。
+	ServletConfig
+		一个servlet的配置信息，getInitParamNames获取servlet的初始化参数。
+	request
+		封装了一次请求的所有信息，包括请求头、行、体中的信息。可读取请求参数。
+		getRequestDispatcher能转发请求
+	response
+		封装了响应信息，设置响应码，响应头，响应行响应消息的信息。

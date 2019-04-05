@@ -2,12 +2,13 @@ http://blog.csdn.net/dgeek/article/details/70145555
 
 1   Timer，TimerTask，Vector，Stack，HashTable，StringBuffer
 	通过synchronized 关键字给方法加上内置锁来实现线程安全
+	用jvm的加锁指令来实现资源并发控制。monitorentry，monitorexit
     
 
 2  	Collections中的synchronizedCollection(Collection c)方法可将一个集合变为线程安全
 	其内部通过synchronized关键字加锁同步
 
-3   原子类Atomicxxx—包装类的线程安全类
+3   原子类Atomicxxx—包装类的线程安全类 CAS
     如AtomicLong，AtomicInteger等等
 	Atomicxxx 是通过Unsafe 类的native方法实现线程安全的
 
@@ -25,15 +26,21 @@ http://blog.csdn.net/dgeek/article/details/70145555
 JUC的并发集合
 
 	6   Concurrentxxx
-		最常用的就是ConcurrentHashMap，当然还有ConcurrentSkipListSet和ConcurrentSkipListMap等等。
+		最常用的就是ConcurrentHashMap。
 		ConcurrentHashMap使用了一种完全不同的加锁策略来提供更高的并发性和伸缩性。
-		里面是一个Segment数组，每操作一个segment时，只对该segment加锁
+		里面是一个Segment数组，每操作一个segment时，只对该segment加ReentrantLock锁
 		使用分段锁来实现更大程度的共享
 		
-	7   ConcurrentLinkedDeque，ConcurrentLinkedQueue，
+	7   ConcurrentSkipListMap，ConcurrentSkipListSet
+		内部用跳表保存元素，可加快检索速度。
+		并发修改时，用cas来对元素进行修改。
+		ConcurrentSkipListSet使用Map保存Key的方法来保证元素不重复
+		
+		
+	8   ConcurrentLinkedDeque，ConcurrentLinkedQueue，
 		使用CAS保证线程安全在增加节点和删除节点时用CAS来增加和删除
 		
-	8   CopyOnWriteArrayList和 CopyOnWriteArraySet
+	9   CopyOnWriteArrayList和 CopyOnWriteArraySet
 		CopyOnWriteArraySet的内部实现是在其类内部声明一个final的CopyOnWriteArrayList属性，
 		并在调用其构造函数时实例化该CopyOnWriteArrayList，CopyOnWriteArrayList采用的是显式地加上ReentrantLock实现同步，
 		而CopyOnWriteArrayList容器的线程安全性在于在每次修改时都会创建并重新发布一个新的容器副本，从而实现可变性。
